@@ -44,17 +44,20 @@ O logo tem tokens próprios, medidos pixel a pixel no arquivo original: a face
 mais fechado que o pink neon.
 `--mitte-logo-face: #62C3D5` · `--mitte-logo-shadow: #E72989`.
 
-A face também vira **superfície**, nos dois botões secundários da hero. Os
-derivados (`--mitte-face-topo`, `--mitte-face-base`, `--mitte-face-borda`,
-`--mitte-face-acesa`, `--mitte-face-afundada`) saem todos de
-`--mitte-logo-face` por `color-mix`: mexeu na face, mexeu na chapa inteira.
-A tinta por cima é `--mitte-face-ink`, que é o próprio `--mitte-bg` — **9,7:1**,
-AAA em qualquer corpo de texto. Branco sobre a face daria 2,0:1 e seria
+O matiz da face — **189°** — é o que define o azul neon da marca.
+`--mitte-blue: #33E0FF` é `hsl(189 100% 60%)`: a **fórmula exata** do
+`--mitte-pink`, que é `hsl(330 100% 60%)`. Mesma saturação, mesma
+luminosidade, matiz do logo. É isso que faz os botões da hero lerem como um
+par, e não como duas cores que por acaso estão juntas.
+
+A tinta por cima é `--mitte-blue-ink`, que é o próprio `--mitte-bg` —
+**12,6:1**, AAA em qualquer corpo. Branco sobre o azul daria 1,7:1 e seria
 ilegível, então não há escolha real aqui.
 
-Por que a chapa não é `--mitte-cyan`: dois botões preenchidos seriam a maior
-área de ciano do app inteiro. Em `#00FFFF` o olho aprenderia "ciano = superfície
-clicável" antes de chegar no primeiro preço, e a regra abaixo cairia.
+Por que o azul não é `--mitte-cyan`: `#00FFFF` é matiz 180, puxa para o verde
+e não é a cor do logo. E é a cor reservada ao preço — dois botões cheios dela
+seriam a maior área de ciano do app, e o olho aprenderia "ciano = clicável"
+antes de chegar no primeiro preço.
 
 ### Regra de uso do par rosa/ciano
 
@@ -151,22 +154,28 @@ cabe lado a lado em 375px sem encolher a tipografia abaixo do legível. A pilha
 tem 26rem de largura: em 22rem o rótulo mais longo quebrava em duas linhas no
 desktop e na totem, onde a tipografia bate no teto do `clamp()`.
 
-Os três são preenchidos. *Programação da semana* e *Reserva de aniversário*
-(`.botao--fantasma`) usam a **chapa da face do logo** — a mesma cor que está
-pintada no lettering logo acima. Antes eram de contorno, quase transparentes,
-e liam como botão desativado.
+Os três são preenchidos e os três acendem. *Programação da semana* e
+*Reserva de aniversário* (`.botao--neon`) usam `--mitte-blue`; o *Cardápio*
+(`.botao--principal`) usa `--mitte-pink`. Antes os dois secundários eram de
+contorno, quase transparentes, e liam como botão desativado.
 
-A hierarquia entre eles não é "cheio vs. vazado": é **aceso vs. pintado**,
-como numa fachada de bar, onde o letreiro é pintado e o neon é o que brilha.
-Só o *Cardápio* tem halo. Isso não é preferência — é obrigação aritmética: a
-face do logo mede **9,7:1** contra o fundo e o rosa mede **5,9:1**, ou seja o
-azul é objetivamente o mais claro dos três. Num fundo preto, mais claro é mais
-saliente, então o destaque do rosa não pode se apoiar em luminância. Apoia-se
-em saturação e em ser o único que emite luz.
+Os três são **o mesmo objeto em duas cores**. Tudo entra por `--botao-cor`,
+e tinta, halo, pulso e estados se derivam dela — uma regra só, em vez de uma
+por variante. `.botao--neon` troca duas variáveis e nada mais.
 
-Escurecer o azul para "resolver" a luminância devolveria exatamente o aspecto
-apagado que o contorno tinha. Por isso a chapa fica clara e o brilho sai de
-cena.
+A hierarquia não pode se apoiar em luminância: o azul mede **12,6:1** contra
+o fundo e o rosa **5,9:1**, então no escuro o azul é sempre o mais claro.
+Escurecê-lo devolveria o aspecto apagado que motivou a mudança. O que separa
+o *Cardápio* é ser **o único que pulsa** — a animação `anel`, em `motion.css`,
+é exclusiva de `.botao--principal`.
+
+Esse pulso já foi a origem de um bug caro: aplicado a `.botao`, ele atingia os
+três, com rosa cravado no keyframe. Como **animação vence declaração**, os dois
+secundários pulsavam rosa e perdiam o próprio `box-shadow` — inclusive os
+estados de `:hover` e `:active` — a partir dos 2,4s de atraso. Por isso o
+keyframe hoje lê `--botao-cor` e `--botao-halo` em vez de cor literal, e por
+isso o `:hover` mexe na **variável** do halo em vez de declarar um
+`box-shadow` novo, que a animação engoliria.
 
 As **categorias** viraram uma coluna de pílulas, uma aba por linha, sem foto.
 Uma grade de doze tiles obriga a comparar dois eixos ao mesmo tempo; a coluna
@@ -394,8 +403,11 @@ a montagem do logo e a respiração da hero.
 - Preço em rosa, nome em ciano, ou qualquer inversão do par.
 - Mais de um `.card--destaque` por aba.
 - Verde ou roxo fora da pílula de categoria e do atalho de aba nos resultados.
-- Halo em mais de um botão da hero. O que diz qual é o principal é ser o único
-  que acende — dois brilhando é zero brilhando.
+- Pulso em mais de um botão da hero. Os três acendem; o que diz qual é o
+  principal é ser o único que **pulsa**. Três pulsando é nenhum pulsando.
+- Cor literal dentro de `@keyframes`. Animação vence declaração: um keyframe
+  com cor cravada sequestra o `box-shadow` de todo elemento a que for
+  aplicado, e nenhuma regra depois consegue corrigir.
 - Cor literal (`#FF3399`) no CSS dos componentes — sempre o token.
 - Misturar as duas famílias de foto num mesmo card. Fotos do bar (copo no
   balcão, neon desfocado atrás) e fotos de produto (recorte sobre fundo

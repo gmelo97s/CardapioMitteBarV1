@@ -27,17 +27,14 @@
   --mitte-logo-face:     #62C3D5;
   --mitte-logo-shadow:   #E72989;
 
-  /* A face do logo virando superficie: a mesma chapa azul do lettering,
-     usada para preencher botao. Tudo derivado de --mitte-logo-face para
-     existir uma fonte so — mexeu na face, mexeu na chapa inteira.
-     Nao e --mitte-cyan de proposito: ciano puro e o preco, e duas chapas
-     dele seriam a maior area de ciano do app. */
-  --mitte-face-topo:     color-mix(in srgb, var(--mitte-logo-face) 82%, #FFFFFF);
-  --mitte-face-base:     color-mix(in srgb, var(--mitte-logo-face) 88%, #000000);
-  --mitte-face-borda:    color-mix(in srgb, var(--mitte-logo-face) 70%, #FFFFFF);
-  --mitte-face-acesa:    color-mix(in srgb, var(--mitte-logo-face) 68%, #FFFFFF);
-  --mitte-face-afundada: color-mix(in srgb, var(--mitte-logo-face) 76%, #000000);
-  --mitte-face-ink:      var(--mitte-bg);  /* 9,7:1 sobre a face — AAA */
+  /* O gemeo neon do rosa. O rosa da marca e hsl(330 100% 60%); este e a
+     MESMA formula no matiz do logo (189, medido em --mitte-logo-face), entao
+     os dois tem exatamente a mesma saturacao e a mesma luminosidade. E o que
+     faz os botoes da hero lerem como um par, e nao como duas cores soltas.
+     Nao e --mitte-cyan: ciano puro e 180, puxa para o verde, e e a cor
+     reservada ao preco. */
+  --mitte-blue:      #33E0FF;             /* hsl(189 100% 60%) */
+  --mitte-blue-ink:  var(--mitte-bg);     /* 12,6:1 sobre o azul — AAA */
 
   /* --- Cor: estado ------------------------------------------------------ */
   --mitte-border:        rgba(250, 250, 250, .10);
@@ -47,13 +44,6 @@
   /* --- Glow (assinatura visual do bar) ---------------------------------- */
   --mitte-glow-pink: 0 0 30px rgba(255, 51, 153, .6), 0 0 60px rgba(255, 51, 153, .3);
   --mitte-glow-cyan: 0 0 30px rgba(0, 255, 255, .6), 0 0 60px rgba(0, 255, 255, .3);
-  /* Halo do botao principal da hero. Mais curto e mais aceso que o
-     --mitte-glow-pink: com dois vizinhos de chapa clara, o que separa o
-     principal nao e o alcance do brilho, e o fato de so ele brilhar. */
-  --mitte-glow-botao:       0 0 24px color-mix(in srgb, var(--mitte-pink) 82%, transparent),
-                            0 0 48px color-mix(in srgb, var(--mitte-pink) 26%, transparent);
-  --mitte-glow-botao-forte: 0 0 30px color-mix(in srgb, var(--mitte-pink) 95%, transparent),
-                            0 0 62px color-mix(in srgb, var(--mitte-pink) 38%, transparent);
   --mitte-glow-text-pink: 0 0 12px rgba(255, 51, 153, .75), 0 0 28px rgba(255, 51, 153, .35);
   --mitte-glow-text-cyan: 0 0 12px rgba(0, 255, 255, .70), 0 0 28px rgba(0, 255, 255, .30);
 

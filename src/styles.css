@@ -184,8 +184,20 @@ button {
 
 /* --- Botão neon --------------------------------------------------------- */
 
+/* Os três botões da hero são o mesmo objeto em duas cores. A cor entra por
+   --botao-cor e tudo o mais — tinta, halo, pulso, estados — se deriva dela,
+   então existe uma regra só em vez de uma por variante. */
 .botao {
+  --botao-cor: var(--mitte-pink);
+  --botao-ink: var(--mitte-pink-ink);
+  --botao-halo: 0 0 24px color-mix(in srgb, var(--botao-cor) 82%, transparent),
+                0 0 48px color-mix(in srgb, var(--botao-cor) 26%, transparent);
+
   position: relative;
+  /* As chapas são opacas e pintam por cima do halo da vizinha. Sem o z-index
+     o halo do rosa lavava a borda do botão desenhado antes dele e não a do
+     desenhado depois — assimetria sem motivo. */
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -193,8 +205,8 @@ button {
   min-height: calc(var(--mitte-alvo) * 1.12);
   padding: 1rem 1.75rem;
   border-radius: var(--mitte-radius-pill);
-  background: var(--mitte-pink);
-  color: var(--mitte-pink-ink);
+  background: var(--botao-cor);
+  color: var(--botao-ink);
   font-family: var(--mitte-font-display);
   font-size: clamp(.72rem, 3.2vw, .9rem);
   font-weight: 700;
@@ -204,55 +216,51 @@ button {
   text-decoration: none;
   /* Rótulo longo reparte em linhas parecidas em vez de deixar órfã. */
   text-wrap: balance;
-  box-shadow: var(--mitte-glow-botao);
+  box-shadow: var(--botao-halo);
   transition: transform var(--mitte-dur) var(--mitte-ease-back),
               box-shadow var(--mitte-dur) var(--mitte-ease),
-              border-color var(--mitte-dur) var(--mitte-ease),
               background var(--mitte-dur) var(--mitte-ease);
 }
 
 .botao svg { flex: none; }
 
-/* Os dois destinos que saem do cardápio, preenchidos com a face do logo —
-   a mesma chapa azul do lettering logo acima. Vazados, eles liam como botão
-   desativado, que é o oposto do que um convite deve parecer.
+/* Os dois destinos que saem do cardápio. Azul neon, não mais de contorno:
+   vazados, eles liam como botão desativado — o oposto do que um convite
+   deve parecer.
 
-   A hierarquia deixou de ser "cheio vs. vazado" e virou **aceso vs.
-   pintado**, que é como funciona a fachada de um bar: o letreiro é pintado,
-   o neon é o que brilha. Só o Cardápio emite halo. Precisa ser assim porque
-   a face mede 9,7:1 contra o fundo e o rosa mede 5,9:1 — no escuro o azul é
-   o mais claro dos três, então o destaque do rosa não pode se apoiar em
-   luminância. Apoia-se em saturação e em ser o único que acende. */
-.botao--fantasma {
-  background: linear-gradient(180deg, var(--mitte-face-topo), var(--mitte-face-base));
-  border: 1px solid var(--mitte-face-borda);
-  color: var(--mitte-face-ink);
-  /* Luz só na aresta de cima: dá relevo de chapa, não brilho de neon. */
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
+   --mitte-blue é o gêmeo exato do rosa: mesma saturação, mesma luminosidade,
+   no matiz medido na face do logo. É o que faz os três lerem como um trio e
+   não como um botão com dois enfeites. O destaque do Cardápio não vem mais
+   de ser o único preenchido, e sim de ser o único que pulsa (ver motion.css)
+   — luminância não serviria, porque o azul mede 12,6:1 contra o fundo e o
+   rosa 5,9:1, disputa que o rosa perde sempre. */
+.botao--neon {
+  --botao-cor: var(--mitte-blue);
+  --botao-ink: var(--mitte-blue-ink);
 }
 
 /* O ícone herda a tinta escura por currentColor. A regra antiga pintava ele
-   de --acento, que sobre a face daria 1,6:1 (ciano) ou 2,2:1 (roxo). */
+   de --acento, que sobre o azul daria 1,6:1 (ciano) ou 2,2:1 (roxo). */
 
 .botao:hover { transform: translateY(-2px) scale(1.02); }
-.botao:active { transform: scale(.97); }
 
-#abrir-cardapio:hover,
-#abrir-cardapio:focus-visible { box-shadow: var(--mitte-glow-botao-forte); }
-
-.botao--fantasma:hover,
-.botao--fantasma:focus-visible {
-  background: linear-gradient(180deg, var(--mitte-face-acesa), var(--mitte-logo-face));
-  border-color: var(--mitte-fg);
+/* O halo cresce pela variável, e não por um box-shadow novo, porque no
+   principal quem manda em box-shadow é a animação `anel`: uma declaração
+   direta aqui seria letra morta. Mexendo na variável, o pulso acompanha. */
+.botao:hover,
+.botao:focus-visible {
+  --botao-halo: 0 0 30px color-mix(in srgb, var(--botao-cor) 95%, transparent),
+                0 0 62px color-mix(in srgb, var(--botao-cor) 38%, transparent);
 }
 
-/* O anel de foco global é ciano e sumiria dentro da chapa azul. */
-.botao--fantasma:focus-visible { outline-color: var(--mitte-fg); }
+/* O anel de foco global é ciano e sumiria dentro do botão azul. */
+.botao:focus-visible { outline-color: var(--mitte-fg); }
 
-/* Na totem não existe hover: afundar no toque é o único retorno que sobra. */
-.botao--fantasma:active {
-  background: linear-gradient(180deg, var(--mitte-logo-face), var(--mitte-face-afundada));
-  box-shadow: inset 0 2px 7px rgba(0, 0, 0, .32);
+/* Na totem não existe hover: afundar e apagar no toque é o único retorno. */
+.botao:active {
+  transform: scale(.97);
+  background: color-mix(in srgb, var(--botao-cor) 86%, var(--mitte-bg));
+  --botao-halo: 0 0 12px color-mix(in srgb, var(--botao-cor) 55%, transparent);
 }
 
 /* ==========================================================================
@@ -948,10 +956,11 @@ body.totem .itens__grade {
 @media (hover: none) {
   .card:hover, .categoria:hover { transform: none; box-shadow: none; }
   .card:hover .card__figura img { transform: none; }
-  /* No toque o :hover gruda depois do tap e o botão ficava aceso sozinho. */
-  .botao:hover { transform: none; }
-  .botao--fantasma:hover {
-    background: linear-gradient(180deg, var(--mitte-face-topo), var(--mitte-face-base));
-    border-color: var(--mitte-face-borda);
+  /* No toque o :hover gruda depois do tap e o botão ficava aceso sozinho.
+     O :active continua valendo — é ele que dá o retorno aqui. */
+  .botao:hover {
+    transform: none;
+    --botao-halo: 0 0 24px color-mix(in srgb, var(--botao-cor) 82%, transparent),
+                  0 0 48px color-mix(in srgb, var(--botao-cor) 26%, transparent);
   }
 }

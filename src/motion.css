@@ -114,15 +114,25 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-/* Pulso do anel neon, para o botão se oferecer sem piscar */
+/* Pulso do anel neon, para o botão se oferecer sem piscar.
+
+   O anel sai de --botao-cor e o halo de --botao-halo, nunca de uma cor fixa:
+   antes o keyframe trazia rosa cravado e, como animação vence declaração,
+   ele pintava de rosa qualquer botão a que fosse aplicado. */
 @keyframes anel {
-  0%   { box-shadow: 0 0 0 0 rgba(255, 51, 153, .5), var(--mitte-glow-pink); }
-  70%  { box-shadow: 0 0 0 1.4rem rgba(255, 51, 153, 0), var(--mitte-glow-pink); }
-  100% { box-shadow: 0 0 0 0 rgba(255, 51, 153, 0), var(--mitte-glow-pink); }
+  0%   { box-shadow: 0 0 0 0    color-mix(in srgb, var(--botao-cor) 50%, transparent), var(--botao-halo); }
+  70%  { box-shadow: 0 0 0 1.4rem color-mix(in srgb, var(--botao-cor)  0%, transparent), var(--botao-halo); }
+  100% { box-shadow: 0 0 0 0    color-mix(in srgb, var(--botao-cor)  0%, transparent), var(--botao-halo); }
 }
 
 .hero[data-ativa] .hero__cta { animation: sobe .7s var(--mitte-ease) 1.5s both; }
-.hero[data-ativa] .botao     { animation: anel 2.6s ease-out 2.4s infinite; }
+
+/* Só o principal pulsa. Aplicado a `.botao`, isto atingia os três e, além do
+   rosa fora de lugar, sequestrava o box-shadow dos outros dois: o halo deles
+   e os estados de :hover e :active ficavam sem efeito a partir de 2,4s.
+   Pulsar é também o que separa o Cardápio dos vizinhos agora que os três são
+   preenchidos e acesos. */
+.hero[data-ativa] .botao--principal { animation: anel 2.6s ease-out 2.4s infinite; }
 
 /* --------------------------------------------------------------------------
    3. Troca de tela — a saída recua e desfoca, a entrada vem de baixo.
