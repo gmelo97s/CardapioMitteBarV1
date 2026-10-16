@@ -39,8 +39,8 @@ carregado via `fetch` — abrir o `index.html` direto do disco não funciona.
 **Hero** → o logo se monta letra a letra, a sombra magenta extruda por trás, o
 brilho acende. Embaixo, três destinos empilhados: *Programação da semana* (vai
 para `mittesp.com.br/agenda`), *Cardápio* (fica aqui) e *Reserva de
-aniversário* (vai para `mittebar.vercel.app`). Os dois que saem do cardápio
-são de contorno; só o do meio é preenchido.
+aniversário* (vai para `mittebar.vercel.app`). Os três são preenchidos: os dois
+que saem do cardápio usam a chapa azul da face do logo, e só o do meio acende.
 
 **Categorias** → a barra de busca no topo, fixa, e as 12 abas numa coluna de
 pílulas, uma por linha, sem foto. Cada aba traz seu acento de cor na borda e

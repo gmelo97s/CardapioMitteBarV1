@@ -37,12 +37,24 @@ Os quatro neons vêm literalmente das variáveis do site (`--neon-pink`, `--neon
 | `--mitte-pink` | `330 100% 60%` | `#FF3399` | **Primária.** Títulos de seção, aba ativa, destaque de promoção. |
 | `--mitte-cyan` | `180 100% 50%` | `#00FFFF` | **Secundária.** Preços, eyebrow, face do logo, e o halo frio que sustenta a base da tela. |
 | `--mitte-green` | `150 100% 50%` | `#00FF80` | Acento de categoria (Sem Álcool, Vodkas e Gins, Doses). |
-| `--mitte-purple` | `280 100% 60%` | `#AA33FF` | Acento de categoria (Outros, Caipirinhas, Vinhos). Também o contorno do botão de reserva na hero. |
+| `--mitte-purple` | `280 100% 60%` | `#AA33FF` | Acento de categoria (Outros, Caipirinhas, Vinhos). |
 
 O logo tem tokens próprios, medidos pixel a pixel no arquivo original: a face
 **não** é o ciano puro do site, é um ciano dessaturado, e a sombra é um magenta
 mais fechado que o pink neon.
 `--mitte-logo-face: #62C3D5` · `--mitte-logo-shadow: #E72989`.
+
+A face também vira **superfície**, nos dois botões secundários da hero. Os
+derivados (`--mitte-face-topo`, `--mitte-face-base`, `--mitte-face-borda`,
+`--mitte-face-acesa`, `--mitte-face-afundada`) saem todos de
+`--mitte-logo-face` por `color-mix`: mexeu na face, mexeu na chapa inteira.
+A tinta por cima é `--mitte-face-ink`, que é o próprio `--mitte-bg` — **9,7:1**,
+AAA em qualquer corpo de texto. Branco sobre a face daria 2,0:1 e seria
+ilegível, então não há escolha real aqui.
+
+Por que a chapa não é `--mitte-cyan`: dois botões preenchidos seriam a maior
+área de ciano do app inteiro. Em `#00FFFF` o olho aprenderia "ciano = superfície
+clicável" antes de chegar no primeiro preço, e a regra abaixo cairia.
 
 ### Regra de uso do par rosa/ciano
 
@@ -53,9 +65,9 @@ O cardápio inteiro é lido num salão escuro, muitas vezes no celular. A divis�
 - **Verde e roxo só existem como acento de categoria.** Cada aba recebe um dos
   quatro neons em `--acento` (ver `ACENTOS` em `src/app.js`), que pinta a borda
   da pílula, o sublinhado do nome e a lavagem de cor no toque. Fora da tela de
-  categorias eles aparecem em dois lugares só: nos dois botões de contorno da
-  hero e no `.atalho-aba` dos resultados. Dentro de uma aba volta a valer só
-  rosa e ciano, senão o preço perde a leitura imediata.
+  categorias eles aparecem num lugar só: no `.atalho-aba` dos resultados.
+  Dentro de uma aba volta a valer só rosa e ciano, senão o preço perde a
+  leitura imediata.
 
 ### Contraste
 
@@ -133,12 +145,28 @@ só o painel de itens. Isso vale para celular, desktop e totem.
 | **Categorias** | `auto auto 1fr` — cabeçalho + barra de busca + painel | só o painel |
 | **Itens** | `auto 1fr` — cabeçalho + grade de cards | só a grade |
 
-A **hero** não tem um botão, tem três, um por linha e todos da mesma largura:
-*Programação da semana* e *Reserva de aniversário* saem do cardápio e vão de
-contorno (`.botao--fantasma`, com o acento próprio); *Cardápio* fica aqui e é
-o único preenchido. Empilhar em vez de alinhar resolve o nome longo — "Reserva
-de aniversário" não cabe lado a lado em 375px sem encolher a tipografia abaixo
-do legível.
+A **hero** não tem um botão, tem três, um por linha e todos da mesma largura.
+Empilhar em vez de alinhar resolve o nome longo — "Reserva de aniversário" não
+cabe lado a lado em 375px sem encolher a tipografia abaixo do legível. A pilha
+tem 26rem de largura: em 22rem o rótulo mais longo quebrava em duas linhas no
+desktop e na totem, onde a tipografia bate no teto do `clamp()`.
+
+Os três são preenchidos. *Programação da semana* e *Reserva de aniversário*
+(`.botao--fantasma`) usam a **chapa da face do logo** — a mesma cor que está
+pintada no lettering logo acima. Antes eram de contorno, quase transparentes,
+e liam como botão desativado.
+
+A hierarquia entre eles não é "cheio vs. vazado": é **aceso vs. pintado**,
+como numa fachada de bar, onde o letreiro é pintado e o neon é o que brilha.
+Só o *Cardápio* tem halo. Isso não é preferência — é obrigação aritmética: a
+face do logo mede **9,7:1** contra o fundo e o rosa mede **5,9:1**, ou seja o
+azul é objetivamente o mais claro dos três. Num fundo preto, mais claro é mais
+saliente, então o destaque do rosa não pode se apoiar em luminância. Apoia-se
+em saturação e em ser o único que emite luz.
+
+Escurecer o azul para "resolver" a luminância devolveria exatamente o aspecto
+apagado que o contorno tinha. Por isso a chapa fica clara e o brilho sai de
+cena.
 
 As **categorias** viraram uma coluna de pílulas, uma aba por linha, sem foto.
 Uma grade de doze tiles obriga a comparar dois eixos ao mesmo tempo; a coluna
@@ -365,8 +393,9 @@ a montagem do logo e a respiração da hero.
 - Glow em texto corrido.
 - Preço em rosa, nome em ciano, ou qualquer inversão do par.
 - Mais de um `.card--destaque` por aba.
-- Verde ou roxo fora da pílula de categoria, dos dois botões de contorno da
-  hero e do atalho de aba nos resultados.
+- Verde ou roxo fora da pílula de categoria e do atalho de aba nos resultados.
+- Halo em mais de um botão da hero. O que diz qual é o principal é ser o único
+  que acende — dois brilhando é zero brilhando.
 - Cor literal (`#FF3399`) no CSS dos componentes — sempre o token.
 - Misturar as duas famílias de foto num mesmo card. Fotos do bar (copo no
   balcão, neon desfocado atrás) e fotos de produto (recorte sobre fundo

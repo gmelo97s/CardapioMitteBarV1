@@ -144,8 +144,10 @@ button {
    escolhas, não como um botão principal com dois enfeites em volta. */
 .hero__cta {
   display: grid;
-  gap: clamp(.6rem, 1.8vh, .9rem);
-  width: min(22rem, 100%);
+  gap: clamp(.8rem, 2.4vh, 1.15rem);
+  /* 26rem e nao 22: em 22rem "Programação da semana" quebrava em duas linhas
+     no desktop e na totem, onde a tipografia chega no teto do clamp. */
+  width: min(26rem, 100%);
 }
 
 .hero__palco {
@@ -200,37 +202,57 @@ button {
   text-transform: uppercase;
   text-align: center;
   text-decoration: none;
-  /* Halo mais curto que o --mitte-glow-pink padrão: empilhados, os 60px do
-     token sangravam rosa por cima dos dois botões de contorno. */
-  box-shadow: 0 0 22px rgba(255, 51, 153, .55);
+  /* Rótulo longo reparte em linhas parecidas em vez de deixar órfã. */
+  text-wrap: balance;
+  box-shadow: var(--mitte-glow-botao);
   transition: transform var(--mitte-dur) var(--mitte-ease-back),
               box-shadow var(--mitte-dur) var(--mitte-ease),
               border-color var(--mitte-dur) var(--mitte-ease),
-              background-color var(--mitte-dur) var(--mitte-ease);
+              background var(--mitte-dur) var(--mitte-ease);
 }
 
 .botao svg { flex: none; }
 
-/* Os dois destinos que saem do cardápio: mesmo peso tipográfico, contorno
-   em vez de preenchimento. Só o do meio é "fique aqui". */
+/* Os dois destinos que saem do cardápio, preenchidos com a face do logo —
+   a mesma chapa azul do lettering logo acima. Vazados, eles liam como botão
+   desativado, que é o oposto do que um convite deve parecer.
+
+   A hierarquia deixou de ser "cheio vs. vazado" e virou **aceso vs.
+   pintado**, que é como funciona a fachada de um bar: o letreiro é pintado,
+   o neon é o que brilha. Só o Cardápio emite halo. Precisa ser assim porque
+   a face mede 9,7:1 contra o fundo e o rosa mede 5,9:1 — no escuro o azul é
+   o mais claro dos três, então o destaque do rosa não pode se apoiar em
+   luminância. Apoia-se em saturação e em ser o único que acende. */
 .botao--fantasma {
-  background: color-mix(in srgb, var(--acento) 9%, rgba(9, 9, 11, .55));
-  border: 1px solid color-mix(in srgb, var(--acento) 48%, transparent);
-  color: var(--mitte-fg);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--acento) 16%, transparent);
-  backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, var(--mitte-face-topo), var(--mitte-face-base));
+  border: 1px solid var(--mitte-face-borda);
+  color: var(--mitte-face-ink);
+  /* Luz só na aresta de cima: dá relevo de chapa, não brilho de neon. */
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .45);
 }
 
-.botao--fantasma svg { color: var(--acento); }
+/* O ícone herda a tinta escura por currentColor. A regra antiga pintava ele
+   de --acento, que sobre a face daria 1,6:1 (ciano) ou 2,2:1 (roxo). */
 
 .botao:hover { transform: translateY(-2px) scale(1.02); }
 .botao:active { transform: scale(.97); }
 
+#abrir-cardapio:hover,
+#abrir-cardapio:focus-visible { box-shadow: var(--mitte-glow-botao-forte); }
+
 .botao--fantasma:hover,
 .botao--fantasma:focus-visible {
-  border-color: var(--acento);
-  background: color-mix(in srgb, var(--acento) 16%, rgba(9, 9, 11, .55));
-  box-shadow: 0 0 34px color-mix(in srgb, var(--acento) 32%, transparent);
+  background: linear-gradient(180deg, var(--mitte-face-acesa), var(--mitte-logo-face));
+  border-color: var(--mitte-fg);
+}
+
+/* O anel de foco global é ciano e sumiria dentro da chapa azul. */
+.botao--fantasma:focus-visible { outline-color: var(--mitte-fg); }
+
+/* Na totem não existe hover: afundar no toque é o único retorno que sobra. */
+.botao--fantasma:active {
+  background: linear-gradient(180deg, var(--mitte-logo-face), var(--mitte-face-afundada));
+  box-shadow: inset 0 2px 7px rgba(0, 0, 0, .32);
 }
 
 /* ==========================================================================
@@ -926,4 +948,10 @@ body.totem .itens__grade {
 @media (hover: none) {
   .card:hover, .categoria:hover { transform: none; box-shadow: none; }
   .card:hover .card__figura img { transform: none; }
+  /* No toque o :hover gruda depois do tap e o botão ficava aceso sozinho. */
+  .botao:hover { transform: none; }
+  .botao--fantasma:hover {
+    background: linear-gradient(180deg, var(--mitte-face-topo), var(--mitte-face-base));
+    border-color: var(--mitte-face-borda);
+  }
 }
