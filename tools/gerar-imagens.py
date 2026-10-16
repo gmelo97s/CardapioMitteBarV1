@@ -25,7 +25,11 @@ MASTERS = RAIZ / "assets" / "itens" / "_masters"
 SAIDA = RAIZ / "assets" / "itens"
 CARDAPIO = RAIZ / "src" / "data" / "cardapio.json"
 
-LARGURAS = [400, 800]          # precisa bater com LARGURAS em src/app.js
+# Precisa bater com LARGURAS em src/app.js.
+# O degrau de 600 existe por causa do celular: com 400 e 800 só, um aparelho
+# de DPR 3 precisa de ~515px para um card de 172 e sobe direto para o 800,
+# baixando quase o dobro do necessario em toda aba.
+LARGURAS = [400, 600, 800]
 QUALIDADE = 82
 EXTENSOES = (".png", ".jpg", ".jpeg", ".webp")
 

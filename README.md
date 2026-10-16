@@ -42,9 +42,11 @@ para `mittesp.com.br/agenda`), *Cardápio* (fica aqui) e *Reserva de
 aniversário* (vai para `mittebar.vercel.app`). Os três são neon: os dois que
 saem do cardápio no azul da marca, o do meio no rosa — e só o do meio pulsa.
 
-**Categorias** → a barra de busca no topo, fixa, e as 12 abas numa coluna de
-pílulas, uma por linha, sem foto. Cada aba traz seu acento de cor na borda e
-no sublinhado.
+**Categorias** → o logo centralizado no topo, a barra de busca fixa logo
+abaixo, e as 12 abas numa coluna de pílulas, uma por linha, sem foto. As doze
+**repartem a altura disponível**, então cabem na tela sem rolagem do iPhone SE
+à totem. A pílula é dark premium — chapa neutra, fio de luz — e quem carrega a
+cor é o nome, em rosa neon.
 
 **Itens** → cards com foto quadrada, nome e preço. Só esta lista rola.
 
@@ -56,7 +58,10 @@ A página nunca rola: `html, body { overflow: hidden }` e o shell tem
 
 ## A busca
 
-Mora no topo da tela de categorias e fica visível o tempo todo. Enquanto o
+Mora no topo da tela de categorias e fica visível o tempo todo. Com o campo
+vazio e sem foco, ele se digita sozinho em rosa neon, alternando entre *Gin*,
+*Vodka*, *Pra economizar*, *Drinks*, *Comida*, *Porções*, *Xeque Mate* e
+*Caipirinha* — é demonstração, não sugestão clicável, e some ao primeiro toque. Enquanto o
 campo está vazio, embaixo dele fica a coluna de abas; ao digitar, os
 resultados ocupam o lugar da coluna. Não há chips de sugestão: o que a barra
 entende está no exemplo do placeholder, e o resto ela deduz.

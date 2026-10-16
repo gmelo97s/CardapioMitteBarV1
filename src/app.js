@@ -1,8 +1,10 @@
 const BRL = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
 
-/* Larguras geradas por tools/gerar-imagens.py. 400 cobre card em celular,
-   800 cobre card em totem e telas 2x. */
-const LARGURAS = [400, 800];
+/* Larguras geradas por tools/gerar-imagens.py. 400 cobre o card em tela 1x,
+   600 é o degrau do celular retina (DPR 3 pede ~515px para um card de 172) e
+   800 cobre o detalhe aberto e a totem. Sem o 600 no meio, todo celular
+   moderno baixava o 800 em todos os cards. */
+const LARGURAS = [400, 600, 800];
 
 const el = {
   telas: {
@@ -15,7 +17,9 @@ const el = {
   rolagemItens: document.querySelector("#rolagem-itens"),
   tituloCategoria: document.querySelector("#titulo-categoria"),
   painel: document.querySelector("#painel-cardapio"),
+  campo: document.querySelector(".barra-busca .campo"),
   campoBusca: document.querySelector("#campo-busca"),
+  fantasma: document.querySelector("#fantasma-busca"),
   limparBusca: document.querySelector("#limpar-busca"),
   resultados: document.querySelector("#resultados"),
   detalhe: document.querySelector("#detalhe"),
@@ -56,6 +60,7 @@ async function iniciar() {
   });
 
   el.campoBusca.addEventListener("input", () => buscar(el.campoBusca.value));
+  demoDigitacao();
   el.limparBusca.addEventListener("click", () => {
     el.campoBusca.value = "";
     buscar("");
@@ -309,6 +314,80 @@ function sugerir(item, quantos = 3) {
     .sort((a, b) => a.ordem - b.ordem)
     .slice(0, quantos)
     .map(({ e }) => e);
+}
+
+/* --------------------------------------------------------------------------
+   Demonstração de digitação na barra de busca
+
+   O campo vazio não ensina nada. Aqui ele se digita sozinho, em rosa neon,
+   alternando entre o que dá para pedir: um nome de bebida, uma categoria,
+   um pedido solto. É placeholder animado, não sugestão clicável — some no
+   instante em que a pessoa toca no campo.
+   -------------------------------------------------------------------------- */
+
+const DEMO = [
+  "Gin", "Vodka", "Pra economizar", "Drinks", "Comida",
+  "Porções", "Xeque Mate", "Caipirinha",
+];
+
+function demoDigitacao() {
+  if (!el.fantasma || !el.campo) return;
+
+  const lento = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let timer = null;
+  let anterior = -1;
+
+  const agendar = (fn, ms) => { timer = setTimeout(fn, ms); };
+
+  function parar() {
+    clearTimeout(timer);
+    timer = null;
+    el.campo.removeAttribute("data-demo");
+    el.fantasma.textContent = "";
+  }
+
+  function proxima() {
+    /* Sorteia sem repetir a anterior: a mesma palavra duas vezes seguidas
+       parece animação travada, não sorteio. */
+    let i = Math.floor(Math.random() * DEMO.length);
+    if (DEMO.length > 1 && i === anterior) i = (i + 1) % DEMO.length;
+    anterior = i;
+    const palavra = DEMO[i];
+
+    if (lento) {
+      el.fantasma.textContent = palavra;
+      return agendar(proxima, 2600);
+    }
+
+    let n = 0;
+    (function escreve() {
+      el.fantasma.textContent = palavra.slice(0, ++n);
+      if (n < palavra.length) return agendar(escreve, 58);
+      agendar(function apaga() {
+        el.fantasma.textContent = palavra.slice(0, --n);
+        if (n > 0) return agendar(apaga, 28);
+        agendar(proxima, 320);
+      }, 1500);
+    })();
+  }
+
+  function comecar() {
+    if (timer || el.campoBusca.value || document.activeElement === el.campoBusca) return;
+    el.campo.setAttribute("data-demo", "");
+    proxima();
+  }
+
+  el.campoBusca.addEventListener("focus", parar);
+  el.campoBusca.addEventListener("input", parar);
+  /* Se a pessoa desiste e sai do campo vazio, a demonstração volta. */
+  el.campoBusca.addEventListener("blur", () => { if (!el.campoBusca.value) comecar(); });
+  /* Em aba oculta a animação acordaria o aparelho à toa. */
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) parar();
+    else if (!el.campoBusca.value) comecar();
+  });
+
+  comecar();
 }
 
 /* ==========================================================================

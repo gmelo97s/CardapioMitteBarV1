@@ -194,7 +194,13 @@ texto.
 
 ### Componentes
 
-- **`.categoria`** — pílula de aba: nome em Orbitron centralizado, com
+- **`.categoria`** — pílula de aba, **dark premium**: chapa neutra
+  (`#16161B → #0B0B0E`), fio de luz na borda em rosa a 34%, e o nome em
+  `--mitte-pink` com glow. Doze acentos diferentes competiam entre si e com o
+  conteúdo; com a chapa neutra, a única coisa que brilha na tela é o nome da
+  seção, que é o que a pessoa veio ler. As doze repartem a altura do painel
+  (`grid-auto-rows: minmax(0, 1fr)`), com teto de 44rem para a pílula não
+  virar um bloco de 150px numa totem. Versão anterior: nome em Orbitron centralizado, com
   sublinhado no acento da aba. O sublinhado é o que o cardápio de referência
   tem; em Orbitron ele vira um fio de neon embaixo do nome. A borda também
   carrega o acento, a 40% — parada, a coluna tem o mesmo ritmo de cor que a
@@ -414,3 +420,41 @@ a montagem do logo e a respiração da hero.
   escuro) convivem bem lado a lado porque as duas são escuras; o que quebra
   é foto com fundo claro — por isso o anúncio da Ballantine's, que é diurno,
   ficou de fora.
+
+
+---
+
+## 11. Performance: o que foi medido
+
+Medido com Chromium, viewport 390×844, DPR 3, CPU 4–6× mais lenta e rede 4G.
+
+| | Antes | Depois |
+|---|---|---|
+| Peso total da primeira aba | 540 KB | **450 KB** |
+| Fontes | 59 KB | **35 KB** |
+| Imagens (24 cards) | 336 KB | **260 KB** |
+| Quadros por segundo (CPU 6×) | **8,5 fps** | **60 fps** |
+
+O salto de 8,5 para 60 fps veio de **uma linha**: `will-change: transform`
+nas manchas do fundo. Parecia a otimização óbvia e era o contrário — promovida
+a camada própria, cada mancha vira uma textura de ~1770² pixels com desfoque de
+270px de raio em DPR 3, e o browser a re-rasteriza a cada quadro da deriva.
+Sem a dica, o desfoque é rasterizado junto com o fundo e a deriva sai de graça.
+Diferença visual medida: **máximo de 4/255 por pixel**, ou seja, nenhuma.
+
+As outras quatro, todas sem mudança visual:
+
+- **`@import` virou `<link>`.** Dentro do styles.css, o tokens.css e o
+  motion.css só eram *descobertos* depois que o styles.css terminava de
+  baixar — três viagens em série para a primeira pintura.
+- **Pesos de fonte.** Orbitron 500 e Inter 500 eram baixados em toda visita e
+  nunca pintavam um pixel.
+- **Degrau de 600px no `srcset`.** Com 400 e 800 só, um celular DPR 3 precisa
+  de ~515px para um card de 172 e sobe direto para o 800 — quase o dobro do
+  necessário, em todo card de toda aba.
+- **`preload` do cardapio.json.** O fetch só começava depois de baixar e
+  executar o app.js; agora os dois andam em paralelo.
+
+A troca de tela também deixou de animar `filter: blur()` em tela cheia, que
+repintava a tela a cada quadro. Ficou mais curta (.42s) e, na prática, mais
+fluida — que era justamente o que o desfoque tentava dar.

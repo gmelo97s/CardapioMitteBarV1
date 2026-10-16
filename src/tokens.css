@@ -90,11 +90,27 @@
   /* --- Movimento -------------------------------------------------------- */
   --mitte-ease:      cubic-bezier(.22, 1, .36, 1);   /* saida suave padrao */
   --mitte-ease-back: cubic-bezier(.34, 1.56, .64, 1); /* leve overshoot */
-  --mitte-dur:       .22s;   /* microinteracao */
-  --mitte-dur-tela:  .55s;   /* troca de tela */
-  --mitte-stagger:   60ms;   /* atraso entre itens de uma lista */
+  /* Curva de SAIDA, para o que esta indo embora: comeca rapido e some. Usar
+     a mesma curva de entrada na saida faz a interface parecer lenta, porque
+     o elemento demora a decidir que vai sair. */
+  --mitte-ease-saida: cubic-bezier(.4, 0, 1, 1);
+  /* Mola curta, para o que aparece por cima (dialogo). Overshoot menor que o
+     --mitte-ease-back: num painel grande, 1.56 lê como tremor. */
+  --mitte-ease-mola: cubic-bezier(.2, 1.25, .3, 1);
+
+  --mitte-dur-toque: .12s;  /* o aperto do dedo, tem que ser imediato */
+  --mitte-dur:       .2s;   /* microinteracao */
+  --mitte-dur-tela:  .42s;  /* troca de tela */
+  --mitte-dur-dialogo: .34s;
+  --mitte-stagger:   45ms;  /* atraso entre itens de uma lista */
 }
 
 @media (prefers-reduced-motion: reduce) {
-  :root { --mitte-dur: .001s; }
+  :root {
+    --mitte-dur: .001s;
+    --mitte-dur-toque: .001s;
+    --mitte-dur-tela: .001s;
+    --mitte-dur-dialogo: .001s;
+    --mitte-stagger: 0ms;
+  }
 }

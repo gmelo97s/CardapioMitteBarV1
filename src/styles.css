@@ -1,5 +1,5 @@
-@import url("./tokens.css");
-@import url("./motion.css");
+/* tokens.css e motion.css entram por <link> no index.html, não por
+   @import: o @import serializava os três downloads. */
 
 /* ==========================================================================
    Base — o app ocupa a tela inteira e a página nunca rola
@@ -54,10 +54,16 @@ button {
 .ambiente__mancha {
   position: absolute;
   border-radius: 50%;
-  /* O blur é o custo da festa. 90px numa mancha de 60vmax ainda roda liso
-     numa totem; acima disso começa a pesar na rolagem dos cards. */
+  /* O blur é o custo da festa. 90px numa mancha de 70vmax dá a luz difusa
+     do salão, e é o que faz o fundo parecer iluminado em vez de pintado. */
   filter: blur(90px);
-  will-change: transform;
+  /* NÃO colocar `will-change: transform` aqui. Parece a otimização óbvia e é
+     o contrário: promovida a camada própria, cada mancha vira uma textura de
+     ~1770² pixels com desfoque de 270px de raio em DPR 3, e o browser a
+     re-rasteriza a cada quadro da deriva. Medido num celular com CPU 6×
+     mais lenta: 8,5 fps com a dica, 60 fps sem ela, com diferença máxima de
+     4/255 por pixel — ou seja, nenhuma diferença visível. Sem a dica o
+     desfoque é rasterizado junto com o fundo e a deriva sai de graça. */
 }
 
 .ambiente__mancha--rosa {
@@ -258,7 +264,7 @@ button {
 
 /* Na totem não existe hover: afundar e apagar no toque é o único retorno. */
 .botao:active {
-  transform: scale(.97);
+  transform: scale(.96);
   background: color-mix(in srgb, var(--botao-cor) 86%, var(--mitte-bg));
   --botao-halo: 0 0 12px color-mix(in srgb, var(--botao-cor) 55%, transparent);
 }
@@ -306,6 +312,24 @@ button {
   text-overflow: ellipsis;
 }
 
+/* Na tela de categorias o cabeçalho é só a marca, centralizada. O título
+   saiu junto com o botão de busca: a barra agora é a linha de baixo. */
+.topo--marca { justify-content: center; }
+
+.topo--marca .topo__logo { height: clamp(1.5rem, 4.2vh, 2.5rem); }
+
+/* Fica para o leitor de tela, que perdeu o <h1> visível. */
+.visualmente-oculto {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 .icone {
   flex: none;
   display: grid;
@@ -316,7 +340,9 @@ button {
   border: 1px solid var(--mitte-border);
   background: var(--mitte-bg-elev-1);
   color: var(--mitte-fg);
-  transition: all var(--mitte-dur) var(--mitte-ease);
+  transition: border-color var(--mitte-dur) var(--mitte-ease),
+              color var(--mitte-dur) var(--mitte-ease),
+              transform var(--mitte-dur-toque) var(--mitte-ease);
 }
 
 .icone:hover {
@@ -324,7 +350,7 @@ button {
   color: var(--mitte-pink);
 }
 
-.icone:active { transform: scale(.92); }
+.icone:active { transform: scale(.9); }
 
 /* ==========================================================================
    Tela 2 — Categorias em coluna, com a busca fixa no topo
@@ -352,7 +378,10 @@ button {
      embaixo — e volta a alinhar pelo topo assim que a lista passa da altura
      da tela, sem cortar a primeira linha. */
   display: grid;
-  align-content: safe center;
+  /* `stretch` (o padrão) e não `safe center`: a coluna de abas precisa de uma
+     altura definida para repartir entre as pílulas, e trilha auto-dimensionada
+     não dá isso. Quem centra na tela alta é a própria coluna, pelo max-height. */
+  align-content: stretch;
   /* A coluna central vem da trilha, não de margin-inline:auto — margem
      automática em item de grade cancela o stretch e a pílula encolhe para
      o tamanho do texto. */
@@ -370,10 +399,19 @@ button {
   border-radius: var(--mitte-radius-pill);
 }
 
+/* As doze abas repartem a altura que existe, em vez de somar 12 × altura fixa
+   e transbordar. `1fr` por linha faz cada pílula valer (altura − vãos) / 12,
+   então a coluna inteira cabe na tela sem rolagem, do iPhone SE à totem.
+   O teto de 44rem é o que impede a pílula de virar um bloco de 150px numa
+   totem de 1920 de altura; acima disso a coluna para de crescer e se centra. */
 .categorias__coluna {
   display: grid;
-  gap: clamp(.4rem, 1.2vh, .7rem);
-  padding-block: clamp(.25rem, 1vh, .6rem);
+  grid-auto-rows: minmax(0, 1fr);
+  gap: clamp(.2rem, .85vh, .7rem);
+  height: 100%;
+  max-height: 44rem;
+  align-self: center;
+  padding-block: clamp(.15rem, .7vh, .5rem);
 }
 
 .categorias__coluna[hidden] { display: none; }
@@ -381,26 +419,33 @@ button {
 /* Pílula de contorno, uma aba por linha. Cada aba traz seu acento (--acento,
    vindo do app.js) na borda e no sublinhado: parada, a coluna tem o ritmo de
    cor que a grade antiga tinha; em movimento, a aba inteira acende. */
+/* Dark premium: a pílula é neutra — preto com um fio de luz — e quem carrega
+   a cor é a tipografia, em rosa neon. Doze acentos diferentes competiam entre
+   si e com o conteúdo; com a chapa neutra, a única coisa que brilha na tela é
+   o nome da seção, que é o que a pessoa veio ler. */
 .categoria {
   position: relative;
   isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: calc(var(--mitte-alvo) * 1.04);
-  padding: .8rem 2.5rem;
-  border: 1px solid color-mix(in srgb, var(--acento) 40%, transparent);
+  /* Sem piso de altura: quem manda é o `1fr` da linha. Um min-height aqui
+     reintroduziria a rolagem exatamente nas telas baixas que ele protegeria.
+     O alvo de toque continua grande porque a pílula ocupa a largura toda. */
+  min-height: 0;
+  padding: .5rem 2rem;
+  border: 1px solid color-mix(in srgb, var(--mitte-pink) 34%, transparent);
   border-radius: var(--mitte-radius-pill);
-  background: linear-gradient(180deg, rgba(250, 250, 250, .05), rgba(9, 9, 11, .42));
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, #16161B, #0B0B0E);
+  box-shadow: 0 0 16px rgba(255, 51, 153, .12),
+              inset 0 1px 0 rgba(255, 255, 255, .045);
   overflow: hidden;
-  transition: transform var(--mitte-dur) var(--mitte-ease-back),
+  transition: transform var(--mitte-dur) var(--mitte-ease-saida),
               border-color var(--mitte-dur) var(--mitte-ease),
               box-shadow var(--mitte-dur) var(--mitte-ease);
 }
 
-/* Lavagem de cor que atravessa a pílula no toque. Fica atrás do texto e
-   some sozinha — é o "acendeu" sem trocar a cor do rótulo. */
+/* Varredura de luz que atravessa a pílula no toque. */
 .categoria::before {
   content: "";
   position: absolute;
@@ -408,7 +453,7 @@ button {
   z-index: -1;
   background: linear-gradient(90deg,
     transparent,
-    color-mix(in srgb, var(--acento) 26%, transparent) 50%,
+    rgba(255, 51, 153, .16) 50%,
     transparent);
   opacity: 0;
   transform: translateX(-30%);
@@ -418,39 +463,44 @@ button {
 
 .categoria:hover,
 .categoria:focus-visible {
-  border-color: var(--acento);
   transform: translateY(-2px);
-  box-shadow: 0 10px 34px color-mix(in srgb, var(--acento) 26%, transparent),
-              inset 0 0 20px color-mix(in srgb, var(--acento) 10%, transparent);
+  border-color: var(--mitte-pink);
+  box-shadow: 0 0 26px rgba(255, 51, 153, .35),
+              inset 0 0 22px rgba(255, 51, 153, .1);
 }
 
 .categoria:hover::before,
 .categoria:focus-visible::before { opacity: 1; transform: translateX(0); }
 
-.categoria:active { transform: scale(.985); }
+/* O aperto é curto de propósito: o retorno do toque precisa chegar antes do
+   dedo sair, senão a interface parece ter demorado a entender. */
+.categoria:active {
+  transform: scale(.975);
+  transition-duration: var(--mitte-dur-toque);
+  box-shadow: 0 0 34px rgba(255, 51, 153, .5),
+              inset 0 0 26px rgba(255, 51, 153, .18);
+}
 
-/* O sublinhado é o que a referência tem; em Orbitron ele vira o fio de neon
-   embaixo do nome. Fica no acento da aba, não no branco do texto. */
+/* O nome é a única coisa colorida da tela: rosa neon, com o brilho que o
+   resto da pílula não tem. */
 .categoria__nome {
   font-family: var(--mitte-font-display);
-  font-size: clamp(.68rem, 3.2vw, .88rem);
+  /* Dimensionado pela MENOR entre largura e altura: numa tela baixa a pílula
+     encolhe, e amarrar só em vw deixaria o nome grande demais para a caixa. */
+  font-size: clamp(.62rem, min(3.2vw, 1.9vh), .88rem);
   font-weight: 700;
-  letter-spacing: .07em;
+  letter-spacing: .09em;
   text-transform: uppercase;
   line-height: 1.2;
   text-wrap: balance;
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--acento) 70%, transparent);
-  text-decoration-thickness: 1px;
-  text-underline-offset: .42em;
-  transition: text-decoration-color var(--mitte-dur) var(--mitte-ease),
-              text-shadow var(--mitte-dur) var(--mitte-ease);
+  color: var(--mitte-pink);
+  text-shadow: var(--mitte-glow-text-pink);
+  transition: text-shadow var(--mitte-dur) var(--mitte-ease);
 }
 
 .categoria:hover .categoria__nome,
 .categoria:focus-visible .categoria__nome {
-  text-decoration-color: var(--acento);
-  text-shadow: 0 0 14px color-mix(in srgb, var(--acento) 70%, transparent);
+  text-shadow: 0 0 16px rgba(255, 51, 153, .95), 0 0 34px rgba(255, 51, 153, .5);
 }
 
 /* ==========================================================================
@@ -478,6 +528,45 @@ button {
 .campo svg { flex: none; color: var(--mitte-fg-subtle); }
 .campo:focus-within > svg { color: var(--mitte-pink); }
 
+/* Caixa de posicionamento para a demonstração de digitação ficar exatamente
+   em cima do texto do input, sem depender de medir padding na mão. */
+.campo__caixa {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+}
+
+.campo__fantasma {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  pointer-events: none;
+  font-size: 1rem;
+  color: var(--mitte-pink);
+  text-shadow: var(--mitte-glow-text-pink);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* O cursor que pisca no fim do texto digitado. */
+.campo__fantasma::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  margin-left: .12em;
+  background: var(--mitte-pink);
+  box-shadow: var(--mitte-glow-text-pink);
+  animation: piscaCursor 1.05s steps(1) infinite;
+}
+
+/* Com a demonstração rodando, o placeholder real some de vista mas continua
+   no DOM: é ele que o leitor de tela anuncia. */
+.campo[data-demo] .campo__fantasma { display: flex; }
+.campo[data-demo] input::placeholder { color: transparent; }
+
 .campo input {
   flex: 1;
   min-width: 0;
@@ -502,10 +591,12 @@ button {
   border-radius: var(--mitte-radius-pill);
   background: var(--mitte-bg-elev-2);
   color: var(--mitte-fg-muted);
-  transition: color var(--mitte-dur) var(--mitte-ease);
+  transition: color var(--mitte-dur) var(--mitte-ease),
+              transform var(--mitte-dur-toque) var(--mitte-ease);
 }
 
 .campo__limpar:hover { color: var(--mitte-pink); }
+.campo__limpar:active { transform: scale(.88); }
 .campo__limpar[hidden] { display: none; }
 
 .resultados { min-width: 0; }
@@ -544,6 +635,7 @@ button {
 
 .atalho-aba svg { flex: none; color: var(--acento); margin-left: auto; }
 .atalho-aba:hover { border-color: var(--acento); }
+.atalho-aba:active { transform: scale(.985); }
 
 /* "Você quis dizer": uma linha de texto, não um chip. A correção aparece só
    quando a busca falhou, no lugar onde a pessoa já está olhando. */
@@ -623,7 +715,7 @@ button {
   box-shadow: 0 14px 44px rgba(255, 51, 153, .2);
 }
 
-.card:active { transform: scale(.98); }
+.card:active { transform: scale(.97); transition-duration: var(--mitte-dur-toque); }
 
 .card__figura {
   display: block;
@@ -764,10 +856,14 @@ button {
   backdrop-filter: blur(16px);
   visibility: hidden;
   opacity: 0;
-  transition: opacity var(--mitte-dur) var(--mitte-ease), visibility var(--mitte-dur);
+  transition: opacity var(--mitte-dur) var(--mitte-ease-saida), visibility var(--mitte-dur);
 }
 
-.detalhe[data-aberto] { visibility: visible; opacity: 1; }
+.detalhe[data-aberto] {
+  visibility: visible;
+  opacity: 1;
+  transition: opacity var(--mitte-dur) var(--mitte-ease);
+}
 
 .detalhe__caixa {
   position: relative;
@@ -778,8 +874,13 @@ button {
   border-radius: var(--mitte-radius);
   background: var(--mitte-bg-elev-1);
   box-shadow: 0 30px 90px rgba(0, 0, 0, .7), var(--mitte-glow-pink);
-  transform: scale(.92);
-  transition: transform var(--mitte-dur-tela) var(--mitte-ease-back);
+  /* Sobe e cresce com uma mola curta, como um cartão sendo puxado para a
+     frente. Fecha sem mola e mais rápido: overshoot na saída faz o diálogo
+     parecer que hesitou. */
+  transform: scale(.9) translateY(1.25rem);
+  opacity: 0;
+  transition: transform calc(var(--mitte-dur-dialogo) * .6) var(--mitte-ease-saida),
+              opacity calc(var(--mitte-dur-dialogo) * .6) var(--mitte-ease-saida);
   /* A barra de rolagem padrão reservava uma faixa clara à direita, que ficava
      por cima da foto e parecia um pedaço vazio do card. Fina e com trilho
      transparente, ela deixa a imagem encostar nas duas bordas. */
@@ -795,13 +896,26 @@ button {
   border-radius: var(--mitte-radius-pill);
 }
 
-.detalhe[data-aberto] .detalhe__caixa { transform: scale(1); }
+.detalhe[data-aberto] .detalhe__caixa {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+  transition: transform var(--mitte-dur-dialogo) var(--mitte-ease-mola),
+              opacity calc(var(--mitte-dur-dialogo) * .5) var(--mitte-ease);
+}
 
 .detalhe__figura {
   /* span inline ignora aspect-ratio: sem este display a área da foto
      colapsava para a altura de uma linha. */
   display: block;
   position: relative;
+  /* `width: 100%` explícito é o que conserta a faixa preta à direita da foto.
+     Com a largura em `auto`, o `aspect-ratio` passa a valer nos DOIS sentidos:
+     quando o `max-height` abaixo cortava a altura, o browser encolhia a
+     largura junto para manter o quadrado, e a figura ficava mais estreita que
+     o card — 321px dentro de 358px no celular. Largura definida, o
+     `aspect-ratio` só calcula a altura, e o `max-height` corta sem mexer na
+     largura; o object-fit: cover do <img> cuida do resto. */
+  width: 100%;
   aspect-ratio: 1;
   /* Teto de altura para as sugestões aparecerem sem precisar rolar: a foto
      continua quadrada enquanto couber e vira faixa quando a tela é baixa. */
@@ -878,7 +992,7 @@ button {
   transform: translateY(-2px);
 }
 
-.acompanha__item:active { transform: scale(.97); }
+.acompanha__item:active { transform: scale(.95); transition-duration: var(--mitte-dur-toque); }
 
 .acompanha__figura {
   display: block;
@@ -923,7 +1037,11 @@ body.totem .acompanha__preco { font-size: .95rem; }
   position: absolute;
   top: .6rem;
   right: .6rem;
-  z-index: 1;
+  /* 2, e não 1: a foto também está em z-index 1 e vem depois no DOM, então
+     empatava e ganhava — o X ficava escondido atrás da imagem. Só não
+     aparecia antes porque a figura era mais estreita que o card e deixava
+     justamente aquele canto livre. */
+  z-index: 2;
   width: 2.5rem;
   height: 2.5rem;
   border-radius: var(--mitte-radius-pill);
@@ -945,6 +1063,9 @@ body.totem .card__nome   { font-size: 1rem; }
 body.totem .card__desc   { font-size: .875rem; }
 body.totem .card__preco  { font-size: 1.15rem; }
 body.totem .categoria__nome { font-size: 1.15rem; }
+/* O teto de 44rem é para tela de mão. Na totem, a mesma coluna em 1920 de
+   altura deixaria pílulas de 50px para quem está a um metro de distância. */
+body.totem .categorias__coluna { max-height: 64rem; }
 /* Na totem o cliente está a um braço de distância, não a 30 cm: cards grandes,
    poucos por linha. O teto em rem evita cards gigantes numa totem deitada. */
 body.totem .itens__grade {

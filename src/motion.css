@@ -139,30 +139,45 @@
       É o que dá a sensação de atravessar para dentro do menu.
    -------------------------------------------------------------------------- */
 
+/* Só opacidade e transform, que o compositor resolve sozinho. A versão
+   anterior animava `filter: blur()` numa tela inteira: num celular mediano
+   isso repinta a tela a cada quadro e a transição engasga justamente no
+   aparelho em que ela mais aparece. Sem o desfoque a troca ficou mais curta
+   (.42s) e, na prática, mais fluida — que era o ponto do desfoque. */
 @keyframes telaEntra {
-  from { opacity: 0; transform: scale(1.06) translateY(1.5rem); filter: blur(10px); }
-  to   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+  from { opacity: 0; transform: scale(1.03) translateY(1.25rem); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 @keyframes telaSai {
-  from { opacity: 1; transform: scale(1); filter: blur(0); }
-  to   { opacity: 0; transform: scale(.94); filter: blur(14px); }
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to   { opacity: 0; transform: scale(.97) translateY(-.5rem); }
 }
 
 /* Voltar inverte o eixo: a tela anterior volta de trás, não de baixo */
 @keyframes telaVolta {
-  from { opacity: 0; transform: scale(.94); filter: blur(10px); }
-  to   { opacity: 1; transform: scale(1); filter: blur(0); }
+  from { opacity: 0; transform: scale(.975) translateY(-.75rem); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-.tela[data-ativa]          { animation: telaEntra var(--mitte-dur-tela) var(--mitte-ease) both; }
+.tela[data-ativa] {
+  animation: telaEntra var(--mitte-dur-tela) var(--mitte-ease) both;
+  /* Avisa o compositor antes do quadro 1: sem isto o primeiro quadro da
+     troca promove a camada e perde tempo justamente no começo. */
+  will-change: opacity, transform;
+}
+
 .tela[data-ativa][data-volta] { animation-name: telaVolta; }
 
 .tela[data-saindo] {
   visibility: visible;
   pointer-events: none;
-  animation: telaSai var(--mitte-dur-tela) var(--mitte-ease) both;
+  animation: telaSai calc(var(--mitte-dur-tela) * .72) var(--mitte-ease-saida) both;
 }
+
+/* Terminada a troca, a dica de camada sai do caminho: manter will-change
+   em três telas o tempo todo é segurar memória de GPU à toa. */
+.tela:not([data-ativa]):not([data-saindo]) { will-change: auto; }
 
 /* --------------------------------------------------------------------------
    4. Listas — cada item entra logo depois do anterior
@@ -195,6 +210,13 @@
 /* O stagger satura: a partir do 14º item ninguém percebe a diferença, e
    esperar 1s pelo último item seria pior que não animar. */
 .card { animation-delay: calc(min(var(--i), 13) * var(--mitte-stagger)); }
+
+/* Cursor da demonstração de digitação na busca: `steps(1)` para ele ligar e
+   desligar, e não esmaecer — cursor que faz fade não lê como cursor. */
+@keyframes piscaCursor {
+  0%, 50%   { opacity: 1; }
+  50.01%, 100% { opacity: 0; }
+}
 
 /* --------------------------------------------------------------------------
    5. Quem pediu menos movimento recebe menos movimento
