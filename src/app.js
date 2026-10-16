@@ -10,19 +10,19 @@ const el = {
     categorias: document.querySelector("#tela-categorias"),
     itens: document.querySelector("#tela-itens"),
   },
-  gradeCategorias: document.querySelector("#grade-categorias"),
+  coluna: document.querySelector("#grade-categorias"),
   gradeItens: document.querySelector("#grade-itens"),
   rolagemItens: document.querySelector("#rolagem-itens"),
   tituloCategoria: document.querySelector("#titulo-categoria"),
-  busca: document.querySelector("#busca"),
+  painel: document.querySelector("#painel-cardapio"),
   campoBusca: document.querySelector("#campo-busca"),
-  chips: document.querySelector("#chips"),
+  limparBusca: document.querySelector("#limpar-busca"),
   resultados: document.querySelector("#resultados"),
   detalhe: document.querySelector("#detalhe"),
   detalheCaixa: document.querySelector("#detalhe-caixa"),
 };
 
-const state = { dados: null, tela: "hero", categoria: null, indice: [] };
+const state = { dados: null, tela: "hero", categoria: null, indice: [], abas: [] };
 
 /* Totem: forçado por ?totem=1, ou deduzido de tela grande sem mouse. */
 if (
@@ -37,6 +37,10 @@ iniciar();
 async function iniciar() {
   const res = await fetch("./src/data/cardapio.json");
   state.dados = await res.json();
+  state.abas = state.dados.abas.map((aba) => ({
+    ...aba,
+    itens: aba.itens.filter((it) => !it.fora_de_linha),
+  }));
   construirIndice();
   montarCategorias();
 
@@ -44,11 +48,19 @@ async function iniciar() {
   document.querySelector("#voltar-hero").addEventListener("click", () => irPara("hero", true));
   document.querySelector("#voltar-categorias").addEventListener("click", () => irPara("categorias", true));
 
-  for (const b of document.querySelectorAll("[data-abrir-busca]")) {
-    b.addEventListener("click", abrirBusca);
-  }
-  document.querySelector("#fechar-busca").addEventListener("click", fecharBusca);
-  el.campoBusca.addEventListener("input", () => renderResultados(el.campoBusca.value));
+  /* A lupa da tela de itens não abre um segundo campo: devolve para o único
+     que existe, no topo do cardápio, já com o cursor dentro. */
+  document.querySelector("#buscar-do-item").addEventListener("click", () => {
+    irPara("categorias", true);
+    setTimeout(() => el.campoBusca.focus(), 120);
+  });
+
+  el.campoBusca.addEventListener("input", () => buscar(el.campoBusca.value));
+  el.limparBusca.addEventListener("click", () => {
+    el.campoBusca.value = "";
+    buscar("");
+    el.campoBusca.focus();
+  });
 
   el.detalhe.addEventListener("click", (e) => {
     if (e.target === el.detalhe) fecharDetalhe();
@@ -57,7 +69,7 @@ async function iniciar() {
   document.addEventListener("keydown", (e) => {
     if (e.key !== "Escape") return;
     if (el.detalhe.hasAttribute("data-aberto")) fecharDetalhe();
-    else if (el.busca.hasAttribute("data-aberta")) fecharBusca();
+    else if (el.campoBusca.value) { el.campoBusca.value = ""; buscar(""); }
     else if (state.tela === "itens") irPara("categorias", true);
     else if (state.tela === "categorias") irPara("hero", true);
   });
@@ -96,40 +108,34 @@ function abrirCategoria(aba) {
 
 /* Cada aba tem um acento próprio, dentro da paleta da marca. Serve para a
    pessoa reconhecer a seção pela cor antes de ler o nome — e é o que separa
-   uma grade de onze retângulos iguais de um menu que tem ritmo. */
+   uma coluna de doze pílulas iguais de um menu que tem ritmo. */
 const ACENTOS = {
   latas: "#00FFFF",
   outros: "#AA33FF",
   comidas: "#FF3399",
   "sem-alcool": "#00FF80",
-  classicos: "#FF3399",
-  "vodkas-gins": "#00FFFF",
-  caipirinhas: "#00FF80",
+  autorais: "#FF3399",
+  classicos: "#00FFFF",
+  "vodkas-gins": "#00FF80",
+  caipirinhas: "#AA33FF",
   tropicais: "#FF3399",
-  whisky: "#AA33FF",
+  whisky: "#00FFFF",
   "vinhos-espumantes": "#AA33FF",
-  doses: "#00FFFF",
+  doses: "#00FF80",
 };
 
+const acento = (abaId) => ACENTOS[abaId] ?? "#FF3399";
+
 function montarCategorias() {
-  el.gradeCategorias.replaceChildren(
-    ...state.dados.abas.map((aba, i) => {
-      const disponiveis = aba.itens.filter((it) => !it.fora_de_linha);
+  el.coluna.replaceChildren(
+    ...state.abas.map((aba, i) => {
       const b = document.createElement("button");
       b.className = "categoria";
       b.type = "button";
       b.style.setProperty("--i", i);
-      b.style.setProperty("--acento", ACENTOS[aba.id] ?? "#FF3399");
-      b.innerHTML = `
-        <span class="categoria__indice" aria-hidden="true">${String(i + 1).padStart(2, "0")}</span>
-        <span class="categoria__nome">${esc(aba.nome)}</span>
-        <span class="categoria__seta" aria-hidden="true">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M5 12h14M13 6l6 6-6 6"></path>
-          </svg>
-        </span>`;
-      b.addEventListener("click", () => abrirCategoria({ ...aba, itens: disponiveis }));
+      b.style.setProperty("--acento", acento(aba.id));
+      b.innerHTML = `<span class="categoria__nome">${esc(aba.nome)}</span>`;
+      b.addEventListener("click", () => abrirCategoria(aba));
       return b;
     })
   );
@@ -260,10 +266,11 @@ function fecharDetalhe() {
 /* De qual aba sai a sugestão, para cada aba de origem. Drink puxa comida,
    comida puxa drink, e dose puxa o que se mistura com ela. */
 const ACOMPANHA = {
-  comidas: ["classicos", "tropicais", "caipirinhas", "vodkas-gins", "latas"],
+  comidas: ["autorais", "classicos", "tropicais", "caipirinhas", "vodkas-gins", "latas"],
   doses: ["outros", "latas"],
   outros: ["comidas"],
   latas: ["comidas"],
+  "vinhos-espumantes": ["comidas"],
 };
 const ACOMPANHA_PADRAO = ["comidas"];
 
@@ -308,30 +315,43 @@ function sugerir(item, quantos = 3) {
    Busca
    ========================================================================== */
 
+function normalizar(texto) {
+  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+}
+
+function palavrasDe(texto) {
+  return normalizar(texto).split(/[^a-z0-9]+/).filter(Boolean);
+}
+
+/* Plural é o erro de digitação mais comum do balcão: a pessoa escreve
+   "caipirinhas", o cardápio diz "Caipirinha". Cortar o "s" (e o "es" de
+   "limões" → "limoes" → "limo") resolve antes de gastar distância de edição. */
+function raiz(palavra) {
+  if (palavra.length > 4 && palavra.endsWith("es")) return palavra.slice(0, -2);
+  if (palavra.length > 3 && palavra.endsWith("s")) return palavra.slice(0, -1);
+  return palavra;
+}
+
 /* O índice guarda palavras, não uma string única: comparar por prefixo de
    palavra evita que "sem" case com "sempre" e "gin" com "original".
    O subtítulo da aba fica de fora de propósito — é texto de vitrine, e
    "cervejas geladas" fazia todo item de Latas virar cerveja. */
 function construirIndice() {
-  state.indice = state.dados.abas.flatMap((aba) =>
-    aba.itens
-      .filter((it) => !it.fora_de_linha)
-      .map((item) => ({
-        item,
-        aba: aba.nome,
-        abaId: aba.id,
-        palavras: normalizar(`${item.nome} ${item.descricao ?? ""} ${aba.nome}`)
-          .split(/[^a-z0-9]+/)
-          .filter(Boolean),
-        /* Separadas porque casar no nome vale mais do que casar na descrição
-           ou no nome da aba — é o que ordena o resultado por relevância. */
-        palavrasNome: normalizar(item.nome).split(/[^a-z0-9]+/).filter(Boolean),
-      }))
+  state.indice = state.abas.flatMap((aba) =>
+    aba.itens.map((item) => ({
+      item,
+      aba: aba.nome,
+      abaId: aba.id,
+      /* Separadas porque casar no nome vale mais do que casar na descrição
+         ou no nome da aba — é o que ordena o resultado por relevância. */
+      palavrasNome: palavrasDe(item.nome).map(raiz),
+      palavrasDesc: palavrasDe(item.descricao ?? "").map(raiz),
+      palavrasAba: palavrasDe(aba.nome).map(raiz),
+    }))
   );
-}
-
-function normalizar(texto) {
-  return texto.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  for (const e of state.indice) {
+    e.palavras = [...e.palavrasNome, ...e.palavrasDesc, ...e.palavrasAba];
+  }
 }
 
 /* Intenções: a pessoa no balcão não digita "porção", digita "tô com fome".
@@ -339,75 +359,154 @@ function normalizar(texto) {
    É o que faz a barra parecer que entende, sem nenhum modelo por trás. */
 const INTENCOES = [
   {
-    rotulo: "Tô com fome",
-    gatilhos: ["fome", "comer", "comida", "petisco", "beliscar", "salgado", "lanche", "faminto"],
+    rotulo: "comida",
+    gatilhos: ["fome", "comer", "comida", "petisco", "beliscar", "salgado", "lanche", "faminto", "fritura"],
     filtro: (e) => e.abaId === "comidas",
   },
   {
-    rotulo: "Pra dividir",
-    gatilhos: ["dividir", "compartilhar", "galera", "turma", "mesa", "porcao", "porcoes", "combo", "combos", "varios"],
-    filtro: (e) => /^(combo|porcao)/.test(e.item.slug ?? "") || /esfirra|porcao/.test(e.item.slug ?? ""),
+    rotulo: "pra dividir",
+    gatilhos: ["dividir", "compartilhar", "galera", "turma", "mesa", "porcao", "porcoes", "combo", "combos", "varios", "em grupo"],
+    filtro: (e) => /^(combo|porcao)/.test(e.item.slug ?? "") || /esfirra/.test(e.item.slug ?? ""),
   },
   {
-    rotulo: "Algo barato",
-    gatilhos: ["barato", "baratos", "barata", "economico", "em conta", "mais barato", "pouco", "promocao", "promo"],
+    rotulo: "barato",
+    gatilhos: ["barato", "baratos", "barata", "economico", "em conta", "mais barato", "promocao", "promo", "mais em conta"],
     filtro: (e) => e.item.preco <= 25,
     ordenar: "preco",
   },
   {
-    rotulo: "Sem álcool",
-    gatilhos: ["sem alcool", "nao bebo", "dirigindo", "zero alcool", "nao alcoolico", "sem bebida"],
+    rotulo: "sem álcool",
+    gatilhos: ["sem alcool", "nao bebo", "dirigindo", "zero alcool", "nao alcoolico", "sem bebida", "virgem", "mocktail", "nao alcoolica"],
     filtro: (e) => e.abaId === "sem-alcool" || e.abaId === "outros",
   },
   {
-    rotulo: "Algo forte",
-    gatilhos: ["forte", "destilado", "destilados", "pesado", "encher a cara", "shot", "shots"],
+    rotulo: "forte",
+    gatilhos: ["forte", "destilado", "destilados", "pesado", "encher a cara", "shot", "shots", "puro"],
     filtro: (e) => e.abaId === "doses" || e.abaId === "classicos",
   },
   {
-    rotulo: "Refrescante",
-    gatilhos: ["refrescante", "refrescar", "gelado", "calor", "verao", "leve"],
+    rotulo: "refrescante",
+    gatilhos: ["refrescante", "refrescar", "gelado", "gelada", "calor", "citrico", "leve"],
     filtro: (e) => ["tropicais", "caipirinhas", "sem-alcool"].includes(e.abaId),
   },
   {
-    rotulo: "Algo doce",
-    gatilhos: ["doce", "adocicado", "sobremesa", "docinho"],
+    rotulo: "doce",
+    gatilhos: ["doce", "adocicado", "sobremesa", "docinho", "cremoso"],
     filtro: (e) =>
-      /moscatel|condensado|mel|morango|framboesa|coco|batida|melancia|manga/.test(
+      /moscatel|condensado|mel\b|morango|framboesa|coco|batida|melancia|manga|chantilly|chocolate|grenadine|uva/.test(
         normalizar(`${e.item.nome} ${e.item.descricao ?? ""}`)
       ),
   },
+  {
+    rotulo: "vegano",
+    gatilhos: ["vegano", "vegana", "veggie", "vegetariano", "vegetariana", "sem carne"],
+    filtro: (e) => /vegana/.test(e.item.slug ?? ""),
+  },
+  {
+    rotulo: "da casa",
+    gatilhos: ["autoral", "autorais", "da casa", "exclusivo", "assinatura", "novidade", "novidades", "lancamento"],
+    filtro: (e) => e.abaId === "autorais",
+  },
+  {
+    rotulo: "pra brindar",
+    gatilhos: ["brindar", "brinde", "comemorar", "comemoracao", "aniversario", "festa"],
+    filtro: (e) => e.abaId === "vinhos-espumantes" || /espumante|mimosa/.test(e.item.slug ?? ""),
+  },
+  {
+    rotulo: "sem açúcar",
+    gatilhos: ["sem acucar", "zero acucar", "diet", "light"],
+    filtro: (e) => /zero/.test(normalizar(e.item.nome)),
+  },
 ];
 
-/* Apelidos do balcão: o que a pessoa digita nem sempre é o que está escrito
-   no cardápio. */
+/* Apelidos do balcão: o que a pessoa digita quase nunca é o que está escrito
+   no cardápio. Cada chave vira um grupo de alternativas — basta uma casar.
+   As descrições agora trazem a receita inteira, então ingrediente também
+   encontra: "hortelã" acha Mojito sem que Mojito precise de apelido. */
 const APELIDOS = {
-  cerveja: ["corona", "stella", "chopp"],
-  cervejas: ["corona", "stella", "chopp"],
-  breja: ["corona", "stella", "chopp"],
-  refri: ["refrigerante", "coca", "guarana", "schweppes"],
-  refrigerante: ["coca", "guarana", "schweppes"],
-  energetico: ["bull"],
-  petisco: ["porcao", "empanada", "esfirra", "coxinha", "kibe"],
-  petiscos: ["porcao", "empanada", "esfirra", "coxinha", "kibe"],
-  comida: ["porcao", "empanada", "esfirra", "coxinha", "kibe"],
-  comidas: ["porcao", "empanada", "esfirra", "coxinha", "kibe"],
+  // bebidas por categoria
+  cerveja: ["heineken", "corona", "stella", "chopp", "lager"],
+  breja: ["heineken", "corona", "stella", "chopp"],
+  gelada: ["heineken", "corona", "stella", "lata"],
+  refri: ["refrigerante", "coca", "guarana", "schweppes", "sprite"],
+  refrigerante: ["coca", "guarana", "schweppes", "sprite"],
+  coca: ["coca", "cola"],
+  energetico: ["bull", "energetico"],
+  energetica: ["bull", "energetico"],
+  drink: ["drink", "coquetel"],
+  drinque: ["drink", "coquetel"],
+  coquetel: ["drink", "coquetel", "classico"],
+  cocktail: ["drink", "coquetel", "classico"],
   shot: ["dose"],
   shots: ["dose"],
-  doce: ["moscatel", "condensado"],
-  vinho: ["espumante"],
+  taca: ["taca"],
+  garrafa: ["garrafa"],
+
+  // destilados e marcas, como se fala
+  vodka: ["vodca", "absolut", "smirnoff"],
+  vodca: ["vodca", "absolut", "smirnoff"],
+  gim: ["gin", "beefeater", "seagers"],
+  gin: ["gin", "beefeater", "seagers"],
+  whiskey: ["whisky", "ballantine", "label", "chivas", "jack"],
+  whisky: ["whisky", "ballantine", "label", "chivas", "jack"],
+  uisque: ["whisky", "ballantine", "label", "chivas"],
+  ballantines: ["ballantine"],
+  balantines: ["ballantine"],
+  johnnie: ["label"],
+  johnny: ["label"],
+  jack: ["jack", "daniel"],
+  tequila: ["tequila", "cuervo", "margarita", "paloma"],
+  rum: ["rum", "montilla", "mojito", "cuba"],
+  cachaca: ["cachaca", "caipirinha", "batida"],
+  pinga: ["cachaca", "caipirinha"],
+  sake: ["saque"],
+  licor: ["licor", "curacau", "campari", "aperol", "jurupinga"],
+  espumante: ["espumante", "mimosa", "prosecco", "salton"],
+  prosecco: ["espumante"],
+  champagne: ["espumante"],
+  vinho: ["vinho", "espumante", "chilano"],
+
+  // frutas e ingredientes com mais de um nome
+  limao: ["limao"],
+  mexerica: ["tangerina", "mexerica"],
+  tangerina: ["tangerina", "mexerica"],
+  bergamota: ["tangerina"],
+  toranja: ["grapefruit"],
+  grapefruit: ["grapefruit", "paloma"],
+  menta: ["hortela", "menta"],
+  hortela: ["hortela", "menta"],
+  manjericao: ["manjericao", "basil"],
+  basil: ["manjericao", "basil"],
+  cafe: ["cafe", "espresso"],
+  expresso: ["espresso", "cafe"],
+  gengibre: ["gengibre", "ginger", "mule"],
+  ginger: ["gengibre", "ginger"],
+  frutas: ["frutas", "tropical", "vermelhas"],
+  "frutas vermelhas": ["morango", "framboesa", "amora"],
+  amora: ["amora"],
+
+  // comida
+  petisco: ["porcao", "empanada", "esfirra", "coxinha", "kibe", "bolinha", "enroladinho", "torta"],
+  petiscos: ["porcao", "empanada", "esfirra", "coxinha", "kibe", "bolinha", "enroladinho", "torta"],
+  comida: ["porcao", "empanada", "esfirra", "coxinha", "kibe", "bolinha", "enroladinho", "torta"],
+  salgadinho: ["coxinha", "kibe", "bolinha", "enroladinho", "esfirra"],
+  queijo: ["queijo", "caprese", "bolinha"],
+  carne: ["carne", "platense", "kibe"],
+  frango: ["frango", "coxinha", "torta"],
+  jaca: ["jaca", "vegana"],
+
+  // modos de dizer o mesmo item
+  gintonica: ["gin", "tonica"],
+  caipira: ["caipirinha"],
+  negrone: ["negroni"],
+  aperol: ["aperol", "spritz"],
+  spritz: ["spritz", "aperol"],
 };
 
-function abrirBusca() {
-  el.busca.setAttribute("data-aberta", "");
+function abrirBuscaDaAba(aba) {
   el.campoBusca.value = "";
-  renderResultados("");
-  setTimeout(() => el.campoBusca.focus(), 60);
-}
-
-function fecharBusca() {
-  el.busca.removeAttribute("data-aberta");
-  el.campoBusca.blur();
+  buscar("");
+  abrirCategoria(aba);
 }
 
 /* Distância de edição com teto: para assim que passa do limite, então custa
@@ -434,14 +533,17 @@ function distancia(a, b, teto) {
    "fim", e a busca passaria a devolver qualquer coisa. */
 function parecido(termo, palavra) {
   if (palavra.startsWith(termo)) return true;
+  /* O sentido inverso ("empanada" casando com a palavra "empanad") existe
+     para quem digita mais do que o cardápio escreve — mas só a partir de 4
+     letras. Sem esse piso, o "e" de "Vinhos e Espumantes" casava com toda
+     palavra começada em E, e "espumante" devolvia o cardápio inteiro. */
+  if (palavra.length >= 4 && termo.startsWith(palavra)) return true;
   if (termo.length < 4) return false;
   const teto = termo.length <= 6 ? 1 : 2;
   return distancia(termo, palavra, teto) <= teto;
 }
 
-function casaTermo(termo, palavras) {
-  return palavras.some((p) => parecido(termo, p));
-}
+const casaTermo = (termo, palavras) => palavras.some((p) => parecido(termo, p));
 
 /* Ninguém digita só substantivo: "tô com fome", "pra dividir", "quero algo
    barato". Sem tirar essas palavras, "to" e "com" viram termos de busca e
@@ -453,40 +555,112 @@ const PALAVRAS_VAZIAS = new Set([
   "quero", "queria", "gostaria", "vou", "vai", "algo", "alguma", "algum", "coisa",
   "mais", "menos", "muito", "bem", "ai", "la", "aqui", "voce", "voces", "nos",
   "seu", "sua", "meu", "minha", "esse", "essa", "isso", "aquele", "aquela",
+  "qual", "quais", "oque", "tipo", "beber", "tomar", "pedir", "ver", "reais",
+  "real", "rs", "r", "custa", "preco", "opcao", "opcoes", "sugestao", "aba",
 ]);
 
 /* Quanto o item responde ao que foi digitado. Nome vale mais que descrição,
-   e acerto exato vale mais que correção de digitação. */
+   descrição vale mais que nome de aba, e acerto exato vale mais que correção
+   de digitação — é isso que põe "Gin Tônica" acima de "Basil Smash" em "gin". */
 function relevancia(entrada, grupos) {
   let nota = 0;
   for (const alts of grupos) {
     let melhor = 0;
-    for (const t of alts) {
-      if (entrada.palavrasNome.some((p) => p.startsWith(t))) melhor = Math.max(melhor, 4);
-      else if (entrada.palavrasNome.some((p) => parecido(t, p))) melhor = Math.max(melhor, 3);
-      else if (entrada.palavras.some((p) => p.startsWith(t))) melhor = Math.max(melhor, 2);
-      else if (casaTermo(t, entrada.palavras)) melhor = Math.max(melhor, 1);
+    for (const [i, t] of alts.entries()) {
+      let ponto = 0;
+      if (entrada.palavrasNome.includes(t)) ponto = 6;
+      else if (entrada.palavrasNome.some((p) => p.startsWith(t))) ponto = 5;
+      else if (entrada.palavrasNome.some((p) => parecido(t, p))) ponto = 4;
+      else if (entrada.palavrasDesc.some((p) => p.startsWith(t))) ponto = 3;
+      else if (entrada.palavrasAba.some((p) => parecido(t, p))) ponto = 2;
+      else if (casaTermo(t, entrada.palavrasDesc)) ponto = 1;
+      /* A primeira alternativa é a palavra digitada; as outras são apelidos.
+         Meio ponto a menos é o que põe o Mojito (tem hortelã escrito) na
+         frente do Halls (só tem menta, que é apelido de hortelã). */
+      if (ponto && i > 0) ponto -= 0.5;
+      melhor = Math.max(melhor, ponto);
     }
     nota += melhor;
   }
   return nota;
 }
 
-function maisParecidos(termo, quantos) {
-  return state.indice
-    .map((e) => ({
-      nome: e.item.nome,
-      erro: Math.min(...e.palavras.map((p) => distancia(termo, p, 3))),
-    }))
-    .filter((x) => x.erro <= 3)
-    .sort((a, b) => a.erro - b.erro)
-    .slice(0, quantos)
-    .map((x) => x.nome);
+/* Quanto do nome do item o que foi digitado já cobre. Desempata "gin" entre
+   "Gin Tônica" (2 palavras, metade coberta) e "Gin Tônica Pink Schweppes
+   Lata 269ml" (6 palavras): o nome curto é o que a pessoa quis dizer. */
+function cobertura(entrada, grupos) {
+  const casadas = entrada.palavrasNome.filter((p) =>
+    grupos.some((alts) => alts.some((t) => parecido(t, p)))
+  ).length;
+  return casadas / entrada.palavrasNome.length;
 }
 
-function renderResultados(consulta) {
-  const q = normalizar(consulta.trim());
+/* Palpite de correção quando nada casou: o nome mais próximo do que sobrou. */
+function maisParecido(termo) {
+  let melhor = null;
+  for (const e of state.indice) {
+    const erro = Math.min(...e.palavrasNome.map((p) => distancia(termo, p, 3)));
+    if (erro <= 3 && (!melhor || erro < melhor.erro)) melhor = { erro, nome: e.item.nome };
+  }
+  return melhor?.nome ?? null;
+}
 
+/* Aba cujo nome responde ao que foi digitado — "caipirinha" quase sempre
+   quer a lista inteira, não um item solto. */
+function abaPedida(termos) {
+  if (!termos.length) return null;
+  for (const aba of state.abas) {
+    const palavras = palavrasDe(aba.nome).map(raiz);
+    if (termos.every((t) => palavras.some((p) => parecido(t, p)))) return aba;
+  }
+  return null;
+}
+
+/* Preço dito de todo jeito: "até 30", "menos de 30", "<30", "acima de 50",
+   "entre 20 e 40" — e o número solto, que no balcão sempre quer dizer teto. */
+function lerPreco(texto) {
+  let resto = texto;
+  let teto = null;
+  let piso = null;
+
+  const faixa = resto.match(/entre\s*(\d{1,3})\s*(?:e|a)\s*(\d{1,3})/);
+  if (faixa) {
+    piso = Math.min(+faixa[1], +faixa[2]);
+    teto = Math.max(+faixa[1], +faixa[2]);
+    resto = resto.replace(faixa[0], " ");
+  }
+
+  const baixo = resto.match(/(?:ate|menos de|abaixo de|no maximo|max|<)\s*r?\$?\s*(\d{1,3})/);
+  if (baixo) { teto = +baixo[1]; resto = resto.replace(baixo[0], " "); }
+
+  const alto = resto.match(/(?:acima de|mais de|a partir de|>)\s*r?\$?\s*(\d{1,3})/);
+  if (alto) { piso = +alto[1]; resto = resto.replace(alto[0], " "); }
+
+  if (teto === null && piso === null) {
+    const solto = resto.match(/(?:^|\s)r?\$?\s*(\d{1,3})(?:\s|$)/);
+    if (solto) { teto = +solto[1]; resto = resto.replace(solto[0], " "); }
+  }
+  return { resto, teto, piso };
+}
+
+function buscar(consulta) {
+  const q = normalizar(consulta.trim());
+  el.limparBusca.hidden = !consulta;
+
+  if (!q) {
+    el.resultados.hidden = true;
+    el.resultados.replaceChildren();
+    el.coluna.hidden = false;
+    el.painel.scrollTop = 0;
+    return;
+  }
+
+  el.coluna.hidden = true;
+  el.resultados.hidden = false;
+  renderResultados(q, consulta.trim());
+}
+
+function renderResultados(q, original) {
   /* 1. Intenções em linguagem natural, detectadas na frase inteira. */
   const intencoes = INTENCOES.filter((i) => i.gatilhos.some((g) => q.includes(g)));
   let resto = q;
@@ -494,27 +668,25 @@ function renderResultados(consulta) {
     for (const g of i.gatilhos) resto = resto.replaceAll(g, " ");
   }
 
-  /* 2. Teto de preço: "até 30", "menos de 30", "<30". */
-  const limite = resto.match(/(?:ate|menos de|abaixo de|max|<)\s*(\d+)/);
-  const teto = limite ? Number(limite[1]) : null;
-  if (limite) resto = resto.replace(limite[0], " ");
+  /* 2. Teto e piso de preço, em qualquer das formas que se diz. */
+  const preco = lerPreco(resto);
+  resto = preco.resto;
 
   /* 3. O que sobrou vira termos; cada um com seus apelidos como alternativa. */
-  const grupos = resto
+  const termos = resto
     .split(/[^a-z0-9]+/)
     .filter((t) => t.length > 1 && !PALAVRAS_VAZIAS.has(t))
-    .map((t) => [t, ...(APELIDOS[t] ?? [])]);
+    .map(raiz);
+  const grupos = termos.map((t) => [t, ...(APELIDOS[t] ?? []).map(raiz)]);
 
-  const vazio = !intencoes.length && teto === null && !grupos.length;
-  if (vazio) {
-    el.resultados.innerHTML = `<p class="vazio">Procure por um drink, uma categoria ou um valor.<br>
-      Também entende pedido solto: <em>tô com fome</em>, <em>algo barato</em>, <em>pra dividir</em>.</p>`;
-    montarChips(q, []);
+  if (!intencoes.length && preco.teto === null && preco.piso === null && !grupos.length) {
+    vazio(`Nada encontrado para “${esc(original)}”.`);
     return;
   }
 
   let achados = state.indice.filter((e) => {
-    if (teto !== null && e.item.preco > teto) return false;
+    if (preco.teto !== null && e.item.preco > preco.teto) return false;
+    if (preco.piso !== null && e.item.preco < preco.piso) return false;
     if (!intencoes.every((i) => i.filtro(e))) return false;
     return grupos.every((alts) => alts.some((t) => casaTermo(t, e.palavras)));
   });
@@ -522,65 +694,85 @@ function renderResultados(consulta) {
   if (intencoes.some((i) => i.ordenar === "preco")) {
     achados = [...achados].sort((a, b) => a.item.preco - b.item.preco);
   } else if (grupos.length) {
-    achados = [...achados].sort(
-      (a, b) => relevancia(b, grupos) - relevancia(a, grupos)
-    );
+    achados = [...achados].sort((a, b) =>
+      (relevancia(b, grupos) - relevancia(a, grupos)) ||
+      (cobertura(b, grupos) - cobertura(a, grupos)) ||
+      (a.item.preco - b.item.preco));
   }
-
-  montarChips(q, achados);
 
   if (!achados.length) {
-    el.resultados.innerHTML = `<p class="vazio">Nada encontrado para “${esc(consulta.trim())}”.</p>`;
+    const palpite = maisParecido(termos[termos.length - 1] ?? q);
+    vazio(`Nada encontrado para “${esc(original)}”.`, palpite);
     return;
   }
+
+  const partes = [];
+
+  /* Atalho para a aba, quando o que foi digitado é o nome de uma seção. */
+  const aba = abaPedida(termos);
+  if (aba && !intencoes.length) {
+    const b = document.createElement("button");
+    b.className = "atalho-aba";
+    b.type = "button";
+    b.style.setProperty("--acento", acento(aba.id));
+    b.innerHTML = `Ver a aba ${esc(aba.nome)} · ${aba.itens.length} itens
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+           stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M13 6l6 6-6 6"></path>
+      </svg>`;
+    b.addEventListener("click", () => abrirBuscaDaAba(aba));
+    partes.push(b);
+  }
+
+  const contagem = document.createElement("p");
+  contagem.className = "resultados__contagem";
+  const rotulos = intencoes.map((i) => i.rotulo);
+  if (preco.piso !== null && preco.teto !== null) {
+    rotulos.push(`de ${BRL.format(preco.piso)} a ${BRL.format(preco.teto)}`);
+  } else if (preco.teto !== null) {
+    rotulos.push(`até ${BRL.format(preco.teto)}`);
+  } else if (preco.piso !== null) {
+    rotulos.push(`a partir de ${BRL.format(preco.piso)}`);
+  }
+  contagem.textContent =
+    `${achados.length} ${achados.length === 1 ? "item" : "itens"}` +
+    (rotulos.length ? ` · ${rotulos.join(" + ")}` : "");
+  partes.push(contagem);
 
   const grade = document.createElement("div");
   grade.className = "itens__grade";
   grade.append(...achados.slice(0, 60).map(({ item, aba }, i) => cardDoItem(item, i, aba)));
+  partes.push(grade);
 
-  const contagem = document.createElement("p");
-  contagem.className = "busca__contagem";
-  const rotulos = intencoes.map((i) => i.rotulo.toLowerCase());
-  contagem.textContent =
-    `${achados.length} ${achados.length === 1 ? "item" : "itens"}` +
-    (rotulos.length ? ` · ${rotulos.join(" + ")}` : "");
-
-  el.resultados.replaceChildren(contagem, grade);
+  el.resultados.replaceChildren(...partes);
+  el.painel.scrollTop = 0;
 }
 
-/* Os chips são o atalho e o conserto: com o campo vazio mostram o que dá para
-   pedir em linguagem solta; sem resultado, oferecem a correção. */
-function montarChips(q, achados) {
-  let chips = [];
+function vazio(mensagem, palpite = null) {
+  const p = document.createElement("p");
+  p.className = "vazio";
+  p.innerHTML = `${mensagem}<br>
+    Dá para pedir solto: <em>tô com fome</em>, <em>algo barato</em>,
+    <em>sem álcool</em>, <em>pra dividir</em>, <em>até 30</em>.`;
 
-  if (q.length < 2) {
-    chips = INTENCOES.map((i) => ({ texto: i.rotulo, valor: i.rotulo }));
-  } else if (!achados.length) {
-    const ultimo = q.split(/[^a-z0-9]+/).filter(Boolean).pop() ?? q;
-    chips = maisParecidos(ultimo, 4).map((nome) => ({
-      texto: nome,
-      valor: nome,
-      correcao: true,
-    }));
-  } else {
-    chips = INTENCOES.filter((i) => i.gatilhos.some((g) => g.startsWith(q) || q.includes(g)))
-      .map((i) => ({ texto: i.rotulo, valor: i.rotulo }));
+  const partes = [p];
+  if (palpite) {
+    const linha = document.createElement("p");
+    linha.className = "correcao";
+    linha.append("Você quis dizer ");
+    const b = document.createElement("button");
+    b.type = "button";
+    b.textContent = palpite;
+    b.addEventListener("click", () => {
+      el.campoBusca.value = palpite;
+      buscar(palpite);
+      el.campoBusca.focus();
+    });
+    linha.append(b, "?");
+    partes.unshift(linha);
   }
-
-  el.chips.replaceChildren(
-    ...chips.slice(0, 7).map(({ texto, valor, correcao }) => {
-      const b = document.createElement("button");
-      b.className = "chip" + (correcao ? " chip--correcao" : "");
-      b.type = "button";
-      b.textContent = correcao ? `Você quis dizer ${texto}?` : texto;
-      b.addEventListener("click", () => {
-        el.campoBusca.value = valor;
-        el.campoBusca.focus();
-        renderResultados(valor);
-      });
-      return b;
-    })
-  );
+  el.resultados.replaceChildren(...partes);
+  el.painel.scrollTop = 0;
 }
 
 /* ========================================================================== */

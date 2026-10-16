@@ -1,101 +1,233 @@
 # Pendências de revisão
 
-**100 itens** em **11 abas**, sendo 5 marcados como fora de linha.
-Os itens com pendência estão marcados com `"confirmar": true` no
-`src/data/cardapio.json` — é uma anotação interna, não aparece na tela.
+**115 itens** em **12 abas**, dos quais **50 têm foto** e
+**65 ainda não**. Fonte: `CARDÁPIO MITTE BAR OUTUBRO 2026.xls`
+(nome, preço e aba de cada item) cruzado com `MENU NOVO MITTE BAR.docx`
+(as receitas) e com a pasta **NOVOS DRINKS** do Drive (as fotos).
+
+Item sem foto não fica quebrado: mostra a **inicial em neon rosa**, que é um
+estado desenhado. Dá para publicar assim e ir completando.
 
 ---
 
-## 1. Itens que podem estar faltando
+## 1. Nomes que mudaram entre a planilha e as fotos — **confira estes cinco**
 
-Os prints são recortes de rolagem do painel. Em três pontos a lista foi cortada:
+A planilha trouxe nomes novos para drinks que o .docx e as fotos ainda chamam
+pelo nome antigo. Casei pelo preço e pela receita, mas é palpite meu:
 
-| # | Onde | O que falta |
-|---|---|---|
-| 1 | **Início da aba Latas** | O primeiro print já começa em *Combo 4 Corona Lata 350ml*. Tudo que vinha antes ficou de fora — provavelmente as cervejas avulsas (Corona, Stella, Heineken, Budweiser…) e chopps. **Esta é a lacuna maior.** |
-| 2 | **Aba Doses** | Entre *Chivas Dose 45ml* (último do print 20) e *Jambuzera Dose 45ml* (primeiro do print 21) pode haver linhas não capturadas. |
-| 3 | **Aba Vinhos e Espumantes** | Abaixo de *Garrafa Vinho Branco Sauvignon Chilano* aparecia outra garrafa Chilano cortada — provavelmente um tinto. Não foi inventado nada; falta o print. |
+| Item na planilha | Foto que usei | Por que casei | Se estiver errado |
+|---|---|---|---|
+| **Finest Jam** (R$ 38) | `BALLA JAM AMORA.png` | "Finest" + "Jam" = Ballantine's **Finest** com geleia (*jam*) de amora. Preço idêntico ao antigo Balla Jam Amora. | apague a linha `"finest-jam"` de `tools/fotos-drive.json` |
+| **Bi Nights** (R$ 36) | `HONEY NIGHTS.png` | Mesmo "Nights", mesmo preço do antigo Honey Nights. | idem, `"bi-nights"` |
+| **Green Island** (R$ 32) | `ILHA VERDE.png` | Tradução literal, mesma receita no .docx. | idem, `"green-island"` |
+| **Pink Energy** (R$ 30) | `SPEED RACER.png` | Mesma receita no .docx (vodca, morango, energético). | idem, `"pink-energy"` |
+| **Vai Tomando** (R$ 32) | `VAI QUICANDO.png` | Mesmo "Vai", mesma receita (gin, Malibu, abacaxi, energético). | idem, `"vai-tomando"` |
 
-Me manda os prints desses três trechos e eu completo o `cardapio.json`.
+Também reaproveitei a foto de `GIN.png` no card da promoção
+**Compre 2 Gins Tônicas e Ganhe a Terceira** — é o mesmo drink.
+
+E a lata **Mascate Drinks Maracujá e Caju**: na fileira de latas do Drive a
+lata correspondente diz *"Maracujá & Água de Coco"*. É a mesma linha, sabor
+diferente. Se o rótulo importar, mande a foto certa.
 
 ---
 
-## 2. Descrições inferidas (18)
+## 2. Itens sem foto (65)
 
-Para os clássicos usei a receita padrão — Negroni, Mojito, Paloma, Espresso Martini etc. estão corretos. Os drinks autorais da casa eu deduzi pelo nome e pela foto do painel, então **precisam passar pelo bar antes de publicar**:
+Nenhuma foto na pasta do Drive corresponde a estes. Para resolver, coloque a
+foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
+`tools/fotos-drive.json`; ou me mande as fotos que eu ligo.
+
+**Latas** — 12 de 24
+
+- [ ] `heineken-lata-350ml.png` — Heineken Lata 350ml
+- [ ] `corona-lata-350ml.png` — Corona Lata 350ml
+- [ ] `corona-zero-lata-350ml.png` — Corona Zero Lata 350ml
+- [ ] `stella-artois-lata-350ml.png` — Stella Artois Lata 350ml
+- [ ] `combo-4-heineken-lata-350ml.png` — Combo 4 Heineken Lata 350ml
+- [ ] `combo-4-corona-lata-350ml.png` — Combo 4 Corona Lata 350ml
+- [ ] `combo-4-stella-artois-lata-350ml.png` — Combo 4 Stella Artois Lata 350ml
+- [ ] `chopp-vinho-draft-600ml.png` — Chopp Vinho Draft 600ml
+- [ ] `absolut-sprite-lata-269ml.png` — Absolut Sprite Lata 269ml
+- [ ] `gin-tonica-pink-schweppes-lata-269ml.png` — Gin Tônica Pink Schweppes Lata 269ml
+- [ ] `spritz-schweppes-lata-269ml.png` — Spritz Schweppes Lata 269ml
+- [ ] `gin-tonica-schweppes-lata-269ml.png` — Gin Tônica Schweppes Lata 269ml
+
+**Outros** — 17 de 17
+
+- [ ] `agua-sem-gas-lindoya-510ml.png` — Água sem Gás Lindoya 510ml
+- [ ] `agua-com-gas-lindoya-510ml.png` — Água com Gás Lindoya 510ml
+- [ ] `coca-cola-lata.png` — Coca-Cola Lata
+- [ ] `coca-cola-zero-lata.png` — Coca-Cola Zero Lata
+- [ ] `guarana-antarctica-lata.png` — Guaraná Antarctica Lata
+- [ ] `schweppes-citrus-lata.png` — Schweppes Citrus Lata
+- [ ] `agua-tonica-antarctica-lata.png` — Água Tônica Antarctica Lata
+- [ ] `agua-tonica-antarctica-zero-lata.png` — Água Tônica Antarctica Zero Lata
+- [ ] `energetico-red-bull-tradicional-lata.png` — Energético Red Bull Tradicional Lata
+- [ ] `energetico-red-bull-zero-acucar-lata.png` — Energético Red Bull Zero Açúcar Lata
+- [ ] `energetico-red-bull-tropical-lata.png` — Energético Red Bull Tropical Lata
+- [ ] `energetico-red-bull-morango-e-pessego-lata.png` — Energético Red Bull Morango e Pêssego Lata
+- [ ] `energetico-red-bull-melancia-lata.png` — Energético Red Bull Melancia Lata
+- [ ] `halls-preto-ou-verde.png` — Halls Preto ou Verde
+- [ ] `trident-verde-ou-azul.png` — Trident Verde ou Azul
+- [ ] `leque-mitte-bar.png` — Leque Mitte Bar
+- [ ] `eco-bag-mitte.png` — Eco Bag Mitte
+
+**Comidas** — 13 de 13
+
+- [ ] `empanada-cebola-e-queijo-campestre.png` — Empanada Cebola e Queijo — Campestre
+- [ ] `empanada-queijo-e-tomate-caprese.png` — Empanada Queijo e Tomate — Caprese
+- [ ] `empanada-carne-e-azeitona-platense.png` — Empanada Carne e Azeitona — Platense
+- [ ] `porcao-mini-bolinha-de-queijo.png` — Porção Mini Bolinha de Queijo
+- [ ] `porcao-mini-coxinha-de-frango-e-requeijao.png` — Porção Mini Coxinha de Frango e Requeijão
+- [ ] `porcao-mini-kibe.png` — Porção Mini Kibe
+- [ ] `porcao-mini-enroladinho-presunto-e-queijo.png` — Porção Mini Enroladinho Presunto e Queijo
+- [ ] `porcao-esfirra-de-carne-fechada.png` — Porção Esfirra de Carne Fechada
+- [ ] `porcao-esfirra-de-queijo-fechada.png` — Porção Esfirra de Queijo Fechada
+- [ ] `torta-de-frango.png` — Torta de Frango
+- [ ] `porcao-vegana-mini-coxinha-de-jaca.png` — Porção Vegana Mini Coxinha de Jaca
+- [ ] `porcao-vegana-mini-kibe.png` — Porção Vegana Mini Kibe
+- [ ] `porcao-vegana-mini-bolinha-de-queijo.png` — Porção Vegana Mini Bolinha de Queijo
+
+**Autorais** — 1 de 5
+
+- [ ] `party.png` — Party
+
+**Caipirinhas** — 5 de 9
+
+- [ ] `batida-de-jambuzera.png` — Batida de Jambuzera
+- [ ] `caipirinha-vodca-absolut.png` — Caipirinha Vodca Absolut
+- [ ] `caipirinha-cachaca.png` — Caipirinha Cachaça
+- [ ] `caipirinha-saque.png` — Caipirinha Saquê
+- [ ] `caipirinha-jambu.png` — Caipirinha Jambu
+
+**Tropicais** — 2 de 9
+
+- [ ] `porn-martini.png` — Porn Martini
+- [ ] `taca-mimosa.png` — Taça Mimosa
+
+**Whisky** — 1 de 2
+
+- [ ] `sunshine-citrus.png` — Sunshine Citrus
+
+**Vinhos e Espumantes** — 6 de 6
+
+- [ ] `garrafa-espumante-brut-salton-750ml.png` — Garrafa Espumante Brut Salton 750ml
+- [ ] `garrafa-espumante-moscatel-salton-750ml.png` — Garrafa Espumante Moscatel Salton 750ml
+- [ ] `taca-de-espumante.png` — Taça de Espumante
+- [ ] `garrafa-vinho-branco-sauvignon-chilano.png` — Garrafa Vinho Branco Sauvignon Chilano
+- [ ] `garrafa-vinho-tinto-carmenere-chilano.png` — Garrafa Vinho Tinto Carmenere Chilano
+- [ ] `taca-de-vinho.png` — Taça de Vinho
+
+**Doses** — 8 de 8
+
+- [ ] `absolut-dose-45ml.png` — Absolut — Dose 45ml
+- [ ] `ballantine-s-sunshine-dose-45ml.png` — Ballantine's Sunshine — Dose 45ml
+- [ ] `black-label-dose-45ml.png` — Black Label — Dose 45ml
+- [ ] `chivas-dose-45ml.png` — Chivas — Dose 45ml
+- [ ] `red-label-dose-45ml.png` — Red Label — Dose 45ml
+- [ ] `jack-daniel-s-dose-45ml.png` — Jack Daniel's — Dose 45ml
+- [ ] `jambuzera-dose-45ml.png` — Jambuzera — Dose 45ml
+- [ ] `jose-cuervo-ouro-dose-45ml.png` — José Cuervo Ouro — Dose 45ml
+
+---
+
+## 3. Fotos do Drive que sobraram
+
+Estão na pasta mas não entraram no cardápio — ou porque o item não existe na
+planilha de outubro, ou porque não combinam com o resto:
+
+| Arquivo | Por que ficou de fora |
+|---|---|
+| `CAIPI MEXERICA COM PIMENTA.png` | Não há item com esse nome na planilha. |
+| `MARACUJÁ & GINGER.png` | Está no .docx (Sem Álcool) mas **não** na planilha. |
+| `THUG LIFE.png` | Idem — no .docx (Tropicais), fora da planilha. Seria o **Party**? |
+| `SUNSHINE.jpeg` | É o anúncio da Ballantine's (garrafa, fundo claro, texto), não uma foto de drink. Destoaria das outras 45. **Sunshine Citrus** ficou sem foto por isso. |
+| `CAIPIRITA_v2.png`, `NEW YORK SOUR (2).png`, `paloma sem f.png` | Segundas versões; usei a primeira de cada. |
+| `ChatGPT Image …` (2 arquivos) | Composições com vários drinks, não dá para atribuir a um item. |
+| `white-paper-texture-background.jpg`, `latas_bebidas prontas.psd` | Não são itens. |
+
+Se **Party** for o Thug Life, é uma linha em `tools/fotos-drive.json`.
+
+---
+
+## 4. Descrições que precisam passar pelo bar (12)
+
+As receitas dos clássicos, dos autorais, dos sem álcool e dos tropicais
+vieram do `MENU NOVO MITTE BAR.docx` — são do bar, estão certas. As de baixo
+eu deduzi pelo nome, e **aparecem normalmente para o cliente**:
 
 | Aba | Item | Descrição proposta |
 |---|---|---|
-| Latas | Chopp Vinho Draft 600ml | *Garrafa 600ml gelada.* — o nome está ambíguo: a foto é de garrafa de cerveja, mas o nome diz "vinho". Qual é o produto? |
-| Sem Álcool | Tropical Coconut | Água de coco, abacaxi e limão. |
-| Sem Álcool | Grape Basil | Uva, manjericão e limão. |
-| Sem Álcool | Pineapple Collin's | Abacaxi, limão, xarope e água com gás. |
-| Sem Álcool | Strawberry Mule | Morango, gengibre, limão e ginger beer. |
-| Vodkas e Gins | Raspberri | Vodca, framboesa e limão. |
-| Vodkas e Gins | Green Island | Gin, hortelã, limão e xarope. |
-| Vodkas e Gins | Pink Energy | Vodca, frutas vermelhas e energético. |
-| Vodkas e Gins | Vai Tomando | Vodca com cítricos e maracujá. |
-| Caipirinhas | Blue Coconut | Vodca, curaçau blue e coco. |
-| Caipirinhas | Tanjuru | Saquê com tangerina e limão. |
-| Tropicais | Jambu Verão | Cachaça de jambu, cítricos e espumante. |
-| Tropicais | Crazy Life | Vodca com laranja e maracujá. |
-| Tropicais | Hungarian Poison | Destilado com frutas vermelhas e cítricos. |
-| Whisky | Balla Jam Amora | Whisky Ballantine's, amora e limão. |
-| Whisky | Honey Nights | Whisky, mel, maracujá e limão. |
-| Whisky | Sunshine Citrus | Ballantine's Sunshine, abacaxi e cítricos. |
-| Whisky | Zero B | Whisky com cola zero e limão. |
+| Latas | Chopp Vinho Draft 600ml | Garrafa 600ml gelada. |
+| Comidas | Torta de Frango | Fatia de torta de frango. |
+| Comidas | Porção Vegana Mini Coxinha de Jaca | Porção de mini coxinhas veganas de jaca. |
+| Comidas | Porção Vegana Mini Kibe | Porção de mini kibes veganos. |
+| Comidas | Porção Vegana Mini Bolinha de Queijo | Porção de mini bolinhas de queijo vegano. |
+| Autorais | Party | Drink autoral da casa. |
+| Autorais | Finest Jam | Ballantine's Finest, geleia de amora, limão siciliano e soda. |
+| Autorais | Bi Nights | Ballantine's Finest, mel, limão taiti, maracujá e água com gás. |
+| Vodkas e Gins | Pink Energy | Smirnoff, morango, mel, limão e energético. |
+| Vodkas e Gins | Vai Tomando | Gin Seagers, Malibu, abacaxi e energético. |
+| Caipirinhas | Batida de Jambuzera | Batida cremosa com cachaça de jambu. |
+| Tropicais | Porn Martini | Vodca, maracujá, baunilha e espumante à parte. |
 
-No JSON esses itens têm `"confirmar": true`. Quando o bar validar, é só apagar
-essa chave. Enquanto isso a descrição **aparece normalmente para o cliente** —
-então vale conferir antes de publicar, não depois.
+No JSON esses itens têm `"confirmar": true`. Quando o bar validar, é só
+apagar essa chave.
 
 ---
 
-## 3. Itens riscados no painel
+## 5. Decisões que tomei e você pode querer mudar
 
-Riscado foi lido como **fora de linha**: o item fica no JSON com
-`"fora_de_linha": true`, não aparece em nenhuma tela e não entra na contagem
-da categoria. Basta remover a chave se voltar ao cardápio.
-
-**Dentro das abas (5):**
-
-- Comidas — Porção Mini Bolinha de Queijo (R$ 32,00)
-- Sem Álcool — Grape Basil (R$ 28,00)
-- Clássicos — Cosmopolitan (R$ 37,00)
-- Clássicos — New York Sour (R$ 36,00)
-- Caipirinhas — Caipivinho Branco (R$ 32,00)
-
-**Fora de qualquer aba (3)** — ficaram no final do painel, todos riscados, e os áudios não os citaram. Estão guardados em `fora_do_cardapio` no JSON, com um palpite de aba caso voltem:
-
-- Café Coado (R$ 9,00)
-- Café Expresso (R$ 12,00)
-- Spritzer Verão (R$ 32,00)
-
----
-
-## 4. Decisões que tomei e você pode querer mudar
-
-- **Nomes normalizados.** O painel está em caixa alta com erros de digitação; corrigi para escrita normal e deixei a caixa alta por CSS. Ajustes feitos: `GUARANÁ ANTÁRITCA` → Guaraná Antarctica · `SCHWEEPES` → Schweppes · `CHOOP` → Chopp · `CAIPIRINHA VODKA ABSOLUT` → Caipirinha Vodca Absolut · `REDBULL` → Red Bull. Os preços não foram tocados.
-- **Empanadas** ganharam o nome do recheio na frente e o nome próprio depois (*Empanada Cebola e Queijo — Campestre*), porque "Campestre" sozinho não diz nada para quem lê.
-- **A promoção dos gins** (*Compre 2 gins tônicas e ganhe a terceira*, R$ 68,00) está marcada com `"destaque": true` e ganha tratamento visual diferenciado dentro de Vodkas e Gins.
-- **Leque e Eco Bag** ficaram em *Outros*, como o áudio indicou. Se virarem uma linha de produtos, vale uma aba "Loja".
+- **Aba Autorais entrou entre Sem Álcool e Clássicos.** A planilha está em
+  ordem alfabética, então não diz onde a aba nova deveria ficar. Pus as
+  criações da casa logo antes dos clássicos. Para mudar, é só reordenar
+  `abas` em `src/data/cardapio.json` — a ordem do arquivo é a ordem na tela.
+- **Nomes normalizados.** A planilha está em caixa alta e com erros de
+  digitação; corrigi para escrita normal e deixei a caixa alta por CSS:
+  `SCHWEEPES` → Schweppes · `CHOOP` → Chopp · `GUARANÁ ANTÁRITCA` → Guaraná
+  Antarctica · `REDBULL` → Red Bull · `VODKA ABSOLUT` → Vodca Absolut ·
+  `BALLANTINES`/`JACK DANIELS` → com apóstrofo. **Nenhum preço foi tocado.**
+- **Nome das abas.** `VINHO & ESPUMANTE` virou *Vinhos e Espumantes*,
+  `VODKA & GIN` virou *Vodkas e Gins*. O `&` da planilha não cabe bem no
+  rótulo em caixa alta da coluna.
+- **Empanadas** mantiveram o recheio na frente e o nome próprio depois
+  (*Empanada Cebola e Queijo — Campestre*).
+- **Crazy Life** saiu: estava no cardápio anterior e não está na planilha de
+  outubro. Ficou guardado em `fora_do_cardapio`, junto de Café Coado, Café
+  Expresso e Spritzer Verão.
+- **Cosmopolitan, New York Sour, Grape Basil, Caipivinho Branco e Porção
+  Mini Bolinha de Queijo voltaram**: estavam riscados no painel antigo e
+  aparecem na planilha de outubro.
+- **A promoção dos gins** (*Compre 2 Gins Tônicas e Ganhe a Terceira*,
+  R$ 68,00) continua com `"destaque": true`.
 
 ---
 
-## 5. Transcrição dos áudios
+## 6. O que mudou em relação ao cardápio anterior
 
-Transcrito localmente com Whisper (modelo `small`), então há ruído nos nomes próprios — a interpretação cruzou cada trecho com a ordem dos prints.
+**Nenhum preço de item que já existia mudou.** Conferi um a um: os 92 itens
+que estavam no cardápio antigo e continuam na planilha têm exatamente o
+mesmo valor.
 
-> **1.** "A gente separou esses itens por abas. Os primeiros estão na aba Latas…"
->
-> **2.** "Até a gin tônica Schweppes tudo é lata. As águas, Coca-Cola, energético, Halls e o leque até a eco bag está na aba Outros. A partir dessa aba Outros a gente vem com as comidas, da empanada até a esfirra, na aba Comidas. E aí por fim a gente entra com Tropical Coconut até o Strawberry Mule — são itens sem álcool. Abaixo dos itens sem álcool entram os clássicos, o Aperol até o New York Sour. Os itens Basil Smash até o item Vai Tomando são vodcas e gins."
->
-> **3.** "Depois do item Vai Tomando, da aba vodcas e gins, entram as caipirinhas, que entra a batida de café até a caipirinha de jambu. E aí por fim entram uns tropicais, que é da Jambu Verão até a Hungarian Poison."
->
-> **4.** "Depois tem uma aba chamada Whisky, Balla Jam até o Zero B."
->
-> **5.** "E por fim vêm os itens vinho e espumante, que é da garrafa de espumante até a taça de vinho."
->
-> **6.** "Os outros itens são todos doses."
+**Entraram 18 itens novos:**
 
-A ordem das abas no cardápio segue exatamente essa narração.
+| Aba | Itens |
+|---|---|
+| Latas | Heineken Lata, Corona Lata, Corona Zero, Stella Artois Lata, Combo 4 Heineken, Mascate Drinks Maracujá e Caju |
+| Comidas | Torta de Frango, Porção Vegana Mini Coxinha de Jaca, Porção Vegana Mini Kibe, Porção Vegana Mini Bolinha de Queijo |
+| Autorais | Party, Finest Jam, Bi Nights |
+| Caipirinhas | Batida de Jambuzera |
+| Tropicais | Tropical Passion |
+| Vinhos e Espumantes | Garrafa Vinho Tinto Carménère Chilano |
+| Doses | Red Label, Jack Daniel's |
+
+**Mudaram de lugar:** Green Island saiu de Vodkas e Gins e Caipirita saiu de
+Caipirinhas — as duas foram para a aba Autorais, que é nova.
+
+**Saiu um item:** Crazy Life (R$ 32), que não está na planilha de outubro.
+
+**Mudaram de nome:** os cinco Red Bull ganharam o sufixo *Lata*, como na
+planilha. Balla Jam Amora e Honey Nights saíram da aba Whisky e, se os
+palpites da seção 1 estiverem certos, são o Finest Jam e o Bi Nights dos
+Autorais — por isso a aba Whisky caiu de quatro para dois itens.

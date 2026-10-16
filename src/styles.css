@@ -135,9 +135,17 @@ button {
   grid-template-rows: auto;
   align-content: center;
   justify-items: center;
-  gap: clamp(2.25rem, 9vh, 5rem);
+  gap: clamp(1.75rem, 7vh, 3.75rem);
   padding: var(--mitte-gutter);
   text-align: center;
+}
+
+/* Três destinos empilhados, todos da mesma largura: lidos como uma lista de
+   escolhas, não como um botão principal com dois enfeites em volta. */
+.hero__cta {
+  display: grid;
+  gap: clamp(.6rem, 1.8vh, .9rem);
+  width: min(22rem, 100%);
 }
 
 .hero__palco {
@@ -176,26 +184,54 @@ button {
 
 .botao {
   position: relative;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: .8rem;
+  justify-content: center;
+  gap: .7rem;
   min-height: calc(var(--mitte-alvo) * 1.12);
-  padding: 1rem 2.35rem;
+  padding: 1rem 1.75rem;
   border-radius: var(--mitte-radius-pill);
   background: var(--mitte-pink);
   color: var(--mitte-pink-ink);
   font-family: var(--mitte-font-display);
-  font-size: clamp(.8rem, 1.8vw, .95rem);
+  font-size: clamp(.72rem, 3.2vw, .9rem);
   font-weight: 700;
   letter-spacing: var(--mitte-track-micro);
   text-transform: uppercase;
-  box-shadow: var(--mitte-glow-pink);
+  text-align: center;
+  text-decoration: none;
+  /* Halo mais curto que o --mitte-glow-pink padrão: empilhados, os 60px do
+     token sangravam rosa por cima dos dois botões de contorno. */
+  box-shadow: 0 0 22px rgba(255, 51, 153, .55);
   transition: transform var(--mitte-dur) var(--mitte-ease-back),
-              box-shadow var(--mitte-dur) var(--mitte-ease);
+              box-shadow var(--mitte-dur) var(--mitte-ease),
+              border-color var(--mitte-dur) var(--mitte-ease),
+              background-color var(--mitte-dur) var(--mitte-ease);
 }
+
+.botao svg { flex: none; }
+
+/* Os dois destinos que saem do cardápio: mesmo peso tipográfico, contorno
+   em vez de preenchimento. Só o do meio é "fique aqui". */
+.botao--fantasma {
+  background: color-mix(in srgb, var(--acento) 9%, rgba(9, 9, 11, .55));
+  border: 1px solid color-mix(in srgb, var(--acento) 48%, transparent);
+  color: var(--mitte-fg);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--acento) 16%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.botao--fantasma svg { color: var(--acento); }
 
 .botao:hover { transform: translateY(-2px) scale(1.02); }
 .botao:active { transform: scale(.97); }
+
+.botao--fantasma:hover,
+.botao--fantasma:focus-visible {
+  border-color: var(--acento);
+  background: color-mix(in srgb, var(--acento) 16%, rgba(9, 9, 11, .55));
+  box-shadow: 0 0 34px color-mix(in srgb, var(--acento) 32%, transparent);
+}
 
 /* ==========================================================================
    Cabeçalho das telas internas
@@ -261,173 +297,250 @@ button {
 .icone:active { transform: scale(.92); }
 
 /* ==========================================================================
-   Tela 2 — Categorias (grade que sempre cabe na tela)
+   Tela 2 — Categorias em coluna, com a busca fixa no topo
    ========================================================================== */
 
-.categorias { grid-template-rows: auto 1fr; }
+.categorias { grid-template-rows: auto auto 1fr; }
 
-.categorias__grade {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: clamp(.5rem, 1.4vh, 1rem);
-  padding: clamp(.5rem, 1.6vh, 1.25rem) var(--mitte-gutter);
-  min-height: 0;
+/* A barra fica fora da área que rola. Digitar não pode empurrar o campo para
+   fora da tela — e no celular, com o teclado aberto, sobra pouca tela. */
+.barra-busca {
+  padding: clamp(.5rem, 1.6vh, .9rem) var(--mitte-gutter) clamp(.35rem, 1.1vh, .65rem);
 }
 
-@media (min-width: 48rem)  { .categorias__grade { grid-template-columns: repeat(3, 1fr); } }
-@media (min-width: 75rem)  { .categorias__grade { grid-template-columns: repeat(4, 1fr); } }
+.barra-busca .campo {
+  max-width: var(--mitte-maxw);
+  margin-inline: auto;
+}
 
-/* Cada aba carrega seu próprio acento (--acento, vindo do app.js). O tile é
-   vidro escuro sobre a luz do fundo, com o acento entrando pela base. */
+.painel {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  /* "safe center" centra a coluna quando ela cabe — o que salva a totem em
+     pé, onde as doze pílulas ficariam amontoadas no topo com meia tela vazia
+     embaixo — e volta a alinhar pelo topo assim que a lista passa da altura
+     da tela, sem cortar a primeira linha. */
+  display: grid;
+  align-content: safe center;
+  /* A coluna central vem da trilha, não de margin-inline:auto — margem
+     automática em item de grade cancela o stretch e a pílula encolhe para
+     o tamanho do texto. */
+  grid-template-columns: minmax(0, var(--mitte-maxw));
+  justify-content: center;
+  padding: 0 var(--mitte-gutter) var(--mitte-gutter);
+  scrollbar-width: thin;
+  scrollbar-color: var(--mitte-border-strong) transparent;
+}
+
+.painel::-webkit-scrollbar { width: 5px; }
+.painel::-webkit-scrollbar-track { background: transparent; }
+.painel::-webkit-scrollbar-thumb {
+  background: var(--mitte-border-strong);
+  border-radius: var(--mitte-radius-pill);
+}
+
+.categorias__coluna {
+  display: grid;
+  gap: clamp(.4rem, 1.2vh, .7rem);
+  padding-block: clamp(.25rem, 1vh, .6rem);
+}
+
+.categorias__coluna[hidden] { display: none; }
+
+/* Pílula de contorno, uma aba por linha. Cada aba traz seu acento (--acento,
+   vindo do app.js) na borda e no sublinhado: parada, a coluna tem o ritmo de
+   cor que a grade antiga tinha; em movimento, a aba inteira acende. */
 .categoria {
   position: relative;
   isolation: isolate;
-  display: grid;
-  align-content: end;
-  gap: .15rem;
-  padding: clamp(.6rem, 1.8vh, 1.2rem);
-  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(var(--mitte-alvo) * 1.04);
+  padding: .8rem 2.5rem;
+  border: 1px solid color-mix(in srgb, var(--acento) 40%, transparent);
+  border-radius: var(--mitte-radius-pill);
+  background: linear-gradient(180deg, rgba(250, 250, 250, .05), rgba(9, 9, 11, .42));
+  backdrop-filter: blur(6px);
   overflow: hidden;
-  border: 1px solid var(--mitte-border);
-  border-radius: var(--mitte-radius);
-  background:
-    linear-gradient(160deg, color-mix(in srgb, var(--acento) 16%, transparent), transparent 58%),
-    linear-gradient(var(--mitte-bg-elev-1), var(--mitte-bg));
-  text-align: left;
   transition: transform var(--mitte-dur) var(--mitte-ease-back),
-              box-shadow var(--mitte-dur) var(--mitte-ease),
-              border-color var(--mitte-dur) var(--mitte-ease);
+              border-color var(--mitte-dur) var(--mitte-ease),
+              box-shadow var(--mitte-dur) var(--mitte-ease);
 }
 
-/* Fio de luz girando na borda — só acende no hover/foco, e só quando o
-   browser sabe animar um ângulo (@property). Sem isso fica um fio parado,
-   que também serve. */
-@property --ang {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
-}
-
+/* Lavagem de cor que atravessa a pílula no toque. Fica atrás do texto e
+   some sozinha — é o "acendeu" sem trocar a cor do rótulo. */
 .categoria::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: -1;
-  border-radius: inherit;
-  padding: 1px;
-  background: conic-gradient(from var(--ang),
-    transparent 0 58%, var(--acento) 76%, transparent 92%);
-  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  mask-composite: exclude;
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in srgb, var(--acento) 26%, transparent) 50%,
+    transparent);
   opacity: 0;
-  transition: opacity var(--mitte-dur-tela) var(--mitte-ease);
-}
-
-/* Brilho que sobe da base no toque */
-.categoria::after {
-  content: "";
-  position: absolute;
-  inset: auto -20% -60% -20%;
-  z-index: -1;
-  height: 100%;
-  border-radius: 50%;
-  background: radial-gradient(circle, color-mix(in srgb, var(--acento) 55%, transparent), transparent 70%);
-  filter: blur(28px);
-  opacity: 0;
-  transform: translateY(30%);
+  transform: translateX(-30%);
   transition: opacity var(--mitte-dur-tela) var(--mitte-ease),
               transform var(--mitte-dur-tela) var(--mitte-ease);
 }
 
 .categoria:hover,
 .categoria:focus-visible {
-  border-color: transparent;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 50px color-mix(in srgb, var(--acento) 28%, transparent);
+  border-color: var(--acento);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 34px color-mix(in srgb, var(--acento) 26%, transparent),
+              inset 0 0 20px color-mix(in srgb, var(--acento) 10%, transparent);
 }
 
 .categoria:hover::before,
-.categoria:focus-visible::before {
-  opacity: 1;
-  animation: girar 3.2s linear infinite;
-}
+.categoria:focus-visible::before { opacity: 1; transform: translateX(0); }
 
-.categoria:hover::after,
-.categoria:focus-visible::after { opacity: .85; transform: translateY(0); }
+.categoria:active { transform: scale(.985); }
 
-.categoria:active { transform: scale(.97); }
-
-/* Número fantasma: dá escala tipográfica ao tile sem competir com o nome */
-.categoria__indice {
-  position: absolute;
-  top: -.35em;
-  right: .1em;
-  font-family: var(--mitte-font-display);
-  font-size: clamp(3rem, 9vh, 5.5rem);
-  font-weight: 900;
-  line-height: 1;
-  color: var(--acento);
-  opacity: .14;
-  pointer-events: none;
-  transition: opacity var(--mitte-dur-tela) var(--mitte-ease),
-              transform var(--mitte-dur-tela) var(--mitte-ease);
-}
-
-.categoria:hover .categoria__indice { opacity: .26; transform: translateY(.06em); }
-
-/* O nome é dimensionado pela MENOR entre a largura e a altura do tile: numa
-   grade que muda de 2 para 4 colunas e de tela baixa para tela alta, amarrar
-   só em vh (ou só em vw) deixava "Vinhos e Espumantes" grande demais num
-   caso e minúsculo no outro. O tracking encolhe junto. */
+/* O sublinhado é o que a referência tem; em Orbitron ele vira o fio de neon
+   embaixo do nome. Fica no acento da aba, não no branco do texto. */
 .categoria__nome {
   font-family: var(--mitte-font-display);
-  font-size: clamp(.66rem, min(3.6vw, 1.9vh), .95rem);
+  font-size: clamp(.68rem, 3.2vw, .88rem);
   font-weight: 700;
-  letter-spacing: .05em;
+  letter-spacing: .07em;
   text-transform: uppercase;
-  line-height: 1.18;
-  /* Reparte as linhas em blocos parecidos em vez de deixar uma palavra órfã */
+  line-height: 1.2;
   text-wrap: balance;
-  hyphens: none;
-  overflow-wrap: break-word;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--acento) 70%, transparent);
+  text-decoration-thickness: 1px;
+  text-underline-offset: .42em;
+  transition: text-decoration-color var(--mitte-dur) var(--mitte-ease),
+              text-shadow var(--mitte-dur) var(--mitte-ease);
 }
 
-/* Seta com o traço que cresce no hover — leitura de "entra aqui", agora sem
-   a contagem de itens, que não ajudava quem só quer escolher o que beber. */
-.categoria__seta {
+.categoria:hover .categoria__nome,
+.categoria:focus-visible .categoria__nome {
+  text-decoration-color: var(--acento);
+  text-shadow: 0 0 14px color-mix(in srgb, var(--acento) 70%, transparent);
+}
+
+/* ==========================================================================
+   Busca — campo no topo, resultados no lugar da coluna
+   ========================================================================== */
+
+.campo {
   display: flex;
   align-items: center;
-  gap: .5rem;
-  margin-top: .15rem;
-  color: var(--acento);
-  opacity: .75;
+  gap: .75rem;
+  min-height: calc(var(--mitte-alvo) * 1.04);
+  padding-inline: 1.1rem;
+  border: 1px solid var(--mitte-border-strong);
+  border-radius: var(--mitte-radius-pill);
+  background: var(--mitte-bg-elev-1);
+  transition: border-color var(--mitte-dur) var(--mitte-ease),
+              box-shadow var(--mitte-dur) var(--mitte-ease);
 }
 
-.categoria__seta::before {
-  content: "";
+.campo:focus-within {
+  border-color: var(--mitte-pink);
+  box-shadow: 0 0 0 1px var(--mitte-pink), 0 0 26px rgba(255, 51, 153, .28);
+}
+
+.campo svg { flex: none; color: var(--mitte-fg-subtle); }
+.campo:focus-within > svg { color: var(--mitte-pink); }
+
+.campo input {
   flex: 1;
-  height: 1px;
-  background: linear-gradient(90deg, var(--acento), transparent);
-  transform: scaleX(.25);
-  transform-origin: left;
-  transition: transform var(--mitte-dur-tela) var(--mitte-ease);
+  min-width: 0;
+  background: none;
+  border: 0;
+  color: var(--mitte-fg);
+  font: inherit;
+  font-size: 1rem;
 }
 
-.categoria__seta svg {
+.campo input::placeholder { color: var(--mitte-fg-subtle); }
+.campo input:focus { outline: none; }
+/* O X nativo do type=search some: ele é cinza, quadrado e de outro sistema */
+.campo input::-webkit-search-cancel-button { display: none; }
+
+.campo__limpar {
   flex: none;
-  transform: translateX(-.35rem);
-  opacity: 0;
-  transition: transform var(--mitte-dur-tela) var(--mitte-ease),
-              opacity var(--mitte-dur-tela) var(--mitte-ease);
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--mitte-radius-pill);
+  background: var(--mitte-bg-elev-2);
+  color: var(--mitte-fg-muted);
+  transition: color var(--mitte-dur) var(--mitte-ease);
 }
 
-.categoria:hover .categoria__seta::before,
-.categoria:focus-visible .categoria__seta::before { transform: scaleX(1); }
+.campo__limpar:hover { color: var(--mitte-pink); }
+.campo__limpar[hidden] { display: none; }
 
-.categoria:hover .categoria__seta svg,
-.categoria:focus-visible .categoria__seta svg { transform: translateX(0); opacity: 1; }
+.resultados { min-width: 0; }
+.resultados[hidden] { display: none; }
+
+.resultados__contagem {
+  margin: var(--mitte-space-3) 0;
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  color: var(--mitte-fg-subtle);
+}
+
+/* Atalho para a aba inteira quando o que foi digitado é o nome de uma seção:
+   quem escreve "caipirinha" quase sempre quer a lista, não um item. */
+.atalho-aba {
+  display: flex;
+  align-items: center;
+  gap: .7rem;
+  width: 100%;
+  min-height: var(--mitte-alvo);
+  margin-bottom: var(--mitte-space-3);
+  padding: .7rem 1.1rem;
+  border: 1px solid color-mix(in srgb, var(--acento) 45%, transparent);
+  border-radius: var(--mitte-radius-pill);
+  background: color-mix(in srgb, var(--acento) 10%, var(--mitte-bg-elev-1));
+  color: var(--mitte-fg);
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  font-weight: 700;
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  text-align: left;
+}
+
+.atalho-aba svg { flex: none; color: var(--acento); margin-left: auto; }
+.atalho-aba:hover { border-color: var(--acento); }
+
+/* "Você quis dizer": uma linha de texto, não um chip. A correção aparece só
+   quando a busca falhou, no lugar onde a pessoa já está olhando. */
+.correcao {
+  margin: 0 0 var(--mitte-space-4);
+  color: var(--mitte-fg-muted);
+  font-size: var(--mitte-size-desc);
+  text-align: center;
+}
+
+.correcao button {
+  color: var(--mitte-pink);
+  font: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: .25em;
+}
+
+.vazio {
+  padding: var(--mitte-space-8) var(--mitte-space-4);
+  text-align: center;
+  color: var(--mitte-fg-subtle);
+  font-size: var(--mitte-size-desc);
+  line-height: 1.7;
+}
+
+.vazio em { color: var(--mitte-fg-muted); font-style: normal; }
 
 /* ==========================================================================
    Tela 3 — Itens
@@ -485,15 +598,18 @@ button {
 .card__figura {
   display: block;
   position: relative;
-  /* 4:3 em vez de quadrado: o master continua quadrado e o object-fit corta
-     só as sobras de topo e base, que é onde a foto de produto tem margem.
-     Essa troca é o que faz caber uma fileira a mais na tela. */
-  aspect-ratio: 4 / 3;
+  /* Quadrado, igual ao master: as fotos novas são de copo em pé, e um 4:3
+     cortava justamente a borda e a base — o que se olha num drink. */
+  aspect-ratio: 1;
   background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
   overflow: hidden;
 }
 
+/* `position` + z-index porque a inicial é absoluta: sem isso ela pintava
+   por cima da foto, e toda foto aparecia com duas letras rosa no meio. */
 .card__figura img {
+  position: relative;
+  z-index: 1;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -577,6 +693,7 @@ button {
    encurta o card o bastante para caber mais uma fileira na tela. */
 .card__preco {
   position: absolute;
+  z-index: 2;   /* acima da foto, que já está em z-index 1 */
   right: .4rem;
   bottom: .4rem;
   padding: .2rem .5rem;
@@ -600,130 +717,6 @@ button {
 .card--destaque .card__nome {
   color: var(--mitte-pink);
   text-shadow: var(--mitte-glow-text-pink);
-}
-
-/* ==========================================================================
-   Busca
-   ========================================================================== */
-
-.busca {
-  position: absolute;
-  inset: 0;
-  z-index: 20;
-  display: grid;
-  grid-template-rows: auto auto 1fr;
-  background: rgba(9, 9, 11, .94);
-  backdrop-filter: blur(20px);
-  visibility: hidden;
-  opacity: 0;
-  transition: opacity var(--mitte-dur) var(--mitte-ease), visibility var(--mitte-dur);
-}
-
-.busca[data-aberta] { visibility: visible; opacity: 1; }
-
-.busca__topo {
-  display: flex;
-  align-items: center;
-  gap: var(--mitte-space-3);
-  padding: var(--mitte-gutter);
-  padding-bottom: var(--mitte-space-3);
-}
-
-.campo {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: .75rem;
-  min-height: var(--mitte-alvo);
-  padding-inline: 1.1rem;
-  border: 1px solid var(--mitte-border-strong);
-  border-radius: var(--mitte-radius-pill);
-  background: var(--mitte-bg-elev-1);
-}
-
-.campo svg { flex: none; color: var(--mitte-fg-subtle); }
-
-.campo input {
-  flex: 1;
-  min-width: 0;
-  background: none;
-  border: 0;
-  color: var(--mitte-fg);
-  font: inherit;
-  font-size: 1rem;
-}
-
-.campo input::placeholder { color: var(--mitte-fg-subtle); }
-.campo input:focus { outline: none; }
-
-.busca__resultados {
-  min-height: 0;
-  overflow-y: auto;
-  overscroll-behavior: contain;
-  padding: 0 var(--mitte-gutter) var(--mitte-gutter);
-}
-
-/* Atalhos em linguagem solta — e, quando nada é encontrado, a correção */
-.busca__chips {
-  display: flex;
-  gap: var(--mitte-space-2);
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 0 var(--mitte-gutter) var(--mitte-space-3);
-}
-
-.busca__chips::-webkit-scrollbar { display: none; }
-.busca__chips:empty { display: none; }
-
-.chip {
-  flex: none;
-  min-height: 2.25rem;
-  padding: .4rem .9rem;
-  border: 1px solid var(--mitte-border);
-  border-radius: var(--mitte-radius-pill);
-  background: var(--mitte-bg-elev-1);
-  color: var(--mitte-fg-muted);
-  font-family: var(--mitte-font-display);
-  font-size: var(--mitte-size-micro);
-  font-weight: 600;
-  letter-spacing: var(--mitte-track-micro);
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: all var(--mitte-dur) var(--mitte-ease);
-}
-
-.chip:hover,
-.chip:focus-visible {
-  color: var(--mitte-fg);
-  border-color: var(--mitte-border-strong);
-  transform: translateY(-1px);
-}
-
-.chip:active { transform: scale(.96); }
-
-.chip--correcao {
-  border-color: var(--mitte-border-strong);
-  color: var(--mitte-pink);
-  text-transform: none;
-  letter-spacing: .02em;
-}
-
-body.totem .chip { min-height: 3rem; font-size: .8rem; }
-
-.busca__contagem {
-  margin: 0 0 var(--mitte-space-3);
-  font-family: var(--mitte-font-display);
-  font-size: var(--mitte-size-micro);
-  letter-spacing: var(--mitte-track-micro);
-  text-transform: uppercase;
-  color: var(--mitte-fg-subtle);
-}
-
-.vazio {
-  padding: var(--mitte-space-12) var(--mitte-space-4);
-  text-align: center;
-  color: var(--mitte-fg-subtle);
-  font-size: var(--mitte-size-desc);
 }
 
 /* ==========================================================================
@@ -787,7 +780,7 @@ body.totem .chip { min-height: 3rem; font-size: .8rem; }
   overflow: hidden;
 }
 
-.detalhe__figura img { width: 100%; height: 100%; object-fit: cover; }
+.detalhe__figura img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 
 .detalhe__corpo { display: grid; gap: .5rem; padding: var(--mitte-space-6); }
 
@@ -865,7 +858,7 @@ body.totem .chip { min-height: 3rem; font-size: .8rem; }
   overflow: hidden;
 }
 
-.acompanha__figura img { width: 100%; height: 100%; object-fit: cover; }
+.acompanha__figura img { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: cover; }
 .acompanha__figura .card__inicial { font-size: 1.25rem; }
 
 .acompanha__nome {

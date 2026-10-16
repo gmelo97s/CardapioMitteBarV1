@@ -2,3 +2,8 @@ node_modules/
 .vercel
 .DS_Store
 Thumbs.db
+
+# Fotos cruas e masters: ficam no Drive do bar, nao no repo.
+# tools/fotos-drive.json diz de onde vieram e tools/fotos-drive.py refaz.
+assets/itens/_brutas/
+assets/itens/_masters/

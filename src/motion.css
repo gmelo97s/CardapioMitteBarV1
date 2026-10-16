@@ -163,27 +163,23 @@
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
-/* Os tiles de categoria entram deitados e levantam, em perspectiva — é o que
-   dá o "menu de jogo abrindo" em vez de uma lista aparecendo. */
-@keyframes entraTile {
-  from { opacity: 0; transform: perspective(60rem) rotateX(26deg) translateY(2.5rem) scale(.94); }
-  to   { opacity: 1; transform: perspective(60rem) rotateX(0) translateY(0) scale(1); }
+/* As pílulas de categoria entram de baixo, em cascata curta: a coluna se
+   monta linha a linha, como uma lista sendo escrita. */
+@keyframes entraPilula {
+  from { opacity: 0; transform: translateY(.9rem) scale(.985); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .categoria {
-  transform-origin: 50% 100%;
-  animation: entraTile .62s var(--mitte-ease) both;
-  animation-delay: calc(var(--i) * var(--mitte-stagger));
+  animation: entraPilula .42s var(--mitte-ease) both;
+  /* 12 abas × 60ms seriam .72s até a última linha aparecer. Com o passo pela
+     metade e teto no 9º, a coluna inteira assenta em menos de meio segundo. */
+  animation-delay: calc(min(var(--i), 9) * (var(--mitte-stagger) / 2));
 }
 
 .card {
   animation: entraCard .5s var(--mitte-ease) both;
   animation-delay: calc(var(--i) * var(--mitte-stagger));
-}
-
-/* Giro do fio de luz na borda do tile */
-@keyframes girar {
-  to { --ang: 360deg; }
 }
 
 /* O stagger satura: a partir do 14º item ninguém percebe a diferença, e

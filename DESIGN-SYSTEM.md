@@ -16,7 +16,7 @@ Todos os valores vivem em [`src/tokens.css`](src/tokens.css). Nada de cor solta 
 | Token | Valor | Uso |
 |---|---|---|
 | `--mitte-bg` | `#09090B` | Fundo da página. É o `body` do site institucional (`rgb(9,9,11)`, tema `dark`). |
-| `--mitte-bg-elev-1` | `#121215` | Linha de item em hover, campo de busca, chip de aba. |
+| `--mitte-bg-elev-1` | `#121215` | Linha de item em hover, campo de busca, etiqueta de aba. |
 | `--mitte-bg-elev-2` | `#1A1A1F` | Segundo nível de elevação. |
 | `--mitte-overlay` | `rgba(9,9,11,.82)` | Barra fixa com `backdrop-filter: blur(12px)`. |
 
@@ -36,8 +36,8 @@ Os quatro neons vêm literalmente das variáveis do site (`--neon-pink`, `--neon
 |---|---|---|---|
 | `--mitte-pink` | `330 100% 60%` | `#FF3399` | **Primária.** Títulos de seção, aba ativa, destaque de promoção. |
 | `--mitte-cyan` | `180 100% 50%` | `#00FFFF` | **Secundária.** Preços, eyebrow, face do logo, e o halo frio que sustenta a base da tela. |
-| `--mitte-green` | `150 100% 50%` | `#00FF80` | Acento de categoria (Sem Álcool, Caipirinhas). |
-| `--mitte-purple` | `280 100% 60%` | `#AA33FF` | Acento de categoria (Outros, Whisky, Vinhos). |
+| `--mitte-green` | `150 100% 50%` | `#00FF80` | Acento de categoria (Sem Álcool, Vodkas e Gins, Doses). |
+| `--mitte-purple` | `280 100% 60%` | `#AA33FF` | Acento de categoria (Outros, Caipirinhas, Vinhos). Também o contorno do botão de reserva na hero. |
 
 O logo tem tokens próprios, medidos pixel a pixel no arquivo original: a face
 **não** é o ciano puro do site, é um ciano dessaturado, e a sombra é um magenta
@@ -52,9 +52,10 @@ O cardápio inteiro é lido num salão escuro, muitas vezes no celular. A divis�
 - **Ciano = dado.** O preço, sempre. Nunca invertê-los — é o que torna a varredura de preço instantânea.
 - **Verde e roxo só existem como acento de categoria.** Cada aba recebe um dos
   quatro neons em `--acento` (ver `ACENTOS` em `src/app.js`), que pinta a borda
-  viva, o brilho da base e o número fantasma daquele tile. Fora da tela de
-  categorias eles não aparecem: dentro de uma aba, volta a valer só rosa e
-  ciano, senão o preço perde a leitura imediata.
+  da pílula, o sublinhado do nome e a lavagem de cor no toque. Fora da tela de
+  categorias eles aparecem em dois lugares só: nos dois botões de contorno da
+  hero e no `.atalho-aba` dos resultados. Dentro de uma aba volta a valer só
+  rosa e ciano, senão o preço perde a leitura imediata.
 
 ### Contraste
 
@@ -128,52 +129,77 @@ só o painel de itens. Isso vale para celular, desktop e totem.
 
 | Tela | Estrutura | Rola? |
 |---|---|---|
-| **Hero** | `1fr auto` — logo centralizado, chamada embaixo | não |
-| **Categorias** | `auto 1fr` — cabeçalho + grade que sempre cabe | não |
+| **Hero** | logo centralizado, três destinos empilhados embaixo | não |
+| **Categorias** | `auto auto 1fr` — cabeçalho + barra de busca + painel | só o painel |
 | **Itens** | `auto 1fr` — cabeçalho + grade de cards | só a grade |
 
-A grade de categorias usa colunas em `fr` e altura `1fr`: as 11 abas se
-redistribuem (2 colunas no celular, 3 em tablet, 4 acima de 75rem) e sempre
-cabem sem rolagem, porque os tiles encolhem em vez de transbordar.
+A **hero** não tem um botão, tem três, um por linha e todos da mesma largura:
+*Programação da semana* e *Reserva de aniversário* saem do cardápio e vão de
+contorno (`.botao--fantasma`, com o acento próprio); *Cardápio* fica aqui e é
+o único preenchido. Empilhar em vez de alinhar resolve o nome longo — "Reserva
+de aniversário" não cabe lado a lado em 375px sem encolher a tipografia abaixo
+do legível.
 
-A grade de itens usa `align-content: safe center`. Lista curta fica centrada
-verticalmente — o que resolve a totem em pé, onde quatro itens alinhados ao
-topo deixariam dois terços da tela vazios. Lista longa volta a alinhar pelo
-topo sozinha, sem cortar o começo.
+As **categorias** viraram uma coluna de pílulas, uma aba por linha, sem foto.
+Uma grade de doze tiles obriga a comparar dois eixos ao mesmo tempo; a coluna
+se lê de cima para baixo, como um cardápio de papel. A barra de busca fica
+**fora** do painel que rola: digitar não pode empurrar o campo para fora da
+tela, e no celular com o teclado aberto sobra pouca tela.
+
+Tanto o painel de categorias quanto a grade de itens usam
+`align-content: safe center`. Lista curta fica centrada verticalmente — o que
+resolve a totem em pé, onde doze pílulas alinhadas ao topo deixariam metade da
+tela vazia. Lista longa volta a alinhar pelo topo sozinha, sem cortar o
+começo. A centragem vem da trilha (`grid-template-columns: minmax(0, 56rem)`
++ `justify-content: center`), não de `margin-inline: auto`: margem automática
+em item de grade cancela o `stretch` e a pílula encolhe para o tamanho do
+texto.
 
 ### Componentes
 
-- **`.categoria`** — tile de aba: nome em Orbitron e um traço no acento da
-  aba, com seta que aparece no hover/foco. **Sem contagem de itens**: quem
-  abre o cardápio quer escolher o que beber, não saber que Latas tem 18
-  linhas — o número só competia com o nome.
-- **`.card`** — item: figura **4:3**, nome, e o preço como **etiqueta sobre a
-  foto** (pílula escura com borda ciano). A descrição some abaixo de 48rem e
-  volta acima disso. Variante `.card--destaque` para promoção, no máximo uma
-  por aba.
+- **`.categoria`** — pílula de aba: nome em Orbitron centralizado, com
+  sublinhado no acento da aba. O sublinhado é o que o cardápio de referência
+  tem; em Orbitron ele vira um fio de neon embaixo do nome. A borda também
+  carrega o acento, a 40% — parada, a coluna tem o mesmo ritmo de cor que a
+  grade antiga tinha; no toque, o acento vai a 100% e uma lavagem de cor
+  atravessa a pílula por trás do texto. **Sem contagem de itens**: quem abre o
+  cardápio quer escolher o que beber, não saber que Latas tem 24 linhas.
+- **`.card`** — item: figura **quadrada**, nome, e o preço como **etiqueta
+  sobre a foto** (pílula escura com borda ciano). A descrição some abaixo de
+  48rem e volta acima disso. Variante `.card--destaque` para promoção, no
+  máximo uma por aba.
 
-  As três decisões — 4:3 em vez de quadrado, preço fora do corpo, descrição só
-  em tela larga — existem pela mesma razão: **densidade**. O alvo é a pessoa
-  ver pelo menos 8 itens ao abrir uma aba e nunca rolar mais de duas telas. O
-  card caiu de 292px para 162px de altura e o resultado medido é:
+  A figura era 4:3 enquanto as fotos eram de produto com margem sobrando em
+  cima e embaixo. As fotos do bar são de copo em pé: o 4:3 cortava justamente
+  a borda e a base, que é o que se olha num drink. Quadrado custa densidade e
+  paga em legibilidade do item:
 
-  | Tela | Cards à vista | Telas para a maior aba (18 itens) |
-  |---|---|---|
-  | Celular 375×812 | 10 | 2,2 |
-  | Desktop 1440×900 | 18 | 1,1 |
-  | Totem 1080×1920 | 15 | 1,2 |
+  | Tela | Card | Cards à vista | Telas para a maior aba (24 itens) |
+  |---|---|---|---|
+  | Celular 375×812 | 198px | 8 | 3,4 |
+  | Desktop 1440×900 | 257px | 24 | 1,1 |
+  | Totem 1080×1920 | 409px | 12 | 2,0 |
 
-  O master da foto continua quadrado; é o `object-fit: cover` que corta topo e
-  base, que é onde a foto de produto tem margem sobrando.
+  O preço fora do corpo e a descrição só em tela larga continuam valendo pela
+  mesma razão de antes: densidade. O master é quadrado e o `object-fit: cover`
+  não precisa cortar nada.
+
+  A foto leva `position: relative; z-index: 1` e o preço, `z-index: 2`. Sem
+  isso a inicial — que é absoluta — pintava por cima da foto, e toda foto
+  aparecia com duas letras rosa no meio.
 - **`.card__inicial`** — as iniciais do item em rosa a 32% de opacidade, atrás
   da foto. Quando a foto ainda não existe, o `onerror` remove o `<img>` e a
   inicial fica à mostra. **É um estado desenhado, não um buraco** — por isso o
   cardápio pode ir ao ar com 20 fotos em vez de 100.
-- **`.busca`** — camada sobre tudo, com campo e resultados. Os resultados usam
-  **o mesmo `.card`** da tela de itens, na mesma grade: a busca não é uma
-  listinha à parte, é o cardápio refiltrado. Como aqui os resultados cruzam
-  abas, o card ganha `.card__aba` — o nome da categoria acima do nome do item,
-  em cinza, que dentro de uma categoria seria redundante e não aparece.
+- **`.campo`** — a barra de busca, fixa no topo da tela de categorias. Não é
+  mais uma camada que abre por cima: está sempre ali, e os resultados
+  (`.resultados`) tomam o lugar da coluna de abas dentro do mesmo painel. Os
+  resultados usam **o mesmo `.card`** da tela de itens, na mesma grade: a
+  busca não é uma listinha à parte, é o cardápio refiltrado. Como aqui os
+  resultados cruzam abas, o card ganha `.card__aba` — o nome da categoria
+  acima do nome do item, em cinza, que dentro de uma categoria seria
+  redundante e não aparece. A lupa da tela de itens não abre um segundo
+  campo: devolve para este, já com o cursor dentro.
 - **`.detalhe`** — diálogo centrado: foto grande (quadrada, com teto de
   `38dvh` para o resto caber sem rolar), categoria, nome, preço, descrição e,
   no rodapé, **três sugestões de acompanhamento**. Abre por cima da busca sem
@@ -184,9 +210,13 @@ topo sozinha, sem cortar o começo.
   sempre o mesmo trio, mas pratos diferentes sugerem trios diferentes — sem
   isso, ou todo mundo vê as três primeiras comidas da lista, ou a tela muda a
   cada abertura. Clicar troca o conteúdo do diálogo em vez de empilhar outro.
-- **`.chip`** — atalho da busca. Com o campo vazio, mostra o que dá para pedir
-  em linguagem solta; sem resultado, vira `.chip--correcao` com o "você quis
-  dizer".
+- **`.atalho-aba`** — primeira linha dos resultados quando o que foi digitado
+  é o nome de uma seção: quem escreve "caipirinha" quase sempre quer a lista,
+  não um item. Leva o acento da aba.
+- **`.correcao`** — o "você quis dizer", em **linha de texto**, só quando a
+  busca não achou nada. Os chips fixos embaixo da barra saíram: ocupavam
+  altura permanente para ensinar uma sintaxe que o placeholder já ensina, e
+  empurravam os resultados para baixo da dobra no celular.
 
 ### Texto que cabe em qualquer tela
 
@@ -211,12 +241,19 @@ embaçar ao passar o cursor. Ele também fica em camada própria
 Três camadas, nessa ordem, sobre a frase inteira já sem acento:
 
 1. **Intenção** — "tô com fome", "pra dividir", "algo barato", "sem álcool",
-   "algo forte", "refrescante", "algo doce". Cada uma é um filtro sobre o
-   índice, disparado por frases soltas (`INTENCOES` em `src/app.js`).
-2. **Teto de preço** — "até 30", "menos de 30", "<30".
+   "algo forte", "refrescante", "algo doce", "vegano", "da casa", "pra
+   brindar", "sem açúcar". Cada uma é um filtro sobre o índice, disparado por
+   frases soltas (`INTENCOES` em `src/app.js`).
+2. **Preço** — teto ("até 30", "menos de 30", "<30"), piso ("acima de 50",
+   "a partir de 50") e faixa ("entre 20 e 40"). Número solto vira teto: no
+   balcão, "30" quer dizer "até 30".
 3. **Termos** — o que sobrou, já sem as palavras vazias do português ("tô",
-   "com", "pra", "algo", "quero"). Sem essa limpeza, "tô com fome" devolvia um
-   item só: "to" e "com" viravam termos de busca e anulavam a intenção.
+   "com", "pra", "algo", "quero") e já reduzido à raiz, que resolve o plural
+   antes de gastar distância de edição. Sem essa limpeza, "tô com fome"
+   devolvia um item só: "to" e "com" viravam termos de busca e anulavam a
+   intenção. Cada termo leva junto seus **apelidos de balcão** (`APELIDOS`):
+   "breja" acha as cervejas, "mexerica" acha a tangerina, "uisque" acha o
+   whisky.
 
 Os termos casam por prefixo e, de quatro letras em diante, por distância de
 edição — "negrone" acha Negroni, "caipirnha" acha as caipirinhas. Abaixo de
@@ -225,13 +262,21 @@ quatro letras a correção fica desligada de propósito: "gin" viraria "vin",
 
 O resultado é ordenado por relevância, com acerto no **nome** valendo mais que
 acerto na descrição ou no nome da aba, e acerto exato valendo mais que
-correção de digitação.
+correção de digitação. O termo digitado vale meio ponto a mais que um apelido
+dele — é o que põe o Mojito (tem *hortelã* escrito) na frente do Halls (só tem
+*menta*, que é apelido de hortelã). Empate vai para a **cobertura do nome**:
+em "gin", "Gin Tônica" (duas palavras, metade coberta) ganha de "Gin Tônica
+Pink Schweppes Lata 269ml" (seis palavras). Só então entra o preço.
+
+Como as descrições agora trazem a receita inteira — vieram do menu do bar —
+ingrediente também encontra: "maracujá" acha o Tropical Passion sem que o
+Tropical Passion precise de apelido nenhum.
 
 ### Modo totem
 
 `body.totem` (via `?totem=1` ou tela ≥1024px sem mouse) sobe o alvo de toque de
 3rem para 4,5rem, aumenta a tipografia dos cards e troca as colunas para
-`minmax(min(21rem, 30vw), 1fr)` — menos cards por linha, maiores, porque o
+`minmax(min(20rem, 27vw), 1fr)` — menos cards por linha, maiores, porque o
 cliente está a um braço de distância e não a 30 cm. `@media (hover: none)`
 desliga os efeitos de hover, que em tela de toque só causam estado preso.
 
@@ -279,9 +324,16 @@ diz "você voltou" sem precisar de texto.
 
 ### Listas
 
-`.categoria` e `.card` entram com stagger de 60ms via `--i`. O atraso dos cards
-satura no 14º item (`min(var(--i), 13)`): ninguém percebe a diferença depois
-disso, e esperar um segundo pelo último card seria pior que não animar.
+`.card` entra com stagger de 60ms via `--i`, saturando no 14º item
+(`min(var(--i), 13)`): ninguém percebe a diferença depois disso, e esperar um
+segundo pelo último card seria pior que não animar.
+
+`.categoria` usa metade do passo e satura no 10º (`min(var(--i), 9)`). Doze
+abas a 60ms seriam 0,72s até a última linha aparecer — com a coluna, isso é
+tempo demais para um menu que a pessoa já está lendo de cima para baixo. A
+pílula também deixou de entrar em perspectiva (`entraTile`) e passou a subir
+(`entraPilula`): a rotação em X funcionava num tile largo e virava tremor numa
+pílula de 48px de altura.
 
 ### A vida do logo
 
@@ -309,10 +361,15 @@ a montagem do logo e a respiração da hero.
 ## 7. O que não fazer
 
 - Fundo claro. A marca é um bar noturno; não há variante clara.
-- Fazer a página rolar. Só o painel de itens rola.
+- Fazer a página rolar. Só o painel de categorias e a grade de itens rolam.
 - Glow em texto corrido.
 - Preço em rosa, nome em ciano, ou qualquer inversão do par.
 - Mais de um `.card--destaque` por aba.
-- Verde ou roxo fora do tile de categoria.
+- Verde ou roxo fora da pílula de categoria, dos dois botões de contorno da
+  hero e do atalho de aba nos resultados.
 - Cor literal (`#FF3399`) no CSS dos componentes — sempre o token.
-- Foto de item com fundo que não seja preto: quebra a continuidade do card.
+- Misturar as duas famílias de foto num mesmo card. Fotos do bar (copo no
+  balcão, neon desfocado atrás) e fotos de produto (recorte sobre fundo
+  escuro) convivem bem lado a lado porque as duas são escuras; o que quebra
+  é foto com fundo claro — por isso o anúncio da Ballantine's, que é diurno,
+  ficou de fora.

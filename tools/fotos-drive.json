@@ -1,0 +1,128 @@
+{
+  "pasta": "https://drive.google.com/drive/folders/1mSI1PvnfAaAAxo1-AzQfmh3U9OEWADWj",
+  "nota": "Baixe a pasta inteira para assets/itens/_brutas/ e rode tools/fotos-drive.py. Os nomes aqui são os do Drive, sem renomear.",
+  "fotos": {
+    "aperol-spritz": "APEROL.png",
+    "black-russian": "BLACK RUSSIAN.png",
+    "cosmopolitan": "COSMOPOLITAN.png",
+    "cuba-libre": "CUBA LIBRE.png",
+    "dry-martini": "DRY MARTINI.png",
+    "espresso-martini": "ESPRESSO MARTINI.jpg",
+    "fitzgerald": "FITZ GERALD.png",
+    "garibaldi": "GARIBALDI2.png",
+    "mojito": "MOJITO.jpeg",
+    "moscow-mule": "MOSCOW MULE.png",
+    "negroni-rosso": "NEGRONI.png",
+    "new-york-sour": "NEW YORK SOUR.png",
+    "tropical-coconut": "COCO TROPICAL.png",
+    "grape-basil": "GRAPE BRASIL.png",
+    "pineapple-collin-s": "PINEAPPLE COLLIN’S.png",
+    "strawberry-mule": "STRAWBERRY MULE.png",
+    "green-island": "ILHA VERDE.png",
+    "caipirita": "CAIPIRITA.png",
+    "finest-jam": "BALLA JAM AMORA.png",
+    "bi-nights": "HONEY NIGHTS.png",
+    "basil-smash": "BASIL SMASH.png",
+    "gin-tonica": "GIN.png",
+    "compre-2-gins-tonicas-e-ganhe-a-terceira": "GIN.png",
+    "raspberri": "RASPBERRI COLLIN’S.png",
+    "pink-energy": "SPEED RACER.png",
+    "vai-tomando": "VAI QUICANDO.png",
+    "batida-de-cafe": "BATIDA DE CAFÉ.png",
+    "blue-coconut": "COCO AZUL DO CÉU.png",
+    "tanjuru": "TANJURU.png",
+    "caipivinho-branco": "CAIPIVINHO BRANCO.png",
+    "jambu-verao": "JAMBU VERÃO (2).png",
+    "margarita-picante-de-tangerina": "MARGARITA PICANTE DE TANGERINA.png",
+    "mojito-vinho-branco": "MOJITO VINHO BRANCO.png",
+    "paloma": "PALOMA.png",
+    "tinto-de-verano": "tinto veran.png",
+    "tropical-passion": "TROPICAL PASSION.png",
+    "hungarian-poison": "VENENO HÚNGARO.png",
+    "zero-b": "ZERO BALLA.png"
+  },
+  "fileira_de_latas": {
+    "arquivo": "latas_bebidas prontas.png",
+    "nota": "Oito latas numa fileira só, encostadas umas nas outras. As faixas são as bordas lidas na própria imagem (x0, x1 em px).",
+    "faixas": {
+      "beats-tropical": [
+        200,
+        866
+      ],
+      "lambe-tangerina": [
+        890,
+        1524
+      ],
+      "mascate-melancia": [
+        1528,
+        2070
+      ],
+      "xeque-mate": [
+        2126,
+        2736
+      ],
+      "beats-senses": [
+        2770,
+        3394
+      ],
+      "mascate-maracuja": [
+        3434,
+        3984
+      ],
+      "lambe-manga": [
+        4052,
+        4662
+      ],
+      "beats-red-mix": [
+        4712,
+        5332
+      ]
+    },
+    "itens": {
+      "skol-beats-tropical-269ml": [
+        "beats-tropical"
+      ],
+      "skol-beats-senses-269ml": [
+        "beats-senses"
+      ],
+      "skol-beats-red-mix-269ml": [
+        "beats-red-mix"
+      ],
+      "combo-3-beats-lata": [
+        "beats-tropical",
+        "beats-senses",
+        "beats-red-mix"
+      ],
+      "lambe-lambe-tangerina-limao-e-sal-355ml": [
+        "lambe-tangerina"
+      ],
+      "lambe-lambe-manga-e-maracuja-355ml": [
+        "lambe-manga"
+      ],
+      "combo-3-lambe-lambe": [
+        "lambe-tangerina",
+        "lambe-manga",
+        "lambe-tangerina"
+      ],
+      "mascate-drinks-melancia-e-framboesa-362ml": [
+        "mascate-melancia"
+      ],
+      "mascate-drinks-maracuja-e-caju-362ml": [
+        "mascate-maracuja"
+      ],
+      "combo-3-mascate-drinks-lata": [
+        "mascate-melancia",
+        "mascate-maracuja",
+        "mascate-melancia"
+      ],
+      "xeque-mate-lata-362ml": [
+        "xeque-mate"
+      ],
+      "combo-3-xeque-mate-lata": [
+        "xeque-mate",
+        "xeque-mate",
+        "xeque-mate"
+      ]
+    }
+  }
+}

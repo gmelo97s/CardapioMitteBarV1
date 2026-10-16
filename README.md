@@ -8,15 +8,17 @@ index.html                    as três telas
 assets/logo-mitte.png         logo completo
 assets/logo-face.png          só a face ciano   ─┐ camadas separadas
 assets/logo-shadow.png        só a sombra magenta┘ para a animação da hero
-assets/itens/                 fotos geradas (webp)
-assets/itens/_masters/        seus originais 1024×1024 (não vão para o ar)
+assets/itens/                 fotos geradas (webp) — vão para o ar
+assets/itens/_brutas/         fotos como vieram do Drive  ─┐ fora do git,
+assets/itens/_masters/        originais 1024×1024          ┘ ~140 MB
 src/tokens.css                design tokens
 src/motion.css                animações
 src/styles.css                componentes
 src/app.js                    navegação, busca e cards
 src/data/cardapio.json        ← todo o conteúdo
-assets/itens/_brutas/         fotos como vieram do Google (não vão para o ar)
-tools/preparar-fotos.py       recorta o fundo e monta os combos
+tools/fotos-drive.json        qual foto do Drive é de qual item
+tools/fotos-drive.py          recorta as fotos do bar e monta as latas
+tools/preparar-fotos.py       recorta o fundo de fotos de produto
 tools/gerar-imagens.py        gera as versões responsivas
 DESIGN-SYSTEM.md              o sistema visual e suas regras
 IMAGENS.md                    como produzir as fotos dos itens
@@ -35,30 +37,53 @@ carregado via `fetch` — abrir o `index.html` direto do disco não funciona.
 ## Como navega
 
 **Hero** → o logo se monta letra a letra, a sombra magenta extruda por trás, o
-brilho acende. Um botão leva ao menu.
-**Categorias** → as 11 abas numa grade que sempre cabe na tela, sem rolagem.
-**Itens** → cards com foto, nome e preço. Só esta lista rola, nunca a página.
+brilho acende. Embaixo, três destinos empilhados: *Programação da semana* (vai
+para `mittesp.com.br/agenda`), *Cardápio* (fica aqui) e *Reserva de
+aniversário* (vai para `mittebar.vercel.app`). Os dois que saem do cardápio
+são de contorno; só o do meio é preenchido.
+
+**Categorias** → a barra de busca no topo, fixa, e as 12 abas numa coluna de
+pílulas, uma por linha, sem foto. Cada aba traz seu acento de cor na borda e
+no sublinhado.
+
+**Itens** → cards com foto quadrada, nome e preço. Só esta lista rola.
 
 Toque num card abre o detalhe: foto grande, descrição e **três sugestões de
 acompanhamento** — drink sugere comida, comida sugere drink.
 
-A lupa abre a busca, que entende pedido em linguagem solta ("tô com fome",
-"algo barato", "pra dividir", "sem álcool"), tolera erro de digitação
-("negrone" acha Negroni) e devolve os resultados na mesma grade de cards.
-
 A página nunca rola: `html, body { overflow: hidden }` e o shell tem
-`height: 100dvh`. Quem rola é o painel de itens.
+`height: 100dvh`. Quem rola é o painel.
+
+## A busca
+
+Mora no topo da tela de categorias e fica visível o tempo todo. Enquanto o
+campo está vazio, embaixo dele fica a coluna de abas; ao digitar, os
+resultados ocupam o lugar da coluna. Não há chips de sugestão: o que a barra
+entende está no exemplo do placeholder, e o resto ela deduz.
+
+| A pessoa digita | O que acontece |
+|---|---|
+| `gin`, `maracujá`, `hortelã` | nome **e** ingrediente — as descrições trazem a receita inteira |
+| `tô com fome`, `pra dividir`, `sem álcool`, `vegano`, `da casa`, `pra brindar` | intenção em linguagem solta, filtra a lista |
+| `até 30`, `menos de 30`, `acima de 50`, `entre 20 e 40`, `30` | teto, piso e faixa de preço |
+| `negrone`, `gim`, `caipirinhas` | erro de digitação, grafia alternativa e plural |
+| `breja`, `refri`, `shot`, `mexerica`, `uisque` | apelido de balcão |
+| `caipirinha`, `doses`, `espumante` | além dos itens, oferece **ir para a aba inteira** |
+
+Quando nada casa, a barra propõe a correção mais próxima numa linha de texto
+— não num botão fixo.
 
 ## Os três aparelhos
 
 | | Como entra |
 |---|---|
-| **Celular** | padrão, 2 colunas, alvos de 3rem |
-| **Desktop** | mesma tela, 3–4 colunas de categoria |
+| **Celular** | padrão, 2 colunas de card, alvos de 3rem |
+| **Desktop** | mesma tela, a coluna de abas cabe inteira sem rolar |
 | **Totem** | `?totem=1` na URL, ou detectado por tela ≥1024px sem mouse |
 
 O modo totem aumenta os alvos de toque para 4,5rem, aumenta a tipografia e
-reduz o número de cards por linha. Para fixar a totem nesse modo, aponte o
+reduz o número de cards por linha. A coluna de abas se centra sozinha quando
+cabe na tela, em vez de ficar amontoada no topo. Para fixar a totem nesse modo, aponte o
 navegador dela para `…/?totem=1`.
 
 ## Editar o cardápio
@@ -88,16 +113,21 @@ A ordem das abas no arquivo é a ordem na tela.
 
 ## Fotos dos itens
 
-Jogue as fotos cruas em `assets/itens/_brutas/` e rode os dois scripts:
+**50 dos 115 itens têm foto.** As fotos do bar vêm da pasta *NOVOS DRINKS*
+do Drive; `tools/fotos-drive.json` guarda qual arquivo é de qual item, então
+a pasta reconstrói tudo:
 
 ```bash
-python tools/preparar-fotos.py && python tools/gerar-imagens.py
+# baixe a pasta do Drive para assets/itens/_brutas/
+python tools/fotos-drive.py && python tools/gerar-imagens.py
 ```
 
-O primeiro recorta o fundo, centraliza e **monta os combos sozinho** — uma
-foto de Corona vira o card de "Combo 4 Corona". O segundo gera os `.webp`.
-Passo a passo e lista de nomes em [IMAGENS.md](IMAGENS.md). Item sem foto
-mostra a inicial em neon — é um estado previsto, não um erro.
+Para fotos de produto (latas, garrafas, comida), o caminho é
+`tools/preparar-fotos.py`, que recorta o fundo e **monta os combos sozinho**
+— uma foto de Corona vira o card de "Combo 4 Corona". Os dois caminhos e a
+especificação estão em [IMAGENS.md](IMAGENS.md); o que falta fotografar
+está em [REVISAR.md](REVISAR.md). Item sem foto mostra a inicial em neon —
+é um estado previsto, não um erro.
 
 ## Publicar
 
