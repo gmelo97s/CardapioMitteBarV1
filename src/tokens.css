@@ -1,0 +1,91 @@
+/* ==========================================================================
+   MITTE BAR — DESIGN TOKENS
+   Extraidos de https://mittebar.vercel.app + Logotipo_MITTE-22.png
+   ========================================================================== */
+
+:root {
+  /* --- Cor: superficie ------------------------------------------------- */
+  --mitte-bg:            #09090B;  /* fundo base (quase preto) */
+  --mitte-bg-elev-1:     #121215;  /* card / linha de item */
+  --mitte-bg-elev-2:     #1A1A1F;  /* hover, chips, barra de abas */
+  --mitte-overlay:       rgba(9, 9, 11, .82);
+
+  /* --- Cor: texto ------------------------------------------------------- */
+  --mitte-fg:            #FAFAFA;
+  --mitte-fg-muted:      #A1A1AA;
+  --mitte-fg-subtle:     #71717A;
+
+  /* --- Cor: neon (marca) ------------------------------------------------ */
+  --mitte-pink:          #FF3399;  /* hsl(330 100% 60%) - primaria */
+  --mitte-pink-ink:      #FFFFFF;
+  --mitte-cyan:          #00FFFF;  /* hsl(180 100% 50%) - secundaria / logo */
+  --mitte-green:         #00FF80;  /* hsl(150 100% 50%) - acento */
+  --mitte-purple:        #AA33FF;  /* hsl(280 100% 60%) */
+
+  /* Cores medidas pixel a pixel no Logotipo_MITTE-22.png:
+     a face nao e o ciano puro do site, e um ciano dessaturado. */
+  --mitte-logo-face:     #62C3D5;
+  --mitte-logo-shadow:   #E72989;
+
+  /* --- Cor: estado ------------------------------------------------------ */
+  --mitte-border:        rgba(250, 250, 250, .10);
+  --mitte-border-strong: rgba(255, 51, 153, .40);
+  --mitte-off:           #52525B;  /* item fora de linha */
+
+  /* --- Glow (assinatura visual do bar) ---------------------------------- */
+  --mitte-glow-pink: 0 0 30px rgba(255, 51, 153, .6), 0 0 60px rgba(255, 51, 153, .3);
+  --mitte-glow-cyan: 0 0 30px rgba(0, 255, 255, .6), 0 0 60px rgba(0, 255, 255, .3);
+  --mitte-glow-text-pink: 0 0 12px rgba(255, 51, 153, .75), 0 0 28px rgba(255, 51, 153, .35);
+  --mitte-glow-text-cyan: 0 0 12px rgba(0, 255, 255, .70), 0 0 28px rgba(0, 255, 255, .30);
+
+  /* --- Tipografia ------------------------------------------------------- */
+  --mitte-font-display: "Orbitron", system-ui, sans-serif;
+  --mitte-font-body:    "Inter", system-ui, sans-serif;
+  /* O site institucional usa Orbitron em tudo. Num cardapio longo isso
+     derruba a legibilidade das descricoes, entao Orbitron fica no display
+     (logo, titulos, nomes, precos) e Inter assume o texto corrido. */
+
+  --mitte-size-hero:    clamp(1.75rem, 6vw, 3rem);
+  --mitte-size-section: clamp(1.1rem, 3.2vw, 1.6rem);
+  --mitte-size-item:    1rem;
+  --mitte-size-desc:    .8125rem;
+  --mitte-size-price:   1rem;
+  --mitte-size-micro:   .6875rem;
+
+  --mitte-track-display: .08em;  /* caixa alta sempre com tracking */
+  --mitte-track-micro:   .14em;
+
+  /* --- Forma ------------------------------------------------------------ */
+  --mitte-radius:    .75rem;   /* --radius do site original */
+  --mitte-radius-sm: .5rem;
+  --mitte-radius-pill: 999px;
+
+  /* --- Espaco ----------------------------------------------------------- */
+  --mitte-space-1: .25rem;
+  --mitte-space-2: .5rem;
+  --mitte-space-3: .75rem;
+  --mitte-space-4: 1rem;
+  --mitte-space-6: 1.5rem;
+  --mitte-space-8: 2rem;
+  --mitte-space-12: 3rem;
+
+  --mitte-maxw: 56rem;
+
+  /* --- App shell (tela cheia, sem rolagem de pagina) -------------------- */
+  --mitte-tela:      100dvh;
+  --mitte-topo:      clamp(3.5rem, 8vh, 5.5rem);   /* altura do cabecalho */
+  --mitte-alvo:      3rem;                          /* alvo de toque minimo */
+  --mitte-alvo-totem: 4.5rem;                       /* idem, em totem */
+  --mitte-gutter:    clamp(1rem, 3vw, 2.5rem);
+
+  /* --- Movimento -------------------------------------------------------- */
+  --mitte-ease:      cubic-bezier(.22, 1, .36, 1);   /* saida suave padrao */
+  --mitte-ease-back: cubic-bezier(.34, 1.56, .64, 1); /* leve overshoot */
+  --mitte-dur:       .22s;   /* microinteracao */
+  --mitte-dur-tela:  .55s;   /* troca de tela */
+  --mitte-stagger:   60ms;   /* atraso entre itens de uma lista */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root { --mitte-dur: .001s; }
+}

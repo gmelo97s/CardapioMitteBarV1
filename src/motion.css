@@ -1,0 +1,203 @@
+/* ==========================================================================
+   MITTE BAR — MOTION
+   Uma regra só: nada se move sem motivo. Entrada constrói hierarquia,
+   transição explica para onde a pessoa foi, hover confirma o toque.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   0. A luz do salão em deriva — as manchas nunca param no mesmo lugar,
+      então o fundo não lê como imagem estática em nenhum momento.
+   -------------------------------------------------------------------------- */
+
+@keyframes deriva {
+  0%   { transform: translate(0, 0) scale(1); }
+  33%  { transform: translate(8vw, 5vh) scale(1.12); }
+  66%  { transform: translate(-5vw, 9vh) scale(.95); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+.ambiente__mancha--rosa    { animation: deriva 34s ease-in-out infinite; }
+.ambiente__mancha--magenta { animation: deriva 44s ease-in-out infinite reverse; }
+.ambiente__mancha--ciano   { animation: deriva 52s ease-in-out infinite; animation-delay: -12s; }
+.ambiente__mancha--ciano-apoio { animation: deriva 60s ease-in-out infinite reverse; animation-delay: -30s; }
+
+/* --------------------------------------------------------------------------
+   1. O logo se montando — sombra extrudada primeiro, face caindo por cima
+   -------------------------------------------------------------------------- */
+
+@keyframes logoSombra {
+  from { opacity: 0; transform: translate(-5%, -14%) scale(.9); }
+  60%  { opacity: 1; }
+  to   { opacity: 1; transform: translate(0, 0) scale(1); }
+}
+
+@keyframes logoFace {
+  from { opacity: 0; transform: translateY(-26%) scale(1.1); filter: blur(12px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+/* O brilho só acende quando as cinco letras já estão no lugar */
+@keyframes logoAcende {
+  0%, 100% { filter: drop-shadow(0 0 0 rgba(98, 195, 213, 0)); }
+  45%      { filter: drop-shadow(0 0 34px rgba(98, 195, 213, .75))
+                     drop-shadow(0 0 70px rgba(231, 41, 137, .45)); }
+}
+
+/* Respiração contínua, quase imperceptível, para a hero não "morrer" */
+@keyframes logoRespira {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50%      { transform: translateY(-.6%) scale(1.004); }
+}
+
+/* A cada 8 segundos uma onda atravessa as cinco letras: cada uma salta,
+   gira de leve e assenta com um resto de overshoot. O movimento inteiro
+   dura ~1,1s (14% de 8s) e os 86% restantes são pausa — é a pausa que faz
+   o salto chamar atenção quando volta. */
+@keyframes vidaFace {
+  0%          { transform: translateY(0) rotate(0deg) scale(1); }
+  4%          { transform: translateY(-11%) rotate(-1.6deg) scale(1.03); }
+  9%          { transform: translateY(2.5%) rotate(.8deg) scale(.99); }
+  13%         { transform: translateY(-1%) rotate(-.2deg) scale(1); }
+  16%, 100%   { transform: translateY(0) rotate(0deg) scale(1); }
+}
+
+/* A sombra sai um tiquinho depois e anda menos: é o volume correndo atrás
+   da face, não uma segunda letra solta. */
+@keyframes vidaSombra {
+  0%          { transform: translateY(0) rotate(0deg); }
+  5%          { transform: translateY(-6%) rotate(-1deg); }
+  10%         { transform: translateY(1.5%) rotate(.5deg); }
+  15%, 100%   { transform: translateY(0) rotate(0deg); }
+}
+
+/* O brilho acompanha a onda, no mesmo compasso de 8s */
+@keyframes vidaBrilho {
+  0%, 12%, 100% { filter: drop-shadow(0 0 0 rgba(98, 195, 213, 0)); }
+  5%            { filter: drop-shadow(0 0 26px rgba(98, 195, 213, .55))
+                          drop-shadow(0 0 52px rgba(231, 41, 137, .3)); }
+}
+
+.logo {
+  animation:
+    logoAcende 1.1s var(--mitte-ease) 1.05s both,
+    vidaBrilho 8s var(--mitte-ease) 6s infinite;
+}
+
+/* Duas animações por fatia: a montagem (uma vez) e a onda (a cada 8s).
+   A onda vem por último na lista, então é ela que manda no transform
+   depois que a montagem termina. Começa em 6s para não atropelar a
+   entrada nem o primeiro olhar da pessoa no logo. */
+.hero[data-ativa] .logo__slice {
+  transform-origin: 50% 100%;
+}
+
+.hero[data-ativa] .logo__slice--shadow {
+  animation:
+    logoSombra .85s var(--mitte-ease-back) calc(.14s + var(--i) * 95ms) both,
+    vidaSombra 8s var(--mitte-ease) calc(6s + var(--i) * 70ms) infinite;
+}
+
+.hero[data-ativa] .logo__slice--face {
+  animation:
+    logoFace .8s var(--mitte-ease-back) calc(var(--i) * 95ms) both,
+    vidaFace 8s var(--mitte-ease) calc(6s + var(--i) * 70ms) infinite;
+}
+
+.hero__palco { animation: logoRespira 6s ease-in-out 2.2s infinite; }
+
+/* --------------------------------------------------------------------------
+   2. Chamada da hero — entra depois que o logo terminou
+   -------------------------------------------------------------------------- */
+
+@keyframes sobe {
+  from { opacity: 0; transform: translateY(1.5rem); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Pulso do anel neon, para o botão se oferecer sem piscar */
+@keyframes anel {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 51, 153, .5), var(--mitte-glow-pink); }
+  70%  { box-shadow: 0 0 0 1.4rem rgba(255, 51, 153, 0), var(--mitte-glow-pink); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 51, 153, 0), var(--mitte-glow-pink); }
+}
+
+.hero[data-ativa] .hero__cta { animation: sobe .7s var(--mitte-ease) 1.5s both; }
+.hero[data-ativa] .botao     { animation: anel 2.6s ease-out 2.4s infinite; }
+
+/* --------------------------------------------------------------------------
+   3. Troca de tela — a saída recua e desfoca, a entrada vem de baixo.
+      É o que dá a sensação de atravessar para dentro do menu.
+   -------------------------------------------------------------------------- */
+
+@keyframes telaEntra {
+  from { opacity: 0; transform: scale(1.06) translateY(1.5rem); filter: blur(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); filter: blur(0); }
+}
+
+@keyframes telaSai {
+  from { opacity: 1; transform: scale(1); filter: blur(0); }
+  to   { opacity: 0; transform: scale(.94); filter: blur(14px); }
+}
+
+/* Voltar inverte o eixo: a tela anterior volta de trás, não de baixo */
+@keyframes telaVolta {
+  from { opacity: 0; transform: scale(.94); filter: blur(10px); }
+  to   { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+.tela[data-ativa]          { animation: telaEntra var(--mitte-dur-tela) var(--mitte-ease) both; }
+.tela[data-ativa][data-volta] { animation-name: telaVolta; }
+
+.tela[data-saindo] {
+  visibility: visible;
+  pointer-events: none;
+  animation: telaSai var(--mitte-dur-tela) var(--mitte-ease) both;
+}
+
+/* --------------------------------------------------------------------------
+   4. Listas — cada item entra logo depois do anterior
+   -------------------------------------------------------------------------- */
+
+@keyframes entraCard {
+  from { opacity: 0; transform: translateY(1.75rem) scale(.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Os tiles de categoria entram deitados e levantam, em perspectiva — é o que
+   dá o "menu de jogo abrindo" em vez de uma lista aparecendo. */
+@keyframes entraTile {
+  from { opacity: 0; transform: perspective(60rem) rotateX(26deg) translateY(2.5rem) scale(.94); }
+  to   { opacity: 1; transform: perspective(60rem) rotateX(0) translateY(0) scale(1); }
+}
+
+.categoria {
+  transform-origin: 50% 100%;
+  animation: entraTile .62s var(--mitte-ease) both;
+  animation-delay: calc(var(--i) * var(--mitte-stagger));
+}
+
+.card {
+  animation: entraCard .5s var(--mitte-ease) both;
+  animation-delay: calc(var(--i) * var(--mitte-stagger));
+}
+
+/* Giro do fio de luz na borda do tile */
+@keyframes girar {
+  to { --ang: 360deg; }
+}
+
+/* O stagger satura: a partir do 14º item ninguém percebe a diferença, e
+   esperar 1s pelo último item seria pior que não animar. */
+.card { animation-delay: calc(min(var(--i), 13) * var(--mitte-stagger)); }
+
+/* --------------------------------------------------------------------------
+   5. Quem pediu menos movimento recebe menos movimento
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}

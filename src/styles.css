@@ -1,0 +1,936 @@
+@import url("./tokens.css");
+@import url("./motion.css");
+
+/* ==========================================================================
+   Base — o app ocupa a tela inteira e a página nunca rola
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  background: var(--mitte-bg);
+  color: var(--mitte-fg);
+  font-family: var(--mitte-font-body);
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+}
+
+img { display: block; max-width: 100%; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+:focus-visible {
+  outline: 2px solid var(--mitte-cyan);
+  outline-offset: 3px;
+  border-radius: var(--mitte-radius-sm);
+}
+
+/* --- Luz ambiente ------------------------------------------------------- */
+
+.ambiente {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.ambiente__mancha {
+  position: absolute;
+  border-radius: 50%;
+  /* O blur é o custo da festa. 90px numa mancha de 60vmax ainda roda liso
+     numa totem; acima disso começa a pesar na rolagem dos cards. */
+  filter: blur(90px);
+  will-change: transform;
+}
+
+.ambiente__mancha--rosa {
+  width: 70vmax; height: 70vmax;
+  top: -28vmax; left: -22vmax;
+  background: radial-gradient(circle, rgba(255, 51, 153, .55), rgba(255, 51, 153, 0) 68%);
+}
+
+.ambiente__mancha--magenta {
+  width: 55vmax; height: 55vmax;
+  bottom: -22vmax; right: -14vmax;
+  background: radial-gradient(circle, rgba(231, 41, 137, .45), rgba(231, 41, 137, 0) 68%);
+}
+
+/* O ciano é o contrapeso frio do rosa: fica embaixo, largo e mais aceso,
+   para a base da tela não cair num preto morto. */
+.ambiente__mancha--ciano {
+  width: 85vmax; height: 55vmax;
+  bottom: -26vmax; left: 50%;
+  margin-left: -42vmax;
+  background: radial-gradient(ellipse, rgba(0, 229, 255, .52), rgba(0, 229, 255, 0) 66%);
+}
+
+.ambiente__mancha--ciano-apoio {
+  width: 48vmax; height: 36vmax;
+  bottom: -14vmax; right: -10vmax;
+  background: radial-gradient(ellipse, rgba(98, 195, 213, .4), rgba(98, 195, 213, 0) 68%);
+}
+
+/* Malha fininha por cima das manchas: dá textura e evita o aspecto de
+   "papel de parede de celular" que gradiente puro tem. */
+.ambiente__grade {
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, .028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, .028) 1px, transparent 1px);
+  background-size: 3rem 3rem;
+  mask-image: radial-gradient(ellipse at 50% 40%, #000 20%, transparent 78%);
+}
+
+/* ==========================================================================
+   Shell: telas empilhadas na mesma célula, uma visível por vez
+   ========================================================================== */
+
+.app {
+  position: relative;
+  z-index: 1;
+  height: var(--mitte-tela);
+  display: grid;
+  grid-template: 1fr / 1fr;
+}
+
+.tela {
+  grid-area: 1 / 1;
+  min-height: 0;
+  display: grid;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.tela[data-ativa] {
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* ==========================================================================
+   Tela 1 — Hero
+   ========================================================================== */
+
+/* Logo e chamada num bloco só, centralizado: o botão colado embaixo do
+   logo em vez de preso ao rodapé, para os dois lerem como uma coisa só. */
+.hero {
+  grid-template-rows: auto;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(2.25rem, 9vh, 5rem);
+  padding: var(--mitte-gutter);
+  text-align: center;
+}
+
+.hero__palco {
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+/* --- Logo fatiado em letras ------------------------------------------- */
+
+.logo {
+  position: relative;
+  width: min(78vw, 46rem, 150vh);
+  aspect-ratio: 3476 / 680;
+}
+
+.logo__slice {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  left: var(--l);
+  width: var(--w);
+  overflow: hidden;
+}
+
+.logo__slice img {
+  position: absolute;
+  top: 0;
+  left: var(--il);
+  width: var(--iw);
+  height: 100%;
+  max-width: none;
+}
+
+/* --- Botão neon --------------------------------------------------------- */
+
+.botao {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: .8rem;
+  min-height: calc(var(--mitte-alvo) * 1.12);
+  padding: 1rem 2.35rem;
+  border-radius: var(--mitte-radius-pill);
+  background: var(--mitte-pink);
+  color: var(--mitte-pink-ink);
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.8rem, 1.8vw, .95rem);
+  font-weight: 700;
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  box-shadow: var(--mitte-glow-pink);
+  transition: transform var(--mitte-dur) var(--mitte-ease-back),
+              box-shadow var(--mitte-dur) var(--mitte-ease);
+}
+
+.botao:hover { transform: translateY(-2px) scale(1.02); }
+.botao:active { transform: scale(.97); }
+
+/* ==========================================================================
+   Cabeçalho das telas internas
+   ========================================================================== */
+
+.topo {
+  display: flex;
+  align-items: center;
+  gap: var(--mitte-space-3);
+  height: var(--mitte-topo);
+  padding-inline: var(--mitte-gutter);
+  border-bottom: 1px solid var(--mitte-border);
+  background: var(--mitte-overlay);
+  backdrop-filter: blur(14px);
+}
+
+.topo__logo {
+  height: clamp(1.25rem, 3.2vh, 2rem);
+  width: auto;
+  flex: none;
+  cursor: pointer;
+  /* O arquivo grande (3476px) reamostrado para ~160px tremia a cada repaint:
+     o browser refazia a redução e o resultado oscilava entre quadros. Aqui
+     entra uma versão já pequena, numa camada própria, que não é reamostrada. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.topo__titulo {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.8rem, 2.2vw, 1.15rem);
+  font-weight: 900;
+  letter-spacing: var(--mitte-track-display);
+  text-transform: uppercase;
+  color: var(--mitte-pink);
+  text-shadow: var(--mitte-glow-text-pink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.icone {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: var(--mitte-alvo);
+  height: var(--mitte-alvo);
+  border-radius: var(--mitte-radius-pill);
+  border: 1px solid var(--mitte-border);
+  background: var(--mitte-bg-elev-1);
+  color: var(--mitte-fg);
+  transition: all var(--mitte-dur) var(--mitte-ease);
+}
+
+.icone:hover {
+  border-color: var(--mitte-border-strong);
+  color: var(--mitte-pink);
+}
+
+.icone:active { transform: scale(.92); }
+
+/* ==========================================================================
+   Tela 2 — Categorias (grade que sempre cabe na tela)
+   ========================================================================== */
+
+.categorias { grid-template-rows: auto 1fr; }
+
+.categorias__grade {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: clamp(.5rem, 1.4vh, 1rem);
+  padding: clamp(.5rem, 1.6vh, 1.25rem) var(--mitte-gutter);
+  min-height: 0;
+}
+
+@media (min-width: 48rem)  { .categorias__grade { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 75rem)  { .categorias__grade { grid-template-columns: repeat(4, 1fr); } }
+
+/* Cada aba carrega seu próprio acento (--acento, vindo do app.js). O tile é
+   vidro escuro sobre a luz do fundo, com o acento entrando pela base. */
+.categoria {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  align-content: end;
+  gap: .15rem;
+  padding: clamp(.6rem, 1.8vh, 1.2rem);
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid var(--mitte-border);
+  border-radius: var(--mitte-radius);
+  background:
+    linear-gradient(160deg, color-mix(in srgb, var(--acento) 16%, transparent), transparent 58%),
+    linear-gradient(var(--mitte-bg-elev-1), var(--mitte-bg));
+  text-align: left;
+  transition: transform var(--mitte-dur) var(--mitte-ease-back),
+              box-shadow var(--mitte-dur) var(--mitte-ease),
+              border-color var(--mitte-dur) var(--mitte-ease);
+}
+
+/* Fio de luz girando na borda — só acende no hover/foco, e só quando o
+   browser sabe animar um ângulo (@property). Sem isso fica um fio parado,
+   que também serve. */
+@property --ang {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.categoria::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(from var(--ang),
+    transparent 0 58%, var(--acento) 76%, transparent 92%);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  opacity: 0;
+  transition: opacity var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+/* Brilho que sobe da base no toque */
+.categoria::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -60% -20%;
+  z-index: -1;
+  height: 100%;
+  border-radius: 50%;
+  background: radial-gradient(circle, color-mix(in srgb, var(--acento) 55%, transparent), transparent 70%);
+  filter: blur(28px);
+  opacity: 0;
+  transform: translateY(30%);
+  transition: opacity var(--mitte-dur-tela) var(--mitte-ease),
+              transform var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+.categoria:hover,
+.categoria:focus-visible {
+  border-color: transparent;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 50px color-mix(in srgb, var(--acento) 28%, transparent);
+}
+
+.categoria:hover::before,
+.categoria:focus-visible::before {
+  opacity: 1;
+  animation: girar 3.2s linear infinite;
+}
+
+.categoria:hover::after,
+.categoria:focus-visible::after { opacity: .85; transform: translateY(0); }
+
+.categoria:active { transform: scale(.97); }
+
+/* Número fantasma: dá escala tipográfica ao tile sem competir com o nome */
+.categoria__indice {
+  position: absolute;
+  top: -.35em;
+  right: .1em;
+  font-family: var(--mitte-font-display);
+  font-size: clamp(3rem, 9vh, 5.5rem);
+  font-weight: 900;
+  line-height: 1;
+  color: var(--acento);
+  opacity: .14;
+  pointer-events: none;
+  transition: opacity var(--mitte-dur-tela) var(--mitte-ease),
+              transform var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+.categoria:hover .categoria__indice { opacity: .26; transform: translateY(.06em); }
+
+/* O nome é dimensionado pela MENOR entre a largura e a altura do tile: numa
+   grade que muda de 2 para 4 colunas e de tela baixa para tela alta, amarrar
+   só em vh (ou só em vw) deixava "Vinhos e Espumantes" grande demais num
+   caso e minúsculo no outro. O tracking encolhe junto. */
+.categoria__nome {
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.66rem, min(3.6vw, 1.9vh), .95rem);
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  line-height: 1.18;
+  /* Reparte as linhas em blocos parecidos em vez de deixar uma palavra órfã */
+  text-wrap: balance;
+  hyphens: none;
+  overflow-wrap: break-word;
+}
+
+/* Seta com o traço que cresce no hover — leitura de "entra aqui", agora sem
+   a contagem de itens, que não ajudava quem só quer escolher o que beber. */
+.categoria__seta {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  margin-top: .15rem;
+  color: var(--acento);
+  opacity: .75;
+}
+
+.categoria__seta::before {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--acento), transparent);
+  transform: scaleX(.25);
+  transform-origin: left;
+  transition: transform var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+.categoria__seta svg {
+  flex: none;
+  transform: translateX(-.35rem);
+  opacity: 0;
+  transition: transform var(--mitte-dur-tela) var(--mitte-ease),
+              opacity var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+.categoria:hover .categoria__seta::before,
+.categoria:focus-visible .categoria__seta::before { transform: scaleX(1); }
+
+.categoria:hover .categoria__seta svg,
+.categoria:focus-visible .categoria__seta svg { transform: translateX(0); opacity: 1; }
+
+/* ==========================================================================
+   Tela 3 — Itens
+   ========================================================================== */
+
+.itens { grid-template-rows: auto 1fr; }
+
+.itens__rolagem {
+  min-height: 0;
+  overflow-y: auto;
+  /* "safe center" centra a grade quando ela cabe — o que salva a totem em pé,
+     onde 10 itens ficariam amontoados no topo — e volta a alinhar pelo topo
+     assim que a lista passa da altura da tela, sem cortar o começo. */
+  display: grid;
+  align-content: safe center;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: var(--mitte-bg-elev-2) transparent;
+  padding: var(--mitte-gutter);
+  padding-bottom: calc(var(--mitte-gutter) * 2);
+}
+
+.itens__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(9.5rem, 44vw), 1fr));
+  gap: clamp(.65rem, 2vw, 1.25rem);
+}
+
+/* --- Card do item ------------------------------------------------------- */
+
+.card {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  overflow: hidden;
+  border: 1px solid var(--mitte-border);
+  border-radius: var(--mitte-radius);
+  background: var(--mitte-bg-elev-1);
+  text-align: left;
+  transition: border-color var(--mitte-dur) var(--mitte-ease),
+              transform var(--mitte-dur) var(--mitte-ease-back),
+              box-shadow var(--mitte-dur) var(--mitte-ease);
+}
+
+.card:hover,
+.card:focus-visible {
+  border-color: var(--mitte-border-strong);
+  transform: translateY(-4px);
+  box-shadow: 0 14px 44px rgba(255, 51, 153, .2);
+}
+
+.card:active { transform: scale(.98); }
+
+.card__figura {
+  display: block;
+  position: relative;
+  /* 4:3 em vez de quadrado: o master continua quadrado e o object-fit corta
+     só as sobras de topo e base, que é onde a foto de produto tem margem.
+     Essa troca é o que faz caber uma fileira a mais na tela. */
+  aspect-ratio: 4 / 3;
+  background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
+  overflow: hidden;
+}
+
+.card__figura img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+.card:hover .card__figura img { transform: scale(1.06); }
+
+/* Placeholder enquanto não existe foto: inicial em neon */
+.card__inicial {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-family: var(--mitte-font-display);
+  font-size: clamp(1.5rem, 7vw, 2.75rem);
+  font-weight: 900;
+  color: var(--mitte-pink);
+  opacity: .32;
+  text-shadow: var(--mitte-glow-text-pink);
+  letter-spacing: .06em;
+}
+
+.card__corpo {
+  display: grid;
+  align-content: start;
+  gap: .3rem;
+  padding: clamp(.55rem, 1.6vw, .9rem);
+}
+
+.card__aba {
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  font-weight: 600;
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  color: var(--mitte-fg-subtle);
+}
+
+/* Nomes como "Lambe Lambe Tangerina, Limão e Sal 355ml" precisam caber num
+   card de 166px sem quebrar em pedaços estranhos: fonte menor, tracking
+   curto, quebra equilibrada e corte em duas linhas no fim. */
+.card__nome {
+  margin: 0;
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.6rem, 2.6vw, .78rem);
+  font-weight: 600;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  line-height: 1.22;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (min-width: 48rem) {
+  .card__nome { -webkit-line-clamp: 3; }
+}
+
+/* No celular a descrição sai do card: ela é o que impede a pessoa de ver a
+   oferta inteira sem rolar, e o texto completo está a um toque de distância,
+   no detalhe. Da largura de tablet para cima sobra espaço e ela volta. */
+.card__desc { display: none; }
+
+@media (min-width: 48rem) {
+  .card__desc {
+    display: -webkit-box;
+    margin: 0;
+    font-size: clamp(.65rem, 1.4vw, .75rem);
+    color: var(--mitte-fg-muted);
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+/* O preço vira etiqueta sobre a foto. Não é só estética: tirá-lo do corpo
+   encurta o card o bastante para caber mais uma fileira na tela. */
+.card__preco {
+  position: absolute;
+  right: .4rem;
+  bottom: .4rem;
+  padding: .2rem .5rem;
+  border-radius: var(--mitte-radius-pill);
+  background: rgba(9, 9, 11, .74);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 255, 255, .22);
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.68rem, 1.7vw, .85rem);
+  font-weight: 700;
+  color: var(--mitte-cyan);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.card--destaque {
+  border-color: var(--mitte-border-strong);
+  background: linear-gradient(160deg, rgba(255, 51, 153, .18), var(--mitte-bg-elev-1) 60%);
+}
+
+.card--destaque .card__nome {
+  color: var(--mitte-pink);
+  text-shadow: var(--mitte-glow-text-pink);
+}
+
+/* ==========================================================================
+   Busca
+   ========================================================================== */
+
+.busca {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  background: rgba(9, 9, 11, .94);
+  backdrop-filter: blur(20px);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--mitte-dur) var(--mitte-ease), visibility var(--mitte-dur);
+}
+
+.busca[data-aberta] { visibility: visible; opacity: 1; }
+
+.busca__topo {
+  display: flex;
+  align-items: center;
+  gap: var(--mitte-space-3);
+  padding: var(--mitte-gutter);
+  padding-bottom: var(--mitte-space-3);
+}
+
+.campo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  min-height: var(--mitte-alvo);
+  padding-inline: 1.1rem;
+  border: 1px solid var(--mitte-border-strong);
+  border-radius: var(--mitte-radius-pill);
+  background: var(--mitte-bg-elev-1);
+}
+
+.campo svg { flex: none; color: var(--mitte-fg-subtle); }
+
+.campo input {
+  flex: 1;
+  min-width: 0;
+  background: none;
+  border: 0;
+  color: var(--mitte-fg);
+  font: inherit;
+  font-size: 1rem;
+}
+
+.campo input::placeholder { color: var(--mitte-fg-subtle); }
+.campo input:focus { outline: none; }
+
+.busca__resultados {
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 0 var(--mitte-gutter) var(--mitte-gutter);
+}
+
+/* Atalhos em linguagem solta — e, quando nada é encontrado, a correção */
+.busca__chips {
+  display: flex;
+  gap: var(--mitte-space-2);
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 0 var(--mitte-gutter) var(--mitte-space-3);
+}
+
+.busca__chips::-webkit-scrollbar { display: none; }
+.busca__chips:empty { display: none; }
+
+.chip {
+  flex: none;
+  min-height: 2.25rem;
+  padding: .4rem .9rem;
+  border: 1px solid var(--mitte-border);
+  border-radius: var(--mitte-radius-pill);
+  background: var(--mitte-bg-elev-1);
+  color: var(--mitte-fg-muted);
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  font-weight: 600;
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition: all var(--mitte-dur) var(--mitte-ease);
+}
+
+.chip:hover,
+.chip:focus-visible {
+  color: var(--mitte-fg);
+  border-color: var(--mitte-border-strong);
+  transform: translateY(-1px);
+}
+
+.chip:active { transform: scale(.96); }
+
+.chip--correcao {
+  border-color: var(--mitte-border-strong);
+  color: var(--mitte-pink);
+  text-transform: none;
+  letter-spacing: .02em;
+}
+
+body.totem .chip { min-height: 3rem; font-size: .8rem; }
+
+.busca__contagem {
+  margin: 0 0 var(--mitte-space-3);
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  color: var(--mitte-fg-subtle);
+}
+
+.vazio {
+  padding: var(--mitte-space-12) var(--mitte-space-4);
+  text-align: center;
+  color: var(--mitte-fg-subtle);
+  font-size: var(--mitte-size-desc);
+}
+
+/* ==========================================================================
+   Detalhe do item
+   ========================================================================== */
+
+.detalhe {
+  position: absolute;
+  inset: 0;
+  z-index: 30;
+  display: grid;
+  place-items: center;
+  padding: var(--mitte-gutter);
+  background: rgba(9, 9, 11, .8);
+  backdrop-filter: blur(16px);
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity var(--mitte-dur) var(--mitte-ease), visibility var(--mitte-dur);
+}
+
+.detalhe[data-aberto] { visibility: visible; opacity: 1; }
+
+.detalhe__caixa {
+  position: relative;
+  width: min(26rem, 100%);
+  max-height: 100%;
+  overflow-y: auto;
+  border: 1px solid var(--mitte-border-strong);
+  border-radius: var(--mitte-radius);
+  background: var(--mitte-bg-elev-1);
+  box-shadow: 0 30px 90px rgba(0, 0, 0, .7), var(--mitte-glow-pink);
+  transform: scale(.92);
+  transition: transform var(--mitte-dur-tela) var(--mitte-ease-back);
+  /* A barra de rolagem padrão reservava uma faixa clara à direita, que ficava
+     por cima da foto e parecia um pedaço vazio do card. Fina e com trilho
+     transparente, ela deixa a imagem encostar nas duas bordas. */
+  scrollbar-width: thin;
+  scrollbar-color: var(--mitte-border-strong) transparent;
+}
+
+.detalhe__caixa::-webkit-scrollbar { width: 5px; }
+.detalhe__caixa::-webkit-scrollbar-track { background: transparent; }
+
+.detalhe__caixa::-webkit-scrollbar-thumb {
+  background: var(--mitte-border-strong);
+  border-radius: var(--mitte-radius-pill);
+}
+
+.detalhe[data-aberto] .detalhe__caixa { transform: scale(1); }
+
+.detalhe__figura {
+  /* span inline ignora aspect-ratio: sem este display a área da foto
+     colapsava para a altura de uma linha. */
+  display: block;
+  position: relative;
+  aspect-ratio: 1;
+  /* Teto de altura para as sugestões aparecerem sem precisar rolar: a foto
+     continua quadrada enquanto couber e vira faixa quando a tela é baixa. */
+  max-height: 38dvh;
+  background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
+  overflow: hidden;
+}
+
+.detalhe__figura img { width: 100%; height: 100%; object-fit: cover; }
+
+.detalhe__corpo { display: grid; gap: .5rem; padding: var(--mitte-space-6); }
+
+.detalhe__nome {
+  margin: 0;
+  font-family: var(--mitte-font-display);
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: var(--mitte-track-display);
+  text-transform: uppercase;
+}
+
+.detalhe__preco {
+  font-family: var(--mitte-font-display);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--mitte-cyan);
+  text-shadow: var(--mitte-glow-text-cyan);
+}
+
+.detalhe__desc { margin: 0; color: var(--mitte-fg-muted); }
+
+/* --- Sugestões de acompanhamento --------------------------------------- */
+
+.acompanha {
+  padding: 0 var(--mitte-space-6) var(--mitte-space-6);
+  border-top: 1px solid var(--mitte-border);
+  margin-top: var(--mitte-space-2);
+  padding-top: var(--mitte-space-4);
+}
+
+.acompanha__titulo {
+  margin: 0 0 var(--mitte-space-3);
+  font-family: var(--mitte-font-display);
+  font-size: var(--mitte-size-micro);
+  font-weight: 600;
+  letter-spacing: var(--mitte-track-micro);
+  text-transform: uppercase;
+  color: var(--mitte-pink);
+  text-shadow: var(--mitte-glow-text-pink);
+}
+
+.acompanha__linha {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--mitte-space-2);
+}
+
+.acompanha__item {
+  display: grid;
+  gap: .25rem;
+  padding: 0 0 .5rem;
+  border: 1px solid var(--mitte-border);
+  border-radius: var(--mitte-radius-sm);
+  background: var(--mitte-bg);
+  overflow: hidden;
+  text-align: left;
+  transition: border-color var(--mitte-dur) var(--mitte-ease),
+              transform var(--mitte-dur) var(--mitte-ease-back);
+}
+
+.acompanha__item:hover,
+.acompanha__item:focus-visible {
+  border-color: var(--mitte-border-strong);
+  transform: translateY(-2px);
+}
+
+.acompanha__item:active { transform: scale(.97); }
+
+.acompanha__figura {
+  display: block;
+  position: relative;
+  aspect-ratio: 1;
+  background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
+  overflow: hidden;
+}
+
+.acompanha__figura img { width: 100%; height: 100%; object-fit: cover; }
+.acompanha__figura .card__inicial { font-size: 1.25rem; }
+
+.acompanha__nome {
+  padding-inline: .45rem;
+  font-family: var(--mitte-font-display);
+  font-size: clamp(.5rem, 2.2vw, .62rem);
+  font-weight: 600;
+  letter-spacing: .01em;
+  text-transform: uppercase;
+  line-height: 1.2;
+  text-wrap: balance;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.acompanha__preco {
+  padding-inline: .5rem;
+  font-family: var(--mitte-font-display);
+  font-size: .7rem;
+  font-weight: 700;
+  color: var(--mitte-cyan);
+  font-variant-numeric: tabular-nums;
+}
+
+body.totem .acompanha__nome  { font-size: .8rem; }
+body.totem .acompanha__preco { font-size: .95rem; }
+
+.detalhe__fechar {
+  position: absolute;
+  top: .6rem;
+  right: .6rem;
+  z-index: 1;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--mitte-radius-pill);
+  background: rgba(9, 9, 11, .7);
+  backdrop-filter: blur(8px);
+  display: grid;
+  place-items: center;
+}
+
+/* ==========================================================================
+   Modo totem — alvos maiores, sem efeitos de hover
+   ========================================================================== */
+
+body.totem {
+  --mitte-alvo: var(--mitte-alvo-totem);
+}
+
+body.totem .card__nome   { font-size: 1rem; }
+body.totem .card__desc   { font-size: .875rem; }
+body.totem .card__preco  { font-size: 1.15rem; }
+body.totem .categoria__nome { font-size: 1.15rem; }
+/* Na totem o cliente está a um braço de distância, não a 30 cm: cards grandes,
+   poucos por linha. O teto em rem evita cards gigantes numa totem deitada. */
+body.totem .itens__grade {
+  /* 27vw em vez de 30vw: numa totem de 1080 em pé isso é a diferença entre
+     duas e três colunas, e entre 2,3 e 1,5 telas de rolagem na maior aba. */
+  grid-template-columns: repeat(auto-fill, minmax(min(20rem, 27vw), 1fr));
+}
+
+@media (hover: none) {
+  .card:hover, .categoria:hover { transform: none; box-shadow: none; }
+  .card:hover .card__figura img { transform: none; }
+}

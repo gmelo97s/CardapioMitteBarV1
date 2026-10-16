@@ -1,0 +1,739 @@
+{
+  "bar": {
+    "nome": "Mitte Bar",
+    "endereco": "Rua Rego Freitas 566, República, São Paulo",
+    "horario": "Quinta 18h–00h · Sexta e Sábado 18h–02h",
+    "instagram": "@mitte.sp",
+    "site": "https://mittebar.vercel.app/"
+  },
+  "meta": {
+    "fonte": "21 prints do painel de produtos + 6 áudios de WhatsApp (15/10/2026)",
+    "legenda": {
+      "fora_de_linha": "Item riscado no painel — não aparece no cardápio público.",
+      "confirmar": "Descrição inferida pelo nome/foto. Precisa de validação do bar."
+    }
+  },
+  "abas": [
+    {
+      "id": "latas",
+      "nome": "Latas",
+      "subtitulo": "Drinks prontos e cervejas geladas",
+      "itens": [
+        {
+          "nome": "Combo 4 Corona Lata 350ml",
+          "preco": 67.0,
+          "descricao": "Quatro latas de Corona Extra 350ml geladas.",
+          "slug": "combo-4-corona-lata-350ml"
+        },
+        {
+          "nome": "Combo 4 Stella Artois Lata 350ml",
+          "preco": 63.0,
+          "descricao": "Quatro latas de Stella Artois 350ml geladas.",
+          "slug": "combo-4-stella-artois-lata-350ml"
+        },
+        {
+          "nome": "Chopp Vinho Draft 600ml",
+          "preco": 25.0,
+          "descricao": "Garrafa 600ml gelada.",
+          "confirmar": true,
+          "slug": "chopp-vinho-draft-600ml"
+        },
+        {
+          "nome": "Xeque Mate Lata 362ml",
+          "preco": 19.0,
+          "descricao": "Drink pronto de chá mate com limão e vodca.",
+          "slug": "xeque-mate-lata-362ml"
+        },
+        {
+          "nome": "Combo 3 Xeque Mate Lata",
+          "preco": 52.0,
+          "descricao": "Três latas de Xeque Mate 362ml.",
+          "slug": "combo-3-xeque-mate-lata"
+        },
+        {
+          "nome": "Mascate Drinks Melancia e Framboesa 362ml",
+          "preco": 21.0,
+          "descricao": "Drink pronto de vodca com melancia e framboesa.",
+          "slug": "mascate-drinks-melancia-e-framboesa-362ml"
+        },
+        {
+          "nome": "Combo 3 Mascate Drinks Lata",
+          "preco": 58.0,
+          "descricao": "Três latas de Mascate Drinks 362ml.",
+          "slug": "combo-3-mascate-drinks-lata"
+        },
+        {
+          "nome": "Lambe Lambe Manga e Maracujá 355ml",
+          "preco": 22.0,
+          "descricao": "Drink pronto de vodca com manga e maracujá.",
+          "slug": "lambe-lambe-manga-e-maracuja-355ml"
+        },
+        {
+          "nome": "Lambe Lambe Tangerina, Limão e Sal 355ml",
+          "preco": 22.0,
+          "descricao": "Drink pronto de vodca com tangerina, limão e sal.",
+          "slug": "lambe-lambe-tangerina-limao-e-sal-355ml"
+        },
+        {
+          "nome": "Combo 3 Lambe Lambe",
+          "preco": 61.0,
+          "descricao": "Três latas de Lambe Lambe 355ml.",
+          "slug": "combo-3-lambe-lambe"
+        },
+        {
+          "nome": "Skol Beats Red Mix 269ml",
+          "preco": 17.0,
+          "descricao": "Bebida mista gaseificada de frutas vermelhas.",
+          "slug": "skol-beats-red-mix-269ml"
+        },
+        {
+          "nome": "Skol Beats Senses 269ml",
+          "preco": 17.0,
+          "descricao": "Bebida mista gaseificada, versão Senses.",
+          "slug": "skol-beats-senses-269ml"
+        },
+        {
+          "nome": "Skol Beats Tropical 269ml",
+          "preco": 17.0,
+          "descricao": "Bebida mista gaseificada de frutas tropicais.",
+          "slug": "skol-beats-tropical-269ml"
+        },
+        {
+          "nome": "Combo 3 Beats Lata",
+          "preco": 46.0,
+          "descricao": "Três latas de Skol Beats 269ml, sabores à escolha.",
+          "slug": "combo-3-beats-lata"
+        },
+        {
+          "nome": "Absolut Sprite Lata 269ml",
+          "preco": 25.0,
+          "descricao": "Drink pronto de vodca Absolut com Sprite.",
+          "slug": "absolut-sprite-lata-269ml"
+        },
+        {
+          "nome": "Gin Tônica Pink Schweppes Lata 269ml",
+          "preco": 22.0,
+          "descricao": "Gin tônica pronto, versão pink.",
+          "slug": "gin-tonica-pink-schweppes-lata-269ml"
+        },
+        {
+          "nome": "Spritz Schweppes Lata 269ml",
+          "preco": 25.0,
+          "descricao": "Spritz pronto de aperitivo com tônica.",
+          "slug": "spritz-schweppes-lata-269ml"
+        },
+        {
+          "nome": "Gin Tônica Schweppes Lata 269ml",
+          "preco": 23.0,
+          "descricao": "Gin tônica pronto, versão tradicional.",
+          "slug": "gin-tonica-schweppes-lata-269ml"
+        }
+      ]
+    },
+    {
+      "id": "outros",
+      "nome": "Outros",
+      "subtitulo": "Águas, refrigerantes, energéticos e produtos Mitte",
+      "itens": [
+        {
+          "nome": "Água sem Gás Lindoya 510ml",
+          "preco": 6.0,
+          "descricao": "Água mineral natural gelada.",
+          "slug": "agua-sem-gas-lindoya-510ml"
+        },
+        {
+          "nome": "Água com Gás Lindoya 510ml",
+          "preco": 7.0,
+          "descricao": "Água mineral com gás gelada.",
+          "slug": "agua-com-gas-lindoya-510ml"
+        },
+        {
+          "nome": "Coca-Cola Lata",
+          "preco": 8.0,
+          "descricao": "Refrigerante de cola 350ml.",
+          "slug": "coca-cola-lata"
+        },
+        {
+          "nome": "Coca-Cola Zero Lata",
+          "preco": 9.0,
+          "descricao": "Refrigerante de cola sem açúcar 350ml.",
+          "slug": "coca-cola-zero-lata"
+        },
+        {
+          "nome": "Guaraná Antarctica Lata",
+          "preco": 8.0,
+          "descricao": "Refrigerante de guaraná 350ml.",
+          "slug": "guarana-antarctica-lata"
+        },
+        {
+          "nome": "Schweppes Citrus Lata",
+          "preco": 8.0,
+          "descricao": "Refrigerante cítrico amargo 350ml.",
+          "slug": "schweppes-citrus-lata"
+        },
+        {
+          "nome": "Água Tônica Antarctica Lata",
+          "preco": 8.0,
+          "descricao": "Água tônica 350ml.",
+          "slug": "agua-tonica-antarctica-lata"
+        },
+        {
+          "nome": "Água Tônica Antarctica Zero Lata",
+          "preco": 8.0,
+          "descricao": "Água tônica sem açúcar 350ml.",
+          "slug": "agua-tonica-antarctica-zero-lata"
+        },
+        {
+          "nome": "Energético Red Bull Tradicional",
+          "preco": 20.0,
+          "descricao": "Energético Red Bull, sabor original.",
+          "slug": "energetico-red-bull-tradicional"
+        },
+        {
+          "nome": "Energético Red Bull Zero Açúcar",
+          "preco": 22.0,
+          "descricao": "Energético Red Bull sem açúcar.",
+          "slug": "energetico-red-bull-zero-acucar"
+        },
+        {
+          "nome": "Energético Red Bull Tropical",
+          "preco": 20.0,
+          "descricao": "Energético Red Bull, edição frutas tropicais.",
+          "slug": "energetico-red-bull-tropical"
+        },
+        {
+          "nome": "Energético Red Bull Morango e Pêssego",
+          "preco": 20.0,
+          "descricao": "Energético Red Bull, edição morango com pêssego.",
+          "slug": "energetico-red-bull-morango-e-pessego"
+        },
+        {
+          "nome": "Energético Red Bull Melancia",
+          "preco": 20.0,
+          "descricao": "Energético Red Bull, edição melancia.",
+          "slug": "energetico-red-bull-melancia"
+        },
+        {
+          "nome": "Halls Preto ou Verde",
+          "preco": 6.0,
+          "descricao": "Drops mentolado, sabor à escolha.",
+          "slug": "halls-preto-ou-verde"
+        },
+        {
+          "nome": "Trident Verde ou Azul",
+          "preco": 6.0,
+          "descricao": "Chiclete sem açúcar, sabor à escolha.",
+          "slug": "trident-verde-ou-azul"
+        },
+        {
+          "nome": "Leque Mitte Bar",
+          "preco": 60.0,
+          "descricao": "Leque de mão com a marca Mitte.",
+          "slug": "leque-mitte-bar"
+        },
+        {
+          "nome": "Eco Bag Mitte",
+          "preco": 40.0,
+          "descricao": "Sacola de tecido estampada com a marca Mitte.",
+          "slug": "eco-bag-mitte"
+        }
+      ]
+    },
+    {
+      "id": "comidas",
+      "nome": "Comidas",
+      "subtitulo": "Empanadas e porções para dividir",
+      "itens": [
+        {
+          "nome": "Empanada Cebola e Queijo — Campestre",
+          "preco": 19.0,
+          "descricao": "Empanada assada recheada com cebola e queijo.",
+          "slug": "empanada-cebola-e-queijo-campestre"
+        },
+        {
+          "nome": "Empanada Queijo e Tomate — Caprese",
+          "preco": 19.0,
+          "descricao": "Empanada assada com queijo, tomate e manjericão.",
+          "slug": "empanada-queijo-e-tomate-caprese"
+        },
+        {
+          "nome": "Empanada Carne e Azeitona — Platense",
+          "preco": 19.0,
+          "descricao": "Empanada assada com carne moída e azeitona.",
+          "slug": "empanada-carne-e-azeitona-platense"
+        },
+        {
+          "nome": "Porção Mini Bolinha de Queijo",
+          "preco": 32.0,
+          "descricao": "Porção de mini bolinhas de queijo fritas.",
+          "fora_de_linha": true,
+          "slug": "porcao-mini-bolinha-de-queijo"
+        },
+        {
+          "nome": "Porção Mini Coxinha de Frango e Requeijão",
+          "preco": 34.0,
+          "descricao": "Porção de mini coxinhas de frango com requeijão.",
+          "slug": "porcao-mini-coxinha-de-frango-e-requeijao"
+        },
+        {
+          "nome": "Porção Mini Kibe",
+          "preco": 34.0,
+          "descricao": "Porção de mini kibes fritos.",
+          "slug": "porcao-mini-kibe"
+        },
+        {
+          "nome": "Porção Mini Enroladinho Presunto e Queijo",
+          "preco": 32.0,
+          "descricao": "Porção de mini enroladinhos de presunto e queijo.",
+          "slug": "porcao-mini-enroladinho-presunto-e-queijo"
+        },
+        {
+          "nome": "Porção Esfirra de Carne Fechada",
+          "preco": 36.0,
+          "descricao": "Porção de esfirras fechadas recheadas com carne.",
+          "slug": "porcao-esfirra-de-carne-fechada"
+        },
+        {
+          "nome": "Porção Esfirra de Queijo Fechada",
+          "preco": 36.0,
+          "descricao": "Porção de esfirras fechadas recheadas com queijo.",
+          "slug": "porcao-esfirra-de-queijo-fechada"
+        }
+      ]
+    },
+    {
+      "id": "sem-alcool",
+      "nome": "Sem Álcool",
+      "subtitulo": "Mocktails da casa",
+      "itens": [
+        {
+          "nome": "Tropical Coconut",
+          "preco": 26.0,
+          "descricao": "Água de coco, abacaxi e limão.",
+          "confirmar": true,
+          "slug": "tropical-coconut"
+        },
+        {
+          "nome": "Grape Basil",
+          "preco": 28.0,
+          "descricao": "Uva, manjericão e limão.",
+          "confirmar": true,
+          "fora_de_linha": true,
+          "slug": "grape-basil"
+        },
+        {
+          "nome": "Pineapple Collin's",
+          "preco": 26.0,
+          "descricao": "Abacaxi, limão, xarope e água com gás.",
+          "confirmar": true,
+          "slug": "pineapple-collin-s"
+        },
+        {
+          "nome": "Strawberry Mule",
+          "preco": 29.0,
+          "descricao": "Morango, gengibre, limão e ginger beer.",
+          "confirmar": true,
+          "slug": "strawberry-mule"
+        }
+      ]
+    },
+    {
+      "id": "classicos",
+      "nome": "Clássicos",
+      "subtitulo": "Os coquetéis de sempre, do jeito certo",
+      "itens": [
+        {
+          "nome": "Aperol Spritz",
+          "preco": 36.0,
+          "descricao": "Aperol, espumante e água com gás, com laranja.",
+          "slug": "aperol-spritz"
+        },
+        {
+          "nome": "Black Russian",
+          "preco": 32.0,
+          "descricao": "Vodca e licor de café no gelo.",
+          "slug": "black-russian"
+        },
+        {
+          "nome": "Cosmopolitan",
+          "preco": 37.0,
+          "descricao": "Vodca, licor de laranja, cranberry e limão.",
+          "fora_de_linha": true,
+          "slug": "cosmopolitan"
+        },
+        {
+          "nome": "Cuba Libre",
+          "preco": 33.0,
+          "descricao": "Rum, Coca-Cola e limão.",
+          "slug": "cuba-libre"
+        },
+        {
+          "nome": "Dry Martini",
+          "preco": 37.0,
+          "descricao": "Gin e vermute seco, com azeitona.",
+          "slug": "dry-martini"
+        },
+        {
+          "nome": "Espresso Martini",
+          "preco": 39.0,
+          "descricao": "Vodca, licor de café e café espresso.",
+          "slug": "espresso-martini"
+        },
+        {
+          "nome": "Fitzgerald",
+          "preco": 38.0,
+          "descricao": "Gin, limão, xarope de açúcar e angostura.",
+          "slug": "fitzgerald"
+        },
+        {
+          "nome": "Garibaldi",
+          "preco": 32.0,
+          "descricao": "Campari com suco de laranja.",
+          "slug": "garibaldi"
+        },
+        {
+          "nome": "Mojito",
+          "preco": 36.0,
+          "descricao": "Rum, hortelã, limão, açúcar e água com gás.",
+          "slug": "mojito"
+        },
+        {
+          "nome": "Moscow Mule",
+          "preco": 38.0,
+          "descricao": "Vodca, limão e ginger beer.",
+          "slug": "moscow-mule"
+        },
+        {
+          "nome": "Negroni Rosso",
+          "preco": 38.0,
+          "descricao": "Gin, Campari e vermute tinto.",
+          "slug": "negroni-rosso"
+        },
+        {
+          "nome": "New York Sour",
+          "preco": 36.0,
+          "descricao": "Whisky, limão, açúcar e camada de vinho tinto.",
+          "fora_de_linha": true,
+          "slug": "new-york-sour"
+        }
+      ]
+    },
+    {
+      "id": "vodkas-gins",
+      "nome": "Vodkas e Gins",
+      "subtitulo": "Autorais com destilado branco",
+      "itens": [
+        {
+          "nome": "Basil Smash",
+          "preco": 32.0,
+          "descricao": "Gin, manjericão, limão e xarope de açúcar.",
+          "slug": "basil-smash"
+        },
+        {
+          "nome": "Gin Tônica",
+          "preco": 34.0,
+          "descricao": "Gin, água tônica e limão.",
+          "slug": "gin-tonica"
+        },
+        {
+          "nome": "Compre 2 Gins Tônicas e Ganhe a Terceira",
+          "preco": 68.0,
+          "descricao": "Promoção: leve três gins tônicas pagando duas.",
+          "destaque": true,
+          "slug": "compre-2-gins-tonicas-e-ganhe-a-terceira"
+        },
+        {
+          "nome": "Raspberri",
+          "preco": 34.0,
+          "descricao": "Vodca, framboesa e limão.",
+          "confirmar": true,
+          "slug": "raspberri"
+        },
+        {
+          "nome": "Green Island",
+          "preco": 32.0,
+          "descricao": "Gin, hortelã, limão e xarope.",
+          "confirmar": true,
+          "slug": "green-island"
+        },
+        {
+          "nome": "Pink Energy",
+          "preco": 30.0,
+          "descricao": "Vodca, frutas vermelhas e energético.",
+          "confirmar": true,
+          "slug": "pink-energy"
+        },
+        {
+          "nome": "Vai Tomando",
+          "preco": 32.0,
+          "descricao": "Vodca com cítricos e maracujá.",
+          "confirmar": true,
+          "slug": "vai-tomando"
+        }
+      ]
+    },
+    {
+      "id": "caipirinhas",
+      "nome": "Caipirinhas",
+      "subtitulo": "Clássicas e batidas",
+      "itens": [
+        {
+          "nome": "Batida de Café",
+          "preco": 34.0,
+          "descricao": "Cachaça, café e leite condensado.",
+          "slug": "batida-de-cafe"
+        },
+        {
+          "nome": "Caipirita",
+          "preco": 32.0,
+          "descricao": "Tequila, limão e açúcar.",
+          "slug": "caipirita"
+        },
+        {
+          "nome": "Blue Coconut",
+          "preco": 34.0,
+          "descricao": "Vodca, curaçau blue e coco.",
+          "confirmar": true,
+          "slug": "blue-coconut"
+        },
+        {
+          "nome": "Tanjuru",
+          "preco": 32.0,
+          "descricao": "Saquê com tangerina e limão.",
+          "confirmar": true,
+          "slug": "tanjuru"
+        },
+        {
+          "nome": "Caipivinho Branco",
+          "preco": 32.0,
+          "descricao": "Vinho branco, limão e açúcar.",
+          "fora_de_linha": true,
+          "slug": "caipivinho-branco"
+        },
+        {
+          "nome": "Caipirinha Vodca Absolut",
+          "preco": 36.0,
+          "descricao": "Limão, açúcar e vodca Absolut.",
+          "slug": "caipirinha-vodca-absolut"
+        },
+        {
+          "nome": "Caipirinha Cachaça",
+          "preco": 30.0,
+          "descricao": "Limão, açúcar e cachaça.",
+          "slug": "caipirinha-cachaca"
+        },
+        {
+          "nome": "Caipirinha Saquê",
+          "preco": 30.0,
+          "descricao": "Limão, açúcar e saquê.",
+          "slug": "caipirinha-saque"
+        },
+        {
+          "nome": "Caipirinha Jambu",
+          "preco": 30.0,
+          "descricao": "Limão, açúcar, cachaça e jambu.",
+          "slug": "caipirinha-jambu"
+        }
+      ]
+    },
+    {
+      "id": "tropicais",
+      "nome": "Tropicais",
+      "subtitulo": "Frutas, espumante e sol",
+      "itens": [
+        {
+          "nome": "Jambu Verão",
+          "preco": 32.0,
+          "descricao": "Cachaça de jambu, cítricos e espumante.",
+          "confirmar": true,
+          "slug": "jambu-verao"
+        },
+        {
+          "nome": "Margarita Picante de Tangerina",
+          "preco": 36.0,
+          "descricao": "Tequila, tangerina, limão e pimenta.",
+          "slug": "margarita-picante-de-tangerina"
+        },
+        {
+          "nome": "Mojito Vinho Branco",
+          "preco": 36.0,
+          "descricao": "Vinho branco, hortelã, limão e água com gás.",
+          "slug": "mojito-vinho-branco"
+        },
+        {
+          "nome": "Paloma",
+          "preco": 36.0,
+          "descricao": "Tequila, grapefruit, limão e soda.",
+          "slug": "paloma"
+        },
+        {
+          "nome": "Porn Martini",
+          "preco": 39.0,
+          "descricao": "Vodca, maracujá e baunilha, com shot de espumante.",
+          "slug": "porn-martini"
+        },
+        {
+          "nome": "Crazy Life",
+          "preco": 32.0,
+          "descricao": "Vodca com laranja e maracujá.",
+          "confirmar": true,
+          "slug": "crazy-life"
+        },
+        {
+          "nome": "Tinto de Verano",
+          "preco": 36.0,
+          "descricao": "Vinho tinto, soda limonada e laranja.",
+          "slug": "tinto-de-verano"
+        },
+        {
+          "nome": "Taça Mimosa",
+          "preco": 28.0,
+          "descricao": "Espumante com suco de laranja.",
+          "slug": "taca-mimosa"
+        },
+        {
+          "nome": "Hungarian Poison",
+          "preco": 34.0,
+          "descricao": "Destilado com frutas vermelhas e cítricos.",
+          "confirmar": true,
+          "slug": "hungarian-poison"
+        }
+      ]
+    },
+    {
+      "id": "whisky",
+      "nome": "Whisky",
+      "subtitulo": "Autorais com whisky",
+      "itens": [
+        {
+          "nome": "Balla Jam Amora",
+          "preco": 38.0,
+          "descricao": "Whisky Ballantine's, amora e limão.",
+          "confirmar": true,
+          "slug": "balla-jam-amora"
+        },
+        {
+          "nome": "Honey Nights",
+          "preco": 36.0,
+          "descricao": "Whisky, mel, maracujá e limão.",
+          "confirmar": true,
+          "slug": "honey-nights"
+        },
+        {
+          "nome": "Sunshine Citrus",
+          "preco": 34.0,
+          "descricao": "Ballantine's Sunshine, abacaxi e cítricos.",
+          "confirmar": true,
+          "slug": "sunshine-citrus"
+        },
+        {
+          "nome": "Zero B",
+          "preco": 34.0,
+          "descricao": "Whisky com cola zero e limão.",
+          "confirmar": true,
+          "slug": "zero-b"
+        }
+      ]
+    },
+    {
+      "id": "vinhos-espumantes",
+      "nome": "Vinhos e Espumantes",
+      "subtitulo": "Taça ou garrafa",
+      "itens": [
+        {
+          "nome": "Garrafa Espumante Brut Salton 750ml",
+          "preco": 78.0,
+          "descricao": "Espumante nacional seco, garrafa 750ml.",
+          "slug": "garrafa-espumante-brut-salton-750ml"
+        },
+        {
+          "nome": "Garrafa Espumante Moscatel Salton 750ml",
+          "preco": 78.0,
+          "descricao": "Espumante nacional doce, garrafa 750ml.",
+          "slug": "garrafa-espumante-moscatel-salton-750ml"
+        },
+        {
+          "nome": "Taça de Espumante",
+          "preco": 28.0,
+          "descricao": "Taça de espumante Salton.",
+          "slug": "taca-de-espumante"
+        },
+        {
+          "nome": "Garrafa Vinho Branco Sauvignon Chilano",
+          "preco": 64.0,
+          "descricao": "Vinho branco chileno seco, garrafa 750ml.",
+          "slug": "garrafa-vinho-branco-sauvignon-chilano"
+        },
+        {
+          "nome": "Taça de Vinho",
+          "preco": 26.0,
+          "descricao": "Taça de vinho da casa.",
+          "slug": "taca-de-vinho"
+        }
+      ]
+    },
+    {
+      "id": "doses",
+      "nome": "Doses",
+      "subtitulo": "Destilados em dose de 45ml",
+      "itens": [
+        {
+          "nome": "Absolut — Dose 45ml",
+          "preco": 24.0,
+          "descricao": "Vodca sueca, dose pura ou com gelo.",
+          "slug": "absolut-dose-45ml"
+        },
+        {
+          "nome": "Ballantine's Sunshine — Dose 45ml",
+          "preco": 26.0,
+          "descricao": "Whisky escocês com toque cítrico.",
+          "slug": "ballantine-s-sunshine-dose-45ml"
+        },
+        {
+          "nome": "Black Label — Dose 45ml",
+          "preco": 26.0,
+          "descricao": "Whisky escocês blended 12 anos.",
+          "slug": "black-label-dose-45ml"
+        },
+        {
+          "nome": "Chivas — Dose 45ml",
+          "preco": 26.0,
+          "descricao": "Whisky escocês blended.",
+          "slug": "chivas-dose-45ml"
+        },
+        {
+          "nome": "Jambuzera — Dose 45ml",
+          "preco": 24.0,
+          "descricao": "Cachaça de jambu, com formigamento característico.",
+          "slug": "jambuzera-dose-45ml"
+        },
+        {
+          "nome": "José Cuervo Ouro — Dose 45ml",
+          "preco": 24.0,
+          "descricao": "Tequila mexicana dourada.",
+          "slug": "jose-cuervo-ouro-dose-45ml"
+        }
+      ]
+    }
+  ],
+  "fora_do_cardapio": [
+    {
+      "nome": "Café Coado",
+      "preco": 9.0,
+      "aba_sugerida": "outros",
+      "fora_de_linha": true
+    },
+    {
+      "nome": "Café Expresso",
+      "preco": 12.0,
+      "aba_sugerida": "outros",
+      "fora_de_linha": true
+    },
+    {
+      "nome": "Spritzer Verão",
+      "preco": 32.0,
+      "aba_sugerida": "tropicais",
+      "fora_de_linha": true
+    }
+  ]
+}

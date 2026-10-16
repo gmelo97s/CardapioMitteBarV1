@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+  <title>Mitte Bar</title>
+  <meta name="description" content="Cardápio do Mitte Bar.">
+  <meta name="theme-color" content="#09090B">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <link rel="icon" href="assets/logo-mitte.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;900&family=Inter:wght@400;500&display=swap">
+  <link rel="preload" as="image" href="assets/logo-face.png">
+  <link rel="preload" as="image" href="assets/logo-shadow.png">
+  <link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+
+  <!-- Luz do salão: três manchas desfocadas em deriva lenta, não um gradiente
+       estático. É o que faz a tela parecer iluminada por neon de verdade. -->
+  <div class="ambiente" aria-hidden="true">
+    <span class="ambiente__mancha ambiente__mancha--rosa"></span>
+    <span class="ambiente__mancha ambiente__mancha--magenta"></span>
+    <span class="ambiente__mancha ambiente__mancha--ciano"></span>
+    <span class="ambiente__mancha ambiente__mancha--ciano-apoio"></span>
+    <span class="ambiente__grade"></span>
+  </div>
+
+  <div class="app">
+
+    <!-- ── Tela 1 ─ Hero ─────────────────────────────────────────────── -->
+    <section class="tela hero" id="tela-hero" data-ativa>
+      <div class="hero__palco">
+        <div class="logo" role="img" aria-label="Mitte Bar">
+          <span class="logo__slice logo__slice--shadow" style="--i:0;--l:0.0%;--w:19.2463%;--il:0.0%;--iw:519.5815%"><img src="assets/logo-shadow.png" alt=""></span>
+          <span class="logo__slice logo__slice--shadow" style="--i:1;--l:22.8423%;--w:10.0403%;--il:-227.5072%;--iw:995.9885%"><img src="assets/logo-shadow.png" alt=""></span>
+          <span class="logo__slice logo__slice--shadow" style="--i:2;--l:36.5362%;--w:19.2463%;--il:-189.8356%;--iw:519.5815%"><img src="assets/logo-shadow.png" alt=""></span>
+          <span class="logo__slice logo__slice--shadow" style="--i:3;--l:59.3498%;--w:19.2463%;--il:-308.3707%;--iw:519.5815%"><img src="assets/logo-shadow.png" alt=""></span>
+          <span class="logo__slice logo__slice--shadow" style="--i:4;--l:80.7825%;--w:19.2175%;--il:-420.3593%;--iw:520.3593%"><img src="assets/logo-shadow.png" alt=""></span>
+          <span class="logo__slice logo__slice--face" style="--i:0;--l:0.0%;--w:15.3625%;--il:0.0%;--iw:650.9363%"><img src="assets/logo-face.png" alt=""></span>
+          <span class="logo__slice logo__slice--face" style="--i:1;--l:22.8423%;--w:6.1565%;--il:-371.028%;--iw:1624.2991%"><img src="assets/logo-face.png" alt=""></span>
+          <span class="logo__slice logo__slice--face" style="--i:2;--l:36.5362%;--w:15.3625%;--il:-237.8277%;--iw:650.9363%"><img src="assets/logo-face.png" alt=""></span>
+          <span class="logo__slice logo__slice--face" style="--i:3;--l:59.3498%;--w:15.3625%;--il:-386.3296%;--iw:650.9363%"><img src="assets/logo-face.png" alt=""></span>
+          <span class="logo__slice logo__slice--face" style="--i:4;--l:80.7825%;--w:15.5063%;--il:-520.9647%;--iw:644.898%"><img src="assets/logo-face.png" alt=""></span>
+        </div>
+      </div>
+
+      <div class="hero__cta">
+        <button class="botao" id="abrir-cardapio" type="button">
+          Ver cardápio
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6"></path>
+          </svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- ── Tela 2 ─ Categorias ───────────────────────────────────────── -->
+    <section class="tela categorias" id="tela-categorias" aria-label="Categorias">
+      <header class="topo">
+        <img class="topo__logo" src="assets/logo-mitte-320.png" width="640" height="125"
+             alt="Mitte Bar" id="voltar-hero" decoding="async">
+        <h1 class="topo__titulo">Cardápio</h1>
+        <button class="icone" type="button" data-abrir-busca aria-label="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+          </svg>
+        </button>
+      </header>
+      <div class="categorias__grade" id="grade-categorias"></div>
+    </section>
+
+    <!-- ── Tela 3 ─ Itens ────────────────────────────────────────────── -->
+    <section class="tela itens" id="tela-itens" aria-label="Itens">
+      <header class="topo">
+        <button class="icone" type="button" id="voltar-categorias" aria-label="Voltar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6"></path>
+          </svg>
+        </button>
+        <h1 class="topo__titulo" id="titulo-categoria"></h1>
+        <button class="icone" type="button" data-abrir-busca aria-label="Buscar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+          </svg>
+        </button>
+      </header>
+      <div class="itens__rolagem" id="rolagem-itens">
+        <div class="itens__grade" id="grade-itens"></div>
+      </div>
+    </section>
+
+    <!-- ── Busca ─────────────────────────────────────────────────────── -->
+    <div class="busca" id="busca" role="dialog" aria-label="Buscar no cardápio" aria-modal="true">
+      <div class="busca__topo">
+        <label class="campo">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path>
+          </svg>
+          <input id="campo-busca" type="search" autocomplete="off" enterkeyhint="search"
+                 placeholder="Gin, tô com fome, algo barato…" aria-label="Buscar">
+        </label>
+        <button class="icone" type="button" id="fechar-busca" aria-label="Fechar busca">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="busca__chips" id="chips"></div>
+      <div class="busca__resultados" id="resultados"></div>
+    </div>
+
+    <!-- ── Detalhe ───────────────────────────────────────────────────── -->
+    <div class="detalhe" id="detalhe" role="dialog" aria-label="Detalhe do item" aria-modal="true">
+      <div class="detalhe__caixa" id="detalhe-caixa"></div>
+    </div>
+
+  </div>
+
+  <script src="src/app.js"></script>
+</body>
+</html>

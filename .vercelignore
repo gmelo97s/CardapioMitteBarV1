@@ -1,0 +1,9 @@
+# Notas internas — nao devem ficar publicas no dominio do cardapio
+REVISAR.md
+DESIGN-SYSTEM.md
+README.md
+.claude/
+node_modules/
+assets/itens/_masters/
+tools/
+assets/itens/_brutas/
