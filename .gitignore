@@ -7,3 +7,6 @@ Thumbs.db
 # tools/fotos-drive.json diz de onde vieram e tools/fotos-drive.py refaz.
 assets/itens/_brutas/
 assets/itens/_masters/
+
+# Cache do Python, dos scripts em tools/
+__pycache__/

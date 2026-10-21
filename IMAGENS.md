@@ -59,6 +59,49 @@ Os combos (`combo-3-beats-lata` e companhia) são **montados**: as mesmas
 latas em leque, com sobreposição e escadinha. Não é preciso achar uma foto
 de "3 Beats" — basta dizer quais latas entram, em `fileira_de_latas.itens`.
 
+### Fundo que briga com o cardápio
+
+Cinco fotos do totem foram tiradas contra o painel pintado do salão —
+verde-limão, amarelo e pink, todos saturados. Como foto do bar estão certas;
+como card, ao lado de outros cinquenta sobre preto, liam como se viessem de
+outro site.
+
+Para essas, o fundo é trocado: o produto é recortado com `rembg` e recolocado
+sobre o mesmo degradê escuro das outras latas, com a mesma sombra elíptica. A
+foto continua sendo a do bar — só o fundo passa a ser o do cardápio.
+
+```json
+"fundo_para_trocar": {
+  "heineken-lata-350ml": "2424.png"
+}
+```
+
+Precisa do modelo, que baixa sozinho na primeira vez (~179 MB):
+
+```bash
+pip install "rembg[cpu]"
+```
+
+### Enquadramento item a item
+
+O padrão serve para quase tudo, mas garrafa fina sobra margem e taça pequena
+se perde no balcão. `ajustes` afrouxa o padrão sem tocar nos outros:
+
+```json
+"ajustes": {
+  "combo-4-heineken-lata-350ml": { "largura_max": 0.96 },
+  "jambuzera-dose-45ml":         { "altura": 0.86, "limiar": 224, "desvio": 20 },
+  "espresso-martini":            { "margem": 0.06 }
+}
+```
+
+| Chave | Para que serve |
+|---|---|
+| `altura` | quanto da altura do quadrado o produto ocupa (padrão 0,82) |
+| `largura_max` | teto de largura; afrouxe para assunto largo e baixo, como quatro latas lado a lado |
+| `margem` | folga em volta do copo nas fotos de bar (padrão 0,10) |
+| `limiar`, `desvio` | o que conta como fundo branco nas fotos de catálogo. Afrouxar resolve véu de scanner e tarja de rodapé — e come topo prateado de lata, então é item a item |
+
 ### Para ligar uma foto nova a um item
 
 Uma linha em `tools/fotos-drive.json`:

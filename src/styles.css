@@ -741,10 +741,12 @@ button {
 .card__figura {
   display: block;
   position: relative;
-  /* Quadrado por padrão — as fotos são de copo em pé, e um 4:3 cortava a
-     borda e a base. Mas `min-height: 0` deixa a linha elástica encolhê-lo
+  /* Quadrado onde a linha do card tem altura automática — tablet, desktop e
+     totem. É o `aspect-ratio` que dá a altura ali: um card sem foto tem na
+     figura só a inicial, que é absoluta e não ocupa, e sem ele a figura
+     colapsava para zero. `min-height: 0` deixa a linha elástica encolhê-la
      quando o nome precisa de mais uma linha, o que mantém a altura do card
-     constante sem cortar texto. */
+     constante sem cortar texto. No celular a regra muda — ver abaixo. */
   aspect-ratio: 1;
   min-height: 0;
   background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
@@ -760,6 +762,20 @@ button {
   height: 100%;
   object-fit: cover;
   transition: transform var(--mitte-dur-tela) var(--mitte-ease);
+}
+
+/* No celular a linha do card tem altura fixa (`--linha`, medida em JS), e o
+   quadrado não a preenche: a figura travava em 161px numa linha de 201 e
+   sobrava uma faixa morta entre a foto e o nome — o jeito mais rápido de um
+   cardápio parecer malfeito. Sem proporção fixa a figura estica e a foto vai
+   de borda a borda.
+
+   Não dá para resolver com `height: 100%` junto do `aspect-ratio`: com a
+   altura definida pela linha, a proporção passa a mandar na LARGURA e a
+   figura saía 199px de largura dentro de um card de 175, estourando para
+   fora do recorte. */
+@media (max-width: 47.99rem) {
+  body:not(.totem) .card__figura { aspect-ratio: auto; }
 }
 
 .card:hover .card__figura img { transform: scale(1.06); }

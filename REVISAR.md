@@ -148,6 +148,19 @@ foto real das quatro latas.)
 3. **Confirmar se Party = Thug Life** resolve 1 item sem foto nova.
 4. Doses e Vinhos (14 itens) são compra por nome; a foto ajuda pouco.
 
+### As latas de `latas_bebidas prontas.png` ficam meio chatas — e por quê
+
+Xeque Mate, Mascate e Lambe-Lambe vêm todos de uma foto só, em que as oito
+latas estão **encostadas e sobrepostas**. Metade de cada lata está atrás da
+vizinha. O script dissolve a borda cortada num degradê, que lê como sombra,
+mas o cilindro nunca fica inteiro: o card mostra uma lata um pouco chapada,
+sem a curvatura de um dos lados.
+
+Isso **não tem conserto por código** — o pixel do lado escondido não existe
+no arquivo. O que resolve é uma foto de cada lata sozinha, do mesmo jeito que
+as do totem: lata no balcão, luz do ambiente, uma por foto. São 8 fotos e
+resolvem 11 cards, contando os combos, que o script monta sozinho.
+
 ---
 
 ## 3. Fotos do Drive que sobraram

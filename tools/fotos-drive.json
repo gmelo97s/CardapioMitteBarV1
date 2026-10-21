@@ -10,7 +10,6 @@
     "espresso-martini": "ESPRESSO MARTINI.jpg",
     "fitzgerald": "FITZ GERALD.png",
     "garibaldi": "GARIBALDI2.png",
-    "mojito": "MOJITO.jpeg",
     "moscow-mule": "MOSCOW MULE.png",
     "negroni-rosso": "NEGRONI.png",
     "new-york-sour": "NEW YORK SOUR.png",
@@ -40,11 +39,6 @@
     "tropical-passion": "TROPICAL PASSION.png",
     "hungarian-poison": "VENENO HÚNGARO.png",
     "zero-b": "ZERO BALLA.png",
-    "heineken-lata-350ml": "2424.png",
-    "combo-4-heineken-lata-350ml": "33.png",
-    "corona-lata-350ml": "32323.png",
-    "corona-zero-lata-350ml": "323.JPG",
-    "agua-tonica-antarctica-zero-lata": "2424434.png",
     "combo-3-beats-lata": "098.png"
   },
   "fileira_de_latas": {
@@ -133,5 +127,26 @@
     "energetico-red-bull-melancia-lata": "232323.JPG",
     "energetico-red-bull-tropical-lata": "24355.JPG",
     "energetico-red-bull-morango-e-pessego-lata": "34324234.JPG"
+  },
+  "fundo_para_trocar": {
+    "heineken-lata-350ml": "2424.png",
+    "combo-4-heineken-lata-350ml": "33.png",
+    "corona-lata-350ml": "32323.png",
+    "corona-zero-lata-350ml": "323.JPG",
+    "agua-tonica-antarctica-zero-lata": "2424434.png",
+    "mojito": "MOJITO.jpeg"
+  },
+  "ajustes": {
+    "mojito": {
+      "altura": 0.86
+    },
+    "jambuzera-dose-45ml": {
+      "altura": 0.86,
+      "limiar": 224,
+      "desvio": 20
+    },
+    "espresso-martini": {
+      "margem": 0.06
+    }
   }
 }

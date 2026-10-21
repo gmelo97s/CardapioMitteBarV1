@@ -48,6 +48,7 @@ ESCURECE = 0.42
 # --- montagem da fileira de latas ---------------------------------------- #
 FUNDO_TOPO = (26, 26, 31)   # --mitte-bg-elev-2
 FUNDO_BASE = (9, 9, 11)     # --mitte-bg
+LARGURA_SEGURA = 0.72       # ver montar_latas: o card recorta as laterais
 
 
 # ========================================================================== #
@@ -85,7 +86,7 @@ def _faixa(peso: np.ndarray, fracao: float) -> tuple[float, float]:
     return float(melhor[0]), float(melhor[1])
 
 
-def _regiao_do_copo(im: Image.Image) -> tuple[int, int, int, int]:
+def _regiao_do_copo(im: Image.Image, margem: float = MARGEM) -> tuple[int, int, int, int]:
     m = _mapa_foco(im)
     h, w = m.shape
     fx0, fx1 = _faixa(m.sum(axis=0), 0.84)
@@ -95,7 +96,7 @@ def _regiao_do_copo(im: Image.Image) -> tuple[int, int, int, int]:
     x0, x1 = fx0 / w * iw, fx1 / w * iw
     y0, y1 = fy0 / h * ih, fy1 / h * ih
 
-    mx, my = (x1 - x0) * MARGEM, (y1 - y0) * MARGEM
+    mx, my = (x1 - x0) * margem, (y1 - y0) * margem
     x0, x1, y0, y1 = x0 - mx, x1 + mx, y0 - my, y1 + my
 
     # tenta fechar um quadrado em volta do copo antes de recorrer ao
@@ -112,7 +113,7 @@ def _regiao_do_copo(im: Image.Image) -> tuple[int, int, int, int]:
     return int(max(x0, 0)), int(max(y0, 0)), int(min(x1, iw)), int(min(y1, ih))
 
 
-def quadrado(im: Image.Image, lado: int = LADO) -> Image.Image:
+def quadrado(im: Image.Image, lado: int = LADO, margem: float = MARGEM) -> Image.Image:
     """Quadrado com o copo inteiro dentro.
 
     O copo quase sempre é mais alto do que a foto é larga, então um corte
@@ -121,7 +122,7 @@ def quadrado(im: Image.Image, lado: int = LADO) -> Image.Image:
     fundo continua sendo o bar, não uma tarja preta.
     """
     im = im.convert("RGB")
-    corte = im.crop(_regiao_do_copo(im))
+    corte = im.crop(_regiao_do_copo(im, margem))
     cw, ch = corte.size
 
     escala = lado / min(cw, ch)
@@ -180,8 +181,16 @@ def recortar_lata(origem: Image.Image, faixa: list[int]) -> Image.Image:
     return lata
 
 
-def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.82) -> Image.Image:
-    """Uma lata centralizada, ou várias em leque com sobreposição e escadinha."""
+def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.82,
+                 largura_max: float = LARGURA_SEGURA) -> Image.Image:
+    """Uma lata centralizada, ou várias em leque com sobreposição e escadinha.
+
+    `largura_max` é a área segura: o master é quadrado, mas o card no celular
+    é retrato e a foto entra com `object-fit: cover`, que come até 13% de cada
+    lado. Um leque que ocupasse 90% da largura apareceria com as latas das
+    pontas fatiadas pela borda do card. Uma lata sozinha é estreita e nunca
+    encosta nesse teto — ele só morde nas montagens.
+    """
     tela = _fundo_radial(lado)
     n = len(latas)
     alvo = int(lado * (altura if n == 1 else altura * 0.88))
@@ -192,8 +201,8 @@ def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.8
     escaladas = escalar(alvo)
     passo = escaladas[0].width * (0.72 if n > 1 else 1)
     largura = escaladas[0].width + passo * (n - 1)
-    if largura > lado * 0.90:
-        alvo = int(alvo * lado * 0.90 / largura)
+    if largura > lado * largura_max:
+        alvo = int(alvo * lado * largura_max / largura)
         escaladas = escalar(alvo)
         passo = escaladas[0].width * (0.72 if n > 1 else 1)
         largura = escaladas[0].width + passo * (n - 1)
@@ -218,7 +227,7 @@ def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.8
 # Foto de produto com fundo branco
 # ========================================================================== #
 
-def recortar_do_branco(im: Image.Image, limiar: int = 238) -> Image.Image:
+def recortar_do_branco(im: Image.Image, limiar: int = 238, desvio: int = 12) -> Image.Image:
     """Transforma o fundo branco de uma foto de catálogo em transparência.
 
     As fotos do totem vêm em dois sabores: produto sobre o balcão colorido do
@@ -232,8 +241,14 @@ def recortar_do_branco(im: Image.Image, limiar: int = 238) -> Image.Image:
     rgb = a[:, :, :3].astype(np.int16)
     # branco é claro E neutro: sem a segunda condição, o rótulo branco da lata
     # e o reflexo no alumínio saem junto com o fundo.
+    #
+    # `limiar` e `desvio` são apertados de propósito e só se afrouxam item a
+    # item, pelo mapa. O fundo nem sempre é branco puro: a faixa do rodapé da
+    # Jambuzera mede (228, 234, 242) e sobrava como tarja branca na base do
+    # card. Mas afrouxar para todo mundo come o topo prateado dos Red Bull,
+    # que é claro, neutro e encostado no fundo pelo alto.
     claro = rgb.min(axis=2) >= limiar
-    neutro = (rgb.max(axis=2) - rgb.min(axis=2)) <= 12
+    neutro = (rgb.max(axis=2) - rgb.min(axis=2)) <= desvio
     fundo = claro & neutro
 
     # só o branco LIGADO à borda é fundo; branco cercado de produto fica.
@@ -261,6 +276,46 @@ def recortar_do_branco(im: Image.Image, limiar: int = 238) -> Image.Image:
     return corte.crop(caixa) if caixa else corte
 
 
+# ========================================================================== #
+# Foto do bar com fundo que briga com o cardápio
+# ========================================================================== #
+
+# O painel pintado do salão é verde-limão, amarelo e pink saturados. Como foto
+# do bar está certo; como card, ao lado de 55 cards sobre preto, lê como se
+# fosse de outro site. Aqui o produto é recortado do painel e recolocado sobre
+# o mesmo degradê escuro das outras latas — a foto continua sendo a do bar,
+# só o fundo passa a ser o do cardápio.
+
+MODELO_RECORTE = "isnet-general-use"
+LADO_RECORTE = 1600      # acima disso o modelo não melhora e só custa tempo
+
+_sessao_recorte = None
+
+
+def _sessao() -> object:
+    """Uma sessão só: carregar o modelo custa alguns segundos."""
+    global _sessao_recorte
+    if _sessao_recorte is None:
+        try:
+            from rembg import new_session
+        except ImportError:
+            sys.exit("Esta seção precisa do rembg. Rode: pip install rembg")
+        _sessao_recorte = new_session(MODELO_RECORTE)
+    return _sessao_recorte
+
+
+def recortar_do_fundo(im: Image.Image) -> Image.Image:
+    """Separa o produto do fundo da foto e devolve só ele, já aparado."""
+    from rembg import remove
+
+    im = im.convert("RGBA")
+    if max(im.size) > LADO_RECORTE:
+        im.thumbnail((LADO_RECORTE, LADO_RECORTE), Image.LANCZOS)
+    corte = remove(im, session=_sessao(), post_process_mask=True)
+    caixa = corte.getbbox()
+    return corte.crop(caixa) if caixa else corte
+
+
 def slugs_do_cardapio() -> set[str]:
     dados = json.loads(CARDAPIO.read_text(encoding="utf-8"))
     return {item["slug"] for aba in dados["abas"] for item in aba["itens"] if "slug" in item}
@@ -278,6 +333,8 @@ def main() -> int:
     for slug, arquivo in mapa["fotos"].items():
         planejado[slug] = arquivo
     for slug, arquivo in mapa.get("produtos_no_branco", {}).items():
+        planejado[slug] = arquivo
+    for slug, arquivo in mapa.get("fundo_para_trocar", {}).items():
         planejado[slug] = arquivo
     fileira = mapa.get("fileira_de_latas")
     for slug in (fileira or {}).get("itens", {}):
@@ -301,15 +358,36 @@ def main() -> int:
     MASTERS.mkdir(parents=True, exist_ok=True)
     feitos = 0
 
+    # Enquadramento fora do padrão, item a item: garrafa fina que sobra
+    # margem, copo pequeno que se perde no balcão.
+    ajustes = mapa.get("ajustes", {})
+
+    def salvar(slug: str, im: Image.Image) -> None:
+        im.save(MASTERS / f"{slug}.webp", "WEBP", quality=QUALIDADE, method=6)
+
     # Fotos de catálogo recortadas sobre branco, do Drive do bar.
     for slug, arquivo in sorted(mapa.get("produtos_no_branco", {}).items()):
         origem = BRUTAS / arquivo
         if not origem.exists():
             print(f"  faltando: {arquivo}")
             continue
+        a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            montar_latas([recortar_do_branco(im)]).save(
-                MASTERS / f"{slug}.webp", "WEBP", quality=QUALIDADE, method=6)
+            corte = recortar_do_branco(im, limiar=a.get("limiar", 238), desvio=a.get("desvio", 12))
+        salvar(slug, montar_latas([corte], altura=a.get("altura", 0.82)))
+        feitos += 1
+
+    # Produto sobre o painel colorido do salão: recorta e devolve no escuro.
+    for slug, arquivo in sorted(mapa.get("fundo_para_trocar", {}).items()):
+        origem = BRUTAS / arquivo
+        if not origem.exists():
+            print(f"  faltando: {arquivo}")
+            continue
+        a = ajustes.get(slug, {})
+        with Image.open(origem) as im:
+            salvar(slug, montar_latas([recortar_do_fundo(im)],
+                                      altura=a.get("altura", 0.80),
+                                      largura_max=a.get("largura_max", 0.90)))
         feitos += 1
 
     for slug, arquivo in sorted(mapa["fotos"].items()):
@@ -317,8 +395,9 @@ def main() -> int:
         if not origem.exists():
             print(f"  faltando: {arquivo}")
             continue
+        a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            quadrado(im).save(MASTERS / f"{slug}.webp", "WEBP", quality=QUALIDADE, method=6)
+            salvar(slug, quadrado(im, margem=a.get("margem", MARGEM)))
         feitos += 1
 
     if fileira:
