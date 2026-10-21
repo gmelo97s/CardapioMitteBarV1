@@ -1,9 +1,10 @@
 # Pendências de revisão
 
-**115 itens** em **12 abas**, dos quais **50 têm foto** e
-**65 ainda não**. Fonte: `CARDÁPIO MITTE BAR OUTUBRO 2026.xls`
+**115 itens** em **12 abas**, dos quais **60 têm foto** e
+**55 ainda não** (a seção 2 diz o motivo de cada uma). Fonte: `CARDÁPIO MITTE BAR OUTUBRO 2026.xls`
 (nome, preço e aba de cada item) cruzado com `MENU NOVO MITTE BAR.docx`
-(as receitas) e com a pasta **NOVOS DRINKS** do Drive (as fotos).
+(as receitas) e com duas pastas de fotos: **NOVOS DRINKS** no Google Drive
+e **FOTOS TOTEM DE PRODUTOS** no OneDrive.
 
 Item sem foto não fica quebrado: mostra a **inicial em neon rosa**, que é um
 estado desenhado. Dá para publicar assim e ir completando.
@@ -32,48 +33,37 @@ diferente. Se o rótulo importar, mande a foto certa.
 
 ---
 
-## 2. Itens sem foto (65)
+## 2. Itens sem foto (55) — e o motivo de cada um
 
-Nenhuma foto na pasta do Drive corresponde a estes. Para resolver, coloque a
-foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
-`tools/fotos-drive.json`; ou me mande as fotos que eu ligo.
+Duas pastas foram usadas. A **NOVOS DRINKS** (Google Drive) trouxe 46 fotos de
+drink no balcão e um PNG com uma fileira de oito latas. A **FOTOS TOTEM DE
+PRODUTOS** (OneDrive) trouxe 30 fotos de produto, metade recortada sobre branco
+e metade fotografada no balcão colorido do ponto novo. Tudo o que deu para
+casar, casou — **60 dos 115 itens têm foto**. O resto está aqui,
+separado pelo motivo, que é a informação de que você precisa para saber o que
+fotografar.
 
-**Latas** — 12 de 24
+### a) Não existe foto correspondente em nenhuma das duas pastas (45)
 
-- [ ] `heineken-lata-350ml.png` — Heineken Lata 350ml
-- [ ] `corona-lata-350ml.png` — Corona Lata 350ml
-- [ ] `corona-zero-lata-350ml.png` — Corona Zero Lata 350ml
-- [ ] `stella-artois-lata-350ml.png` — Stella Artois Lata 350ml
-- [ ] `combo-4-heineken-lata-350ml.png` — Combo 4 Heineken Lata 350ml
-- [ ] `combo-4-corona-lata-350ml.png` — Combo 4 Corona Lata 350ml
-- [ ] `combo-4-stella-artois-lata-350ml.png` — Combo 4 Stella Artois Lata 350ml
-- [ ] `chopp-vinho-draft-600ml.png` — Chopp Vinho Draft 600ml
-- [ ] `absolut-sprite-lata-269ml.png` — Absolut Sprite Lata 269ml
-- [ ] `gin-tonica-pink-schweppes-lata-269ml.png` — Gin Tônica Pink Schweppes Lata 269ml
-- [ ] `spritz-schweppes-lata-269ml.png` — Spritz Schweppes Lata 269ml
-- [ ] `gin-tonica-schweppes-lata-269ml.png` — Gin Tônica Schweppes Lata 269ml
+São, em bloco, as categorias que nenhuma das pastas cobriu: comida, dose,
+vinho, e a parte de mercearia de Outros.
 
-**Outros** — 17 de 17
+**Outros**
 
 - [ ] `agua-sem-gas-lindoya-510ml.png` — Água sem Gás Lindoya 510ml
 - [ ] `agua-com-gas-lindoya-510ml.png` — Água com Gás Lindoya 510ml
-- [ ] `coca-cola-lata.png` — Coca-Cola Lata
 - [ ] `coca-cola-zero-lata.png` — Coca-Cola Zero Lata
 - [ ] `guarana-antarctica-lata.png` — Guaraná Antarctica Lata
 - [ ] `schweppes-citrus-lata.png` — Schweppes Citrus Lata
 - [ ] `agua-tonica-antarctica-lata.png` — Água Tônica Antarctica Lata
-- [ ] `agua-tonica-antarctica-zero-lata.png` — Água Tônica Antarctica Zero Lata
 - [ ] `energetico-red-bull-tradicional-lata.png` — Energético Red Bull Tradicional Lata
 - [ ] `energetico-red-bull-zero-acucar-lata.png` — Energético Red Bull Zero Açúcar Lata
-- [ ] `energetico-red-bull-tropical-lata.png` — Energético Red Bull Tropical Lata
-- [ ] `energetico-red-bull-morango-e-pessego-lata.png` — Energético Red Bull Morango e Pêssego Lata
-- [ ] `energetico-red-bull-melancia-lata.png` — Energético Red Bull Melancia Lata
 - [ ] `halls-preto-ou-verde.png` — Halls Preto ou Verde
 - [ ] `trident-verde-ou-azul.png` — Trident Verde ou Azul
 - [ ] `leque-mitte-bar.png` — Leque Mitte Bar
 - [ ] `eco-bag-mitte.png` — Eco Bag Mitte
 
-**Comidas** — 13 de 13
+**Comidas**
 
 - [ ] `empanada-cebola-e-queijo-campestre.png` — Empanada Cebola e Queijo — Campestre
 - [ ] `empanada-queijo-e-tomate-caprese.png` — Empanada Queijo e Tomate — Caprese
@@ -89,11 +79,7 @@ foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
 - [ ] `porcao-vegana-mini-kibe.png` — Porção Vegana Mini Kibe
 - [ ] `porcao-vegana-mini-bolinha-de-queijo.png` — Porção Vegana Mini Bolinha de Queijo
 
-**Autorais** — 1 de 5
-
-- [ ] `party.png` — Party
-
-**Caipirinhas** — 5 de 9
+**Caipirinhas**
 
 - [ ] `batida-de-jambuzera.png` — Batida de Jambuzera
 - [ ] `caipirinha-vodca-absolut.png` — Caipirinha Vodca Absolut
@@ -101,16 +87,12 @@ foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
 - [ ] `caipirinha-saque.png` — Caipirinha Saquê
 - [ ] `caipirinha-jambu.png` — Caipirinha Jambu
 
-**Tropicais** — 2 de 9
+**Tropicais**
 
 - [ ] `porn-martini.png` — Porn Martini
 - [ ] `taca-mimosa.png` — Taça Mimosa
 
-**Whisky** — 1 de 2
-
-- [ ] `sunshine-citrus.png` — Sunshine Citrus
-
-**Vinhos e Espumantes** — 6 de 6
+**Vinhos e Espumantes**
 
 - [ ] `garrafa-espumante-brut-salton-750ml.png` — Garrafa Espumante Brut Salton 750ml
 - [ ] `garrafa-espumante-moscatel-salton-750ml.png` — Garrafa Espumante Moscatel Salton 750ml
@@ -119,7 +101,7 @@ foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
 - [ ] `garrafa-vinho-tinto-carmenere-chilano.png` — Garrafa Vinho Tinto Carmenere Chilano
 - [ ] `taca-de-vinho.png` — Taça de Vinho
 
-**Doses** — 8 de 8
+**Doses**
 
 - [ ] `absolut-dose-45ml.png` — Absolut — Dose 45ml
 - [ ] `ballantine-s-sunshine-dose-45ml.png` — Ballantine's Sunshine — Dose 45ml
@@ -127,8 +109,44 @@ foto em `assets/itens/_brutas/` e aponte o nome do arquivo em
 - [ ] `chivas-dose-45ml.png` — Chivas — Dose 45ml
 - [ ] `red-label-dose-45ml.png` — Red Label — Dose 45ml
 - [ ] `jack-daniel-s-dose-45ml.png` — Jack Daniel's — Dose 45ml
-- [ ] `jambuzera-dose-45ml.png` — Jambuzera — Dose 45ml
 - [ ] `jose-cuervo-ouro-dose-45ml.png` — José Cuervo Ouro — Dose 45ml
+
+### b) É lata, mas não apareceu em nenhuma das pastas (7)
+
+A fileira do Google Drive tem oito latas (Beats ×3, Lambe Lambe ×2, Mascate ×2,
+Xeque Mate) e o OneDrive trouxe Heineken, Corona, Corona Cero, Coca-Cola,
+Tônica Zero e os Red Bull. Estas ficaram de fora das duas:
+
+**Latas**
+
+- [ ] `stella-artois-lata-350ml.png` — Stella Artois Lata 350ml
+- [ ] `combo-4-corona-lata-350ml.png` — Combo 4 Corona Lata 350ml
+- [ ] `combo-4-stella-artois-lata-350ml.png` — Combo 4 Stella Artois Lata 350ml
+- [ ] `absolut-sprite-lata-269ml.png` — Absolut Sprite Lata 269ml
+- [ ] `gin-tonica-pink-schweppes-lata-269ml.png` — Gin Tônica Pink Schweppes Lata 269ml
+- [ ] `spritz-schweppes-lata-269ml.png` — Spritz Schweppes Lata 269ml
+- [ ] `gin-tonica-schweppes-lata-269ml.png` — Gin Tônica Schweppes Lata 269ml
+
+Para a Stella e os dois Combo 4 que faltam vale o caminho automático: **uma**
+foto da lata resolve a avulsa **e** o combo — `tools/preparar-fotos.py` lê o
+`4` do nome e monta as quatro sozinho. (O Combo 4 Heineken já saiu assim, da
+foto real das quatro latas.)
+
+### c) Os três casos que não são "faltou foto"
+
+| Item | Situação |
+|---|---|
+| **Sunshine Citrus** | **Tem foto**: `SUNSHINE.jpeg`, no Google Drive. Mas é o anúncio da Ballantine's — garrafa, fundo claro, luz de dia, texto de campanha. No meio das outras, destoa. Deixei de fora de propósito; se preferir usar assim mesmo, é uma linha. |
+| **Party** | **Talvez tenha**: sobrou `THUG LIFE.png` no Google Drive, sem item correspondente na planilha. Se Party for o antigo Thug Life, me confirme e eu ligo. |
+| **Chopp Vinho Draft 600ml** | Sem foto, e o nome continua ambíguo (ver seção 4) — não dá para fotografar sem saber qual é o produto. |
+
+### O que resolve mais rápido
+
+1. **Comidas (13 itens)** é o maior bloco sem nada — e é onde a foto mais
+   vende, porque ninguém pede porção sem ver.
+2. **Uma foto de lata de Stella** resolve 2 itens (a avulsa e o Combo 4).
+3. **Confirmar se Party = Thug Life** resolve 1 item sem foto nova.
+4. Doses e Vinhos (14 itens) são compra por nome; a foto ajuda pouco.
 
 ---
 
