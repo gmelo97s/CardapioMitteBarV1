@@ -215,6 +215,51 @@ def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.8
 
 
 # ========================================================================== #
+# Foto de produto com fundo branco
+# ========================================================================== #
+
+def recortar_do_branco(im: Image.Image, limiar: int = 238) -> Image.Image:
+    """Transforma o fundo branco de uma foto de catálogo em transparência.
+
+    As fotos do totem vêm em dois sabores: produto sobre o balcão colorido do
+    bar, que entra como foto, e produto recortado sobre branco, que é o caso
+    daqui. O branco vira alfa, a sobra é aparada, e o resultado segue para a
+    mesma montagem das latas — com o mesmo fundo escuro e a mesma sombra, para
+    o card não denunciar de qual pasta veio a imagem.
+    """
+    im = im.convert("RGBA")
+    a = np.array(im)
+    rgb = a[:, :, :3].astype(np.int16)
+    # branco é claro E neutro: sem a segunda condição, o rótulo branco da lata
+    # e o reflexo no alumínio saem junto com o fundo.
+    claro = rgb.min(axis=2) >= limiar
+    neutro = (rgb.max(axis=2) - rgb.min(axis=2)) <= 12
+    fundo = claro & neutro
+
+    # só o branco LIGADO à borda é fundo; branco cercado de produto fica.
+    from collections import deque
+    h, w = fundo.shape
+    visto = np.zeros_like(fundo)
+    fila = deque()
+    for x in range(w):
+        for y in (0, h - 1):
+            if fundo[y, x] and not visto[y, x]: visto[y, x] = True; fila.append((y, x))
+    for y in range(h):
+        for x in (0, w - 1):
+            if fundo[y, x] and not visto[y, x]: visto[y, x] = True; fila.append((y, x))
+    while fila:
+        y, x = fila.popleft()
+        for dy, dx in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            ny, nx = y + dy, x + dx
+            if 0 <= ny < h and 0 <= nx < w and fundo[ny, nx] and not visto[ny, nx]:
+                visto[ny, nx] = True
+                fila.append((ny, nx))
+
+    a[:, :, 3] = np.where(visto, 0, 255)
+    corte = Image.fromarray(a, "RGBA")
+    caixa = corte.getbbox()
+    return corte.crop(caixa) if caixa else corte
+
 
 def slugs_do_cardapio() -> set[str]:
     dados = json.loads(CARDAPIO.read_text(encoding="utf-8"))
@@ -231,6 +276,8 @@ def main() -> int:
     planejado: dict[str, str] = {}
 
     for slug, arquivo in mapa["fotos"].items():
+        planejado[slug] = arquivo
+    for slug, arquivo in mapa.get("produtos_no_branco", {}).items():
         planejado[slug] = arquivo
     fileira = mapa.get("fileira_de_latas")
     for slug in (fileira or {}).get("itens", {}):
@@ -253,6 +300,17 @@ def main() -> int:
 
     MASTERS.mkdir(parents=True, exist_ok=True)
     feitos = 0
+
+    # Fotos de catálogo recortadas sobre branco, do Drive do bar.
+    for slug, arquivo in sorted(mapa.get("produtos_no_branco", {}).items()):
+        origem = BRUTAS / arquivo
+        if not origem.exists():
+            print(f"  faltando: {arquivo}")
+            continue
+        with Image.open(origem) as im:
+            montar_latas([recortar_do_branco(im)]).save(
+                MASTERS / f"{slug}.webp", "WEBP", quality=QUALIDADE, method=6)
+        feitos += 1
 
     for slug, arquivo in sorted(mapa["fotos"].items()):
         origem = BRUTAS / arquivo

@@ -166,7 +166,10 @@ button {
 
 .logo {
   position: relative;
-  width: min(78vw, 46rem, 150vh);
+  /* 80% do tamanho anterior (era 78vw / 46rem / 150vh). Os três limites
+     encolhem juntos, então a proporção do lettering não muda — quem define a
+     altura é o aspect-ratio abaixo. */
+  width: min(62.4vw, 36.8rem, 120vh);
   aspect-ratio: 3476 / 680;
 }
 
@@ -677,7 +680,10 @@ button {
      onde 10 itens ficariam amontoados no topo — e volta a alinhar pelo topo
      assim que a lista passa da altura da tela, sem cortar o começo. */
   display: grid;
-  align-content: safe center;
+  /* `start` no celular: com 3 linhas calibradas para preencher a tela,
+     centrar sobraria meia linha em cima e meia embaixo. Na totem e no
+     desktop o `safe center` volta, mais abaixo. */
+  align-content: start;
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
@@ -692,12 +698,27 @@ button {
   gap: clamp(.65rem, 2vw, 1.25rem);
 }
 
+/* No celular a tela mostra exatamente 6 cards — 3 linhas de 2 — sem sobra
+   em cima nem embaixo. A altura da linha não dá para calcular só em CSS
+   porque depende da barra do navegador, que entra e sai durante a rolagem;
+   `--linha` é medida em JS (`medirGrade`) e reposta a cada resize. O
+   fallback `auto` mantém a grade correta caso o JS não rode. */
+@media (max-width: 47.99rem) {
+  body:not(.totem) .itens__grade {
+    grid-auto-rows: var(--linha, auto);
+  }
+}
+
 /* --- Card do item ------------------------------------------------------- */
 
 .card {
   position: relative;
   display: grid;
-  grid-template-rows: auto 1fr;
+  /* A foto fica na linha elástica e o corpo na linha automática: num card de
+     altura fixa, quem cede espaço para um nome de três linhas é a imagem, e
+     não o texto. Era o contrário — o corpo era `1fr` e o nome vinha cortado
+     com reticências. */
+  grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
   border: 1px solid var(--mitte-border);
   border-radius: var(--mitte-radius);
@@ -720,9 +741,12 @@ button {
 .card__figura {
   display: block;
   position: relative;
-  /* Quadrado, igual ao master: as fotos novas são de copo em pé, e um 4:3
-     cortava justamente a borda e a base — o que se olha num drink. */
+  /* Quadrado por padrão — as fotos são de copo em pé, e um 4:3 cortava a
+     borda e a base. Mas `min-height: 0` deixa a linha elástica encolhê-lo
+     quando o nome precisa de mais uma linha, o que mantém a altura do card
+     constante sem cortar texto. */
   aspect-ratio: 1;
+  min-height: 0;
   background: radial-gradient(circle at 50% 35%, var(--mitte-bg-elev-2), var(--mitte-bg));
   overflow: hidden;
 }
@@ -782,16 +806,14 @@ button {
   letter-spacing: .02em;
   text-transform: uppercase;
   line-height: 1.22;
-  text-wrap: balance;
+  /* `pretty` e não `balance`: em duas ou três linhas o balance deixa a
+     última linha com uma palavra solta; o pretty só evita a viúva. */
+  text-wrap: pretty;
   overflow-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-@media (min-width: 48rem) {
-  .card__nome { -webkit-line-clamp: 3; }
+  /* Sem line-clamp: nome cortado com reticências num cardápio é o pior dos
+     dois mundos — ocupa o espaço e não informa. A altura quem absorve é a
+     foto, pela linha elástica do .card. */
+  hyphens: none;
 }
 
 /* No celular a descrição sai do card: ela é o que impede a pessoa de ver a
@@ -1013,12 +1035,10 @@ button {
   letter-spacing: .01em;
   text-transform: uppercase;
   line-height: 1.2;
-  text-wrap: balance;
+  text-wrap: pretty;
   overflow-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+  /* Também sem corte aqui: as três sugestões ficam da altura do nome mais
+     longo, que é o que a grade de 3 colunas já faz sozinha. */
 }
 
 .acompanha__preco {
@@ -1068,6 +1088,12 @@ body.totem .categoria__nome { font-size: 1.15rem; }
 body.totem .categorias__coluna { max-height: 64rem; }
 /* Na totem o cliente está a um braço de distância, não a 30 cm: cards grandes,
    poucos por linha. O teto em rem evita cards gigantes numa totem deitada. */
+@media (min-width: 48rem) {
+  .itens__rolagem { align-content: safe center; }
+}
+
+body.totem .itens__rolagem { align-content: safe center; }
+
 body.totem .itens__grade {
   /* 27vw em vez de 30vw: numa totem de 1080 em pé isso é a diferença entre
      duas e três colunas, e entre 2,3 e 1,5 telas de rolagem na maior aba. */

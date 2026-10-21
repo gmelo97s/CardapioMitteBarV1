@@ -61,6 +61,10 @@ async function iniciar() {
 
   el.campoBusca.addEventListener("input", () => buscar(el.campoBusca.value));
   demoDigitacao();
+
+  /* A barra do navegador no celular entra e sai durante a rolagem e muda a
+     altura útil; sem remedir, a terceira linha passa a vazar meia altura. */
+  addEventListener("resize", medirGrade);
   el.limparBusca.addEventListener("click", () => {
     el.campoBusca.value = "";
     buscar("");
@@ -152,6 +156,32 @@ function montarCategorias() {
 
 function montarItens(itens) {
   el.gradeItens.replaceChildren(...itens.map((item, i) => cardDoItem(item, i)));
+  medirGrade();
+}
+
+/* No celular a tela mostra exatamente 6 cards — 3 linhas de 2 — sem sobra em
+   cima nem embaixo. A altura da linha não sai de um cálculo em CSS porque
+   depende da barra do navegador, que entra e sai durante a rolagem e muda a
+   altura útil em dezenas de pixels. Então é medida aqui, do elemento real, e
+   reposta a cada resize. O CSS tem `auto` como reserva. */
+const LINHAS_VISIVEIS = 3;
+
+function medirGrade() {
+  if (!el.rolagemItens || !el.gradeItens) return;
+  if (matchMedia("(min-width: 48rem)").matches || document.body.classList.contains("totem")) {
+    el.gradeItens.style.removeProperty("--linha");
+    return;
+  }
+  const r = getComputedStyle(el.rolagemItens);
+  const vao = parseFloat(getComputedStyle(el.gradeItens).rowGap) || 0;
+  /* Conta a partir da altura VISÍVEL, não do miolo com o padding de baixo:
+     o padding de baixo só existe no fim da lista, não entre uma rolagem e a
+     seguinte. Descontando um vão no fim, a terceira linha termina um respiro
+     antes da borda e a quarta fica inteira fora da tela — que é a diferença
+     entre ver 6 cards e ver 6 cards e meio. */
+  const util = el.rolagemItens.clientHeight - parseFloat(r.paddingTop) - vao;
+  const linha = (util - vao * (LINHAS_VISIVEIS - 1)) / LINHAS_VISIVEIS;
+  if (linha > 0) el.gradeItens.style.setProperty("--linha", `${linha}px`);
 }
 
 /* `aba` só vem na busca: ali os resultados atravessam o cardápio inteiro e o

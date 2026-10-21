@@ -25,19 +25,22 @@
           "nome": "Heineken Lata 350ml",
           "preco": 18.0,
           "descricao": "Lager holandesa, lata 350ml gelada.",
-          "slug": "heineken-lata-350ml"
+          "slug": "heineken-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Corona Lata 350ml",
           "preco": 18.0,
           "descricao": "Cerveja mexicana puro malte, lata 350ml gelada.",
-          "slug": "corona-lata-350ml"
+          "slug": "corona-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Corona Zero Lata 350ml",
           "preco": 20.0,
           "descricao": "Corona sem álcool, lata 350ml gelada.",
-          "slug": "corona-zero-lata-350ml"
+          "slug": "corona-zero-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Stella Artois Lata 350ml",
@@ -49,7 +52,8 @@
           "nome": "Combo 4 Heineken Lata 350ml",
           "preco": 67.0,
           "descricao": "Quatro latas de Heineken 350ml geladas.",
-          "slug": "combo-4-heineken-lata-350ml"
+          "slug": "combo-4-heineken-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Combo 4 Corona Lata 350ml",
@@ -201,7 +205,8 @@
           "nome": "Coca-Cola Lata",
           "preco": 8.0,
           "descricao": "Refrigerante de cola gelado, lata.",
-          "slug": "coca-cola-lata"
+          "slug": "coca-cola-lata",
+          "imagem": true
         },
         {
           "nome": "Coca-Cola Zero Lata",
@@ -231,7 +236,8 @@
           "nome": "Água Tônica Antarctica Zero Lata",
           "preco": 8.0,
           "descricao": "Água tônica sem açúcar, lata.",
-          "slug": "agua-tonica-antarctica-zero-lata"
+          "slug": "agua-tonica-antarctica-zero-lata",
+          "imagem": true
         },
         {
           "nome": "Energético Red Bull Tradicional Lata",
@@ -249,19 +255,22 @@
           "nome": "Energético Red Bull Tropical Lata",
           "preco": 20.0,
           "descricao": "Energético Red Bull, edição Tropical.",
-          "slug": "energetico-red-bull-tropical-lata"
+          "slug": "energetico-red-bull-tropical-lata",
+          "imagem": true
         },
         {
           "nome": "Energético Red Bull Morango e Pêssego Lata",
           "preco": 20.0,
           "descricao": "Energético Red Bull, edição Morango e Pêssego.",
-          "slug": "energetico-red-bull-morango-e-pessego-lata"
+          "slug": "energetico-red-bull-morango-e-pessego-lata",
+          "imagem": true
         },
         {
           "nome": "Energético Red Bull Melancia Lata",
           "preco": 20.0,
           "descricao": "Energético Red Bull, edição Melancia.",
-          "slug": "energetico-red-bull-melancia-lata"
+          "slug": "energetico-red-bull-melancia-lata",
+          "imagem": true
         },
         {
           "nome": "Halls Preto ou Verde",
@@ -843,7 +852,8 @@
           "nome": "Jambuzera — Dose 45ml",
           "preco": 24.0,
           "descricao": "Cachaça de jambu, dose pura ou com gelo.",
-          "slug": "jambuzera-dose-45ml"
+          "slug": "jambuzera-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "José Cuervo Ouro — Dose 45ml",

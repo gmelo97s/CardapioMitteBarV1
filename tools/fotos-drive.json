@@ -39,7 +39,13 @@
     "tinto-de-verano": "tinto veran.png",
     "tropical-passion": "TROPICAL PASSION.png",
     "hungarian-poison": "VENENO HÚNGARO.png",
-    "zero-b": "ZERO BALLA.png"
+    "zero-b": "ZERO BALLA.png",
+    "heineken-lata-350ml": "2424.png",
+    "combo-4-heineken-lata-350ml": "33.png",
+    "corona-lata-350ml": "32323.png",
+    "corona-zero-lata-350ml": "323.JPG",
+    "agua-tonica-antarctica-zero-lata": "2424434.png",
+    "combo-3-beats-lata": "098.png"
   },
   "fileira_de_latas": {
     "arquivo": "latas_bebidas prontas.png",
@@ -88,11 +94,6 @@
       "skol-beats-red-mix-269ml": [
         "beats-red-mix"
       ],
-      "combo-3-beats-lata": [
-        "beats-tropical",
-        "beats-senses",
-        "beats-red-mix"
-      ],
       "lambe-lambe-tangerina-limao-e-sal-355ml": [
         "lambe-tangerina"
       ],
@@ -124,5 +125,13 @@
         "xeque-mate"
       ]
     }
+  },
+  "pasta_produtos": "OneDrive do bar, FOTOS TOTEM DE PRODUTOS (MITTE BAR / PONTO NOVO)",
+  "produtos_no_branco": {
+    "coca-cola-lata": "023.JPG",
+    "jambuzera-dose-45ml": "02323.JPG",
+    "energetico-red-bull-melancia-lata": "232323.JPG",
+    "energetico-red-bull-tropical-lata": "24355.JPG",
+    "energetico-red-bull-morango-e-pessego-lata": "34324234.JPG"
   }
 }
