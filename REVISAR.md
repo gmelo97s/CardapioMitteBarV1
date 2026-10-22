@@ -482,11 +482,18 @@ A descrição ainda é um palpite — "Leque do Mitte, para dançar sem derreter
 a mesma do Leque Mitte Bar. Dois leques com a mesma frase e preços diferentes
 (R$ 60 e R$ 32) pedem uma palavra do bar sobre o que distingue os dois.
 
-### Party e Eco Bag continuam sem foto
+### Party e Eco Bag entraram — e o cardápio ficou completo
 
-As fotos existem — o bar mandou o leque laranja-e-rosa sobre o mármore e a
-eco bag sobre a cortina roxa —, mas chegaram nesta sessão só como imagem na
-conversa, não como arquivo que o pipeline consiga abrir. Reenviadas como
-anexo, as duas entram em uma rodada: a eco bag pelo caminho das fotos de bar,
-que preserva o fundo (a cortina roxa é da identidade), e o leque pelo recorte
-sobre o degradê escuro, porque o mármore do piso não acrescenta nada.
+As duas vieram pelo caminho que preserva o fundo. O mármore escuro sob o
+leque e a cortina roxa atrás da eco bag não são sobra de cenário: são as duas
+fotos de estúdio do próprio bar, e o fundo delas é a identidade. Recortar
+teria trocado isso por um degradê genérico.
+
+**Com elas, os 115 itens do cardápio têm foto.**
+
+### A Ballantine's perdeu o copo
+
+Quando as cinco garrafas novas entraram, a aba Doses ficou com dois tipos de
+composição: cinco só com a garrafa e três com o copo de dose ao lado. O bar
+mandou a Ballantine's sozinha, que entrou pelo mesmo caminho das outras
+cinco. Sobrou **só o Absolut** com o copo — uma foto resolve.

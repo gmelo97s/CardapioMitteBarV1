@@ -46,7 +46,9 @@
     "sunshine-citrus": "BALLENTINES  SUNSHINE.jpg",
     "taca-de-espumante": "ESPUMANTE.jpeg",
     "taca-de-vinho": "VINHO BRANCO.jpeg",
-    "caipirinha-saque": "CAIPIRINHA SAQUE.webp"
+    "caipirinha-saque": "CAIPIRINHA SAQUE.webp",
+    "party": "LEQUE PARTY.jpg",
+    "eco-bag-mitte": "ECO BAG.jpg"
   },
   "fileira_de_latas": {
     "arquivo": "latas_bebidas prontas.png",
@@ -163,7 +165,6 @@
     "halls-preto-ou-verde": "Generated Image November 15, 2025 - 8_30PM.png",
     "trident-verde-ou-azul": "4565477.png",
     "absolut-dose-45ml": "absolut.png",
-    "ballantine-s-sunshine-dose-45ml": "BALLENTINES.png",
     "batida-de-jambuzera": "jambuzera.png",
     "garrafa-espumante-brut-salton-750ml": "brut.jpg",
     "garrafa-espumante-moscatel-salton-750ml": "moscatel.jpg",
@@ -187,7 +188,8 @@
     "jack-daniel-s-dose-45ml": "JACK DANIELS.webp",
     "jose-cuervo-ouro-dose-45ml": "JOSE CUERVO.jpg",
     "red-label-dose-45ml": "RED LABEL.webp",
-    "black-label-dose-45ml": "BLACK LABEL.jpg"
+    "black-label-dose-45ml": "BLACK LABEL.jpg",
+    "ballantine-s-sunshine-dose-45ml": "BALLANTINES SUNSHINE.jpg"
   },
   "ajustes": {
     "jambuzera-dose-45ml": {

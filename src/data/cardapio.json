@@ -312,15 +312,16 @@
         {
           "nome": "Party",
           "preco": 32.0,
-          "descricao": "Leque do Mitte, para dançar sem derreter.",
           "slug": "party",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Eco Bag Mitte",
           "preco": 40.0,
           "descricao": "Sacola de algodão com a marca do Mitte.",
-          "slug": "eco-bag-mitte"
+          "slug": "eco-bag-mitte",
+          "imagem": true
         }
       ]
     },
