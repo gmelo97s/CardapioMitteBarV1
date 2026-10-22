@@ -59,20 +59,23 @@
           "nome": "Combo 4 Corona Lata 350ml",
           "preco": 67.0,
           "descricao": "Quatro latas de Corona Extra 350ml geladas.",
-          "slug": "combo-4-corona-lata-350ml"
+          "slug": "combo-4-corona-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Combo 4 Stella Artois Lata 350ml",
           "preco": 63.0,
           "descricao": "Quatro latas de Stella Artois 350ml geladas.",
-          "slug": "combo-4-stella-artois-lata-350ml"
+          "slug": "combo-4-stella-artois-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Chopp Vinho Draft 600ml",
           "preco": 25.0,
           "descricao": "Garrafa 600ml gelada.",
           "slug": "chopp-vinho-draft-600ml",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Xeque Mate Lata 362ml",
@@ -193,13 +196,15 @@
           "nome": "Água sem Gás Lindoya 510ml",
           "preco": 6.0,
           "descricao": "Água mineral natural gelada.",
-          "slug": "agua-sem-gas-lindoya-510ml"
+          "slug": "agua-sem-gas-lindoya-510ml",
+          "imagem": true
         },
         {
           "nome": "Água com Gás Lindoya 510ml",
           "preco": 7.0,
           "descricao": "Água mineral com gás gelada.",
-          "slug": "agua-com-gas-lindoya-510ml"
+          "slug": "agua-com-gas-lindoya-510ml",
+          "imagem": true
         },
         {
           "nome": "Coca-Cola Lata",
@@ -212,25 +217,29 @@
           "nome": "Coca-Cola Zero Lata",
           "preco": 9.0,
           "descricao": "Refrigerante de cola sem açúcar, lata.",
-          "slug": "coca-cola-zero-lata"
+          "slug": "coca-cola-zero-lata",
+          "imagem": true
         },
         {
           "nome": "Guaraná Antarctica Lata",
           "preco": 8.0,
           "descricao": "Refrigerante de guaraná gelado, lata.",
-          "slug": "guarana-antarctica-lata"
+          "slug": "guarana-antarctica-lata",
+          "imagem": true
         },
         {
           "nome": "Schweppes Citrus Lata",
           "preco": 8.0,
           "descricao": "Refrigerante cítrico amargo, lata.",
-          "slug": "schweppes-citrus-lata"
+          "slug": "schweppes-citrus-lata",
+          "imagem": true
         },
         {
           "nome": "Água Tônica Antarctica Lata",
           "preco": 8.0,
           "descricao": "Água tônica gelada, lata.",
-          "slug": "agua-tonica-antarctica-lata"
+          "slug": "agua-tonica-antarctica-lata",
+          "imagem": true
         },
         {
           "nome": "Água Tônica Antarctica Zero Lata",
@@ -243,13 +252,15 @@
           "nome": "Energético Red Bull Tradicional Lata",
           "preco": 20.0,
           "descricao": "Energético Red Bull, sabor original.",
-          "slug": "energetico-red-bull-tradicional-lata"
+          "slug": "energetico-red-bull-tradicional-lata",
+          "imagem": true
         },
         {
           "nome": "Energético Red Bull Zero Açúcar Lata",
           "preco": 22.0,
           "descricao": "Energético Red Bull sem açúcar.",
-          "slug": "energetico-red-bull-zero-acucar-lata"
+          "slug": "energetico-red-bull-zero-acucar-lata",
+          "imagem": true
         },
         {
           "nome": "Energético Red Bull Tropical Lata",
@@ -276,19 +287,22 @@
           "nome": "Halls Preto ou Verde",
           "preco": 6.0,
           "descricao": "Drops de menta — preto ou verde.",
-          "slug": "halls-preto-ou-verde"
+          "slug": "halls-preto-ou-verde",
+          "imagem": true
         },
         {
           "nome": "Trident Verde ou Azul",
           "preco": 6.0,
           "descricao": "Goma de mascar sem açúcar — verde ou azul.",
-          "slug": "trident-verde-ou-azul"
+          "slug": "trident-verde-ou-azul",
+          "imagem": true
         },
         {
           "nome": "Leque Mitte Bar",
           "preco": 60.0,
           "descricao": "Leque do Mitte, para dançar sem derreter.",
-          "slug": "leque-mitte-bar"
+          "slug": "leque-mitte-bar",
+          "imagem": true
         },
         {
           "nome": "Eco Bag Mitte",
@@ -307,62 +321,72 @@
           "nome": "Empanada Cebola e Queijo — Campestre",
           "preco": 19.0,
           "descricao": "Empanada assada recheada com cebola e queijo.",
-          "slug": "empanada-cebola-e-queijo-campestre"
+          "slug": "empanada-cebola-e-queijo-campestre",
+          "imagem": true
         },
         {
           "nome": "Empanada Queijo e Tomate — Caprese",
           "preco": 19.0,
           "descricao": "Empanada assada recheada com queijo, tomate e manjericão.",
-          "slug": "empanada-queijo-e-tomate-caprese"
+          "slug": "empanada-queijo-e-tomate-caprese",
+          "imagem": true
         },
         {
           "nome": "Empanada Carne e Azeitona — Platense",
           "preco": 19.0,
           "descricao": "Empanada assada recheada com carne e azeitona.",
-          "slug": "empanada-carne-e-azeitona-platense"
+          "slug": "empanada-carne-e-azeitona-platense",
+          "imagem": true
         },
         {
           "nome": "Porção Mini Bolinha de Queijo",
           "preco": 32.0,
           "descricao": "Porção de mini bolinhas de queijo fritas.",
-          "slug": "porcao-mini-bolinha-de-queijo"
+          "slug": "porcao-mini-bolinha-de-queijo",
+          "imagem": true
         },
         {
           "nome": "Porção Mini Coxinha de Frango e Requeijão",
           "preco": 34.0,
           "descricao": "Porção de mini coxinhas de frango com requeijão.",
-          "slug": "porcao-mini-coxinha-de-frango-e-requeijao"
+          "slug": "porcao-mini-coxinha-de-frango-e-requeijao",
+          "imagem": true
         },
         {
           "nome": "Porção Mini Kibe",
           "preco": 34.0,
           "descricao": "Porção de mini kibes fritos.",
-          "slug": "porcao-mini-kibe"
+          "slug": "porcao-mini-kibe",
+          "imagem": true
         },
         {
           "nome": "Porção Mini Enroladinho Presunto e Queijo",
           "preco": 32.0,
           "descricao": "Porção de mini enroladinhos de presunto e queijo.",
-          "slug": "porcao-mini-enroladinho-presunto-e-queijo"
+          "slug": "porcao-mini-enroladinho-presunto-e-queijo",
+          "imagem": true
         },
         {
           "nome": "Porção Esfirra de Carne Fechada",
           "preco": 36.0,
           "descricao": "Porção de esfirras fechadas de carne.",
-          "slug": "porcao-esfirra-de-carne-fechada"
+          "slug": "porcao-esfirra-de-carne-fechada",
+          "imagem": true
         },
         {
           "nome": "Porção Esfirra de Queijo Fechada",
           "preco": 36.0,
           "descricao": "Porção de esfirras fechadas de queijo.",
-          "slug": "porcao-esfirra-de-queijo-fechada"
+          "slug": "porcao-esfirra-de-queijo-fechada",
+          "imagem": true
         },
         {
           "nome": "Torta de Frango",
           "preco": 19.0,
           "descricao": "Fatia de torta de frango.",
           "slug": "torta-de-frango",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Coxinha de Jaca",
@@ -626,7 +650,8 @@
           "preco": 29.0,
           "descricao": "Batida cremosa com cachaça de jambu.",
           "slug": "batida-de-jambuzera",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Blue Coconut",
@@ -653,13 +678,15 @@
           "nome": "Caipirinha Vodca Absolut",
           "preco": 36.0,
           "descricao": "Absolut, limão e açúcar.",
-          "slug": "caipirinha-vodca-absolut"
+          "slug": "caipirinha-vodca-absolut",
+          "imagem": true
         },
         {
           "nome": "Caipirinha Cachaça",
           "preco": 30.0,
           "descricao": "Cachaça, limão e açúcar.",
-          "slug": "caipirinha-cachaca"
+          "slug": "caipirinha-cachaca",
+          "imagem": true
         },
         {
           "nome": "Caipirinha Saquê",
@@ -671,7 +698,8 @@
           "nome": "Caipirinha Jambu",
           "preco": 30.0,
           "descricao": "Cachaça de jambu, limão e açúcar.",
-          "slug": "caipirinha-jambu"
+          "slug": "caipirinha-jambu",
+          "imagem": true
         }
       ]
     },
@@ -733,7 +761,8 @@
           "nome": "Taça Mimosa",
           "preco": 28.0,
           "descricao": "Espumante com suco de laranja.",
-          "slug": "taca-mimosa"
+          "slug": "taca-mimosa",
+          "imagem": true
         },
         {
           "nome": "Hungarian Poison",
@@ -753,7 +782,8 @@
           "nome": "Sunshine Citrus",
           "preco": 34.0,
           "descricao": "Ballantine's Sunshine, suco de laranja e limão siciliano.",
-          "slug": "sunshine-citrus"
+          "slug": "sunshine-citrus",
+          "imagem": true
         },
         {
           "nome": "Zero B",
@@ -773,37 +803,43 @@
           "nome": "Garrafa Espumante Brut Salton 750ml",
           "preco": 78.0,
           "descricao": "Espumante nacional seco, garrafa 750ml.",
-          "slug": "garrafa-espumante-brut-salton-750ml"
+          "slug": "garrafa-espumante-brut-salton-750ml",
+          "imagem": true
         },
         {
           "nome": "Garrafa Espumante Moscatel Salton 750ml",
           "preco": 78.0,
           "descricao": "Espumante nacional doce, garrafa 750ml.",
-          "slug": "garrafa-espumante-moscatel-salton-750ml"
+          "slug": "garrafa-espumante-moscatel-salton-750ml",
+          "imagem": true
         },
         {
           "nome": "Taça de Espumante",
           "preco": 28.0,
           "descricao": "Taça de espumante nacional.",
-          "slug": "taca-de-espumante"
+          "slug": "taca-de-espumante",
+          "imagem": true
         },
         {
           "nome": "Garrafa Vinho Branco Sauvignon Chilano",
           "preco": 64.0,
           "descricao": "Vinho branco chileno Sauvignon Blanc, garrafa 750ml.",
-          "slug": "garrafa-vinho-branco-sauvignon-chilano"
+          "slug": "garrafa-vinho-branco-sauvignon-chilano",
+          "imagem": true
         },
         {
           "nome": "Garrafa Vinho Tinto Carmenere Chilano",
           "preco": 64.0,
           "descricao": "Vinho tinto chileno Carménère, garrafa 750ml.",
-          "slug": "garrafa-vinho-tinto-carmenere-chilano"
+          "slug": "garrafa-vinho-tinto-carmenere-chilano",
+          "imagem": true
         },
         {
           "nome": "Taça de Vinho",
           "preco": 26.0,
           "descricao": "Taça de vinho da casa.",
-          "slug": "taca-de-vinho"
+          "slug": "taca-de-vinho",
+          "imagem": true
         }
       ]
     },
@@ -816,37 +852,43 @@
           "nome": "Absolut — Dose 45ml",
           "preco": 24.0,
           "descricao": "Vodca sueca, dose pura ou com gelo.",
-          "slug": "absolut-dose-45ml"
+          "slug": "absolut-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Ballantine's Sunshine — Dose 45ml",
           "preco": 26.0,
           "descricao": "Whisky escocês cítrico, dose pura ou com gelo.",
-          "slug": "ballantine-s-sunshine-dose-45ml"
+          "slug": "ballantine-s-sunshine-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Black Label — Dose 45ml",
           "preco": 26.0,
           "descricao": "Johnnie Walker Black Label, dose pura ou com gelo.",
-          "slug": "black-label-dose-45ml"
+          "slug": "black-label-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Chivas — Dose 45ml",
           "preco": 26.0,
           "descricao": "Chivas Regal, dose pura ou com gelo.",
-          "slug": "chivas-dose-45ml"
+          "slug": "chivas-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Red Label — Dose 45ml",
           "preco": 24.0,
           "descricao": "Johnnie Walker Red Label, dose pura ou com gelo.",
-          "slug": "red-label-dose-45ml"
+          "slug": "red-label-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Jack Daniel's — Dose 45ml",
           "preco": 26.0,
           "descricao": "Whiskey Tennessee, dose pura ou com gelo.",
-          "slug": "jack-daniel-s-dose-45ml"
+          "slug": "jack-daniel-s-dose-45ml",
+          "imagem": true
         },
         {
           "nome": "Jambuzera — Dose 45ml",
@@ -859,7 +901,8 @@
           "nome": "José Cuervo Ouro — Dose 45ml",
           "preco": 24.0,
           "descricao": "Tequila ouro, dose pura ou com gelo.",
-          "slug": "jose-cuervo-ouro-dose-45ml"
+          "slug": "jose-cuervo-ouro-dose-45ml",
+          "imagem": true
         }
       ]
     }

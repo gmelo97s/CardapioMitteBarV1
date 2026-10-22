@@ -39,7 +39,22 @@
     "tropical-passion": "TROPICAL PASSION.png",
     "hungarian-poison": "VENENO HÚNGARO.png",
     "zero-b": "ZERO BALLA.png",
-    "combo-3-beats-lata": "098.png"
+    "combo-3-beats-lata": "098.png",
+    "empanada-cebola-e-queijo-campestre": "EMPANADA CAMPESTRE.png",
+    "empanada-queijo-e-tomate-caprese": "EMPANADA CAPRESE.png",
+    "empanada-carne-e-azeitona-platense": "EMPANADA PLATENSE.png",
+    "porcao-mini-bolinha-de-queijo": "BOLINHA DE QUEIJO.png",
+    "porcao-mini-coxinha-de-frango-e-requeijao": "COXINHA DE FRANGO.png",
+    "porcao-mini-kibe": "CROQUETE.png",
+    "porcao-mini-enroladinho-presunto-e-queijo": "PRESUNTO E QUEIJO.png",
+    "porcao-esfirra-de-carne-fechada": "ESFIRRA.png",
+    "porcao-esfirra-de-queijo-fechada": "ESFIRRA.png",
+    "torta-de-frango": "TORTA FRANGO.png",
+    "caipirinha-cachaca": "CAIPIRINHA DE LIMÃO TAITI.png",
+    "caipirinha-vodca-absolut": "CAIPIRINHA DE SICILIANO.png",
+    "sunshine-citrus": "BALLENTINES  SUNSHINE.jpg",
+    "taca-de-espumante": "ESPUMANTE.jpeg",
+    "taca-de-vinho": "VINHO BRANCO.jpeg"
   },
   "fileira_de_latas": {
     "arquivo": "latas_bebidas prontas.png",
@@ -120,13 +135,14 @@
       ]
     }
   },
-  "pasta_produtos": "OneDrive do bar, FOTOS TOTEM DE PRODUTOS (MITTE BAR / PONTO NOVO)",
+  "pasta_produtos": "OneDrive do bar, FOTOS TOTEM DE PRODUTOS (MITTE BAR / PONTO NOVO). Os nomes de arquivo de lá são quase todos ilegíveis ('2424434.png'); o casamento foto→item saiu de olhar as fotos, não do nome.",
   "produtos_no_branco": {
     "coca-cola-lata": "023.JPG",
     "jambuzera-dose-45ml": "02323.JPG",
     "energetico-red-bull-melancia-lata": "232323.JPG",
     "energetico-red-bull-tropical-lata": "24355.JPG",
-    "energetico-red-bull-morango-e-pessego-lata": "34324234.JPG"
+    "energetico-red-bull-morango-e-pessego-lata": "34324234.JPG",
+    "leque-mitte-bar": "LEQUE.PNG"
   },
   "fundo_para_trocar": {
     "heineken-lata-350ml": "2424.png",
@@ -134,7 +150,34 @@
     "corona-lata-350ml": "32323.png",
     "corona-zero-lata-350ml": "323.JPG",
     "agua-tonica-antarctica-zero-lata": "2424434.png",
-    "mojito": "MOJITO.jpeg"
+    "mojito": "MOJITO.jpeg",
+    "combo-4-corona-lata-350ml": "4556.png",
+    "combo-4-stella-artois-lata-350ml": "7888.png",
+    "chopp-vinho-draft-600ml": "choop vinho.JPG",
+    "schweppes-citrus-lata": "4554.png",
+    "agua-tonica-antarctica-lata": "78797.png",
+    "energetico-red-bull-tradicional-lata": "46546546.png",
+    "energetico-red-bull-zero-acucar-lata": "987987.png",
+    "coca-cola-zero-lata": "Generated Image November 15, 2025 - 7_11PM.png",
+    "guarana-antarctica-lata": "Generated Image November 15, 2025 - 7_14PM.png",
+    "agua-sem-gas-lindoya-510ml": "Generated Image November 15, 2025 - 7_35PM.png",
+    "agua-com-gas-lindoya-510ml": "Generated Image November 15, 2025 - 7_40PM.png",
+    "halls-preto-ou-verde": "Generated Image November 15, 2025 - 8_30PM.png",
+    "trident-verde-ou-azul": "4565477.png",
+    "absolut-dose-45ml": "absolut.png",
+    "ballantine-s-sunshine-dose-45ml": "BALLENTINES.png",
+    "black-label-dose-45ml": "black.png",
+    "chivas-dose-45ml": "chivas.png",
+    "jose-cuervo-ouro-dose-45ml": "jose cuervo.png",
+    "red-label-dose-45ml": "red.png",
+    "jack-daniel-s-dose-45ml": "jack.png",
+    "batida-de-jambuzera": "jambuzera.png",
+    "garrafa-espumante-brut-salton-750ml": "brut.jpg",
+    "garrafa-espumante-moscatel-salton-750ml": "moscatel.jpg",
+    "garrafa-vinho-branco-sauvignon-chilano": "suvignon.jpg",
+    "garrafa-vinho-tinto-carmenere-chilano": "carmenere.jpg",
+    "caipirinha-jambu": "jambu.jpg",
+    "taca-mimosa": "mimosa.jpg"
   },
   "ajustes": {
     "mojito": {
@@ -147,6 +190,22 @@
     },
     "espresso-martini": {
       "margem": 0.06
+    },
+    "jack-daniel-s-dose-45ml": {
+      "recorte": [
+        0.0,
+        0.0,
+        0.66,
+        1.0
+      ]
+    },
+    "batida-de-jambuzera": {
+      "recorte": [
+        0.0,
+        0.0,
+        0.64,
+        1.0
+      ]
     }
   }
 }

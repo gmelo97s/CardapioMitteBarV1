@@ -365,6 +365,22 @@ def main() -> int:
     def salvar(slug: str, im: Image.Image) -> None:
         im.save(MASTERS / f"{slug}.webp", "WEBP", quality=QUALIDADE, method=6)
 
+    def aparar(im: Image.Image, a: dict) -> Image.Image:
+        """Corte na foto crua, antes de qualquer recorte de fundo.
+
+        Serve para tirar da cena o que o recorte não dá conta: o copo de dose
+        vazio ao lado da garrafa é vidro transparente sobre o painel verde, e
+        o modelo devolve cacos e farelos flutuando. Cortar fora é mais honesto
+        do que tentar salvar — o card fica a garrafa, inteira.
+
+        "recorte": [x0, y0, x1, y1] em fração da foto.
+        """
+        r = a.get("recorte")
+        if not r:
+            return im
+        w, h = im.size
+        return im.crop((int(r[0] * w), int(r[1] * h), int(r[2] * w), int(r[3] * h)))
+
     # Fotos de catálogo recortadas sobre branco, do Drive do bar.
     for slug, arquivo in sorted(mapa.get("produtos_no_branco", {}).items()):
         origem = BRUTAS / arquivo
@@ -373,7 +389,8 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            corte = recortar_do_branco(im, limiar=a.get("limiar", 238), desvio=a.get("desvio", 12))
+            corte = recortar_do_branco(aparar(im, a), limiar=a.get("limiar", 238),
+                                       desvio=a.get("desvio", 12))
         salvar(slug, montar_latas([corte], altura=a.get("altura", 0.82)))
         feitos += 1
 
@@ -385,7 +402,7 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            salvar(slug, montar_latas([recortar_do_fundo(im)],
+            salvar(slug, montar_latas([recortar_do_fundo(aparar(im, a))],
                                       altura=a.get("altura", 0.80),
                                       largura_max=a.get("largura_max", 0.90)))
         feitos += 1
@@ -397,7 +414,7 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            salvar(slug, quadrado(im, margem=a.get("margem", MARGEM)))
+            salvar(slug, quadrado(aparar(im, a), margem=a.get("margem", MARGEM)))
         feitos += 1
 
     if fileira:

@@ -35,6 +35,11 @@ diferente. Se o rótulo importar, mande a foto certa.
 
 ## 2. Itens sem foto (55) — e o motivo de cada um
 
+> **Desatualizado — veja a seção 7.** A pasta do OneDrive tem 151 fotos, não
+> 30: as outras 121 estavam com nomes ilegíveis (`2424434.png`, `43434.JPG`) e
+> por isso não apareceram no casamento por nome. Olhando uma a uma, 43 dos 55
+> itens desta seção ganharam foto. Sobraram 12.
+
 Duas pastas foram usadas. A **NOVOS DRINKS** (Google Drive) trouxe 46 fotos de
 drink no balcão e um PNG com uma fileira de oito latas. A **FOTOS TOTEM DE
 PRODUTOS** (OneDrive) trouxe 30 fotos de produto, metade recortada sobre branco
@@ -262,3 +267,62 @@ Caipirinhas — as duas foram para a aba Autorais, que é nova.
 planilha. Balla Jam Amora e Honey Nights saíram da aba Whisky e, se os
 palpites da seção 1 estiverem certos, são o Finest Jam e o Bi Nights dos
 Autorais — por isso a aba Whisky caiu de quatro para dois itens.
+
+---
+
+## 7. A pasta do OneDrive tinha 151 fotos, não 30 (21/10/2026)
+
+A seção 2 dizia que 45 itens não tinham foto em nenhuma das duas pastas. Não
+era bem isso: a pasta **FOTOS TOTEM DE PRODUTOS** tem 151 imagens, e o
+casamento anterior só enxergou as que tinham nome de gente. A maioria se chama
+`2424434.png`, `43434.JPG`, `87987.png` — nome de arquivo não diz nada ali.
+
+Baixei as 151, montei folhas de contato e olhei uma por uma. **43 itens
+ganharam foto**, e o cardápio foi de 60 para **103 de 115**. Entre eles, a aba
+Comidas inteira, que estava com zero.
+
+Apareceram também as fotos de quatro itens que a planilha de outubro criou e
+que a seção 2 dava como sem foto possível: `carmenere.jpg` (vinho tinto
+Chilano), `red.png` (Red Label), `jack.png` (Jack Daniel's) e
+`TORTA FRANGO.png` (Torta de Frango).
+
+### Os sete que casaram pela aparência, não pelo nome
+
+O arquivo não dizia o drink; escolhi pela foto. Vale uma olhada do bar:
+
+| Item | Foto | Por que |
+|---|---|---|
+| Caipirinha Cachaça | `CAIPIRINHA DE LIMÃO TAITI` | Limão taiti é o padrão da caipirinha de cachaça. |
+| Caipirinha Vodca Absolut | `CAIPIRINHA DE SICILIANO` | Sobrou esta caipirinha e sobrou este item. É palpite. |
+| Caipirinha Jambu | `jambu` | Taça com folha de jambu — mas é taça, e caipirinha vai em copo. |
+| Taça Mimosa | `mimosa` | Taça de espumante com laranja. |
+| Sunshine Citrus | `BALLENTINES  SUNSHINE` | Garrafa Ballantine's Sunshine ao lado do copo. |
+| Porção Mini Kibe | `CROQUETE` | São croquetes escuros, que é o que um kibe parece. |
+| Batida de Jambuzera | `jambuzera` | Garrafa de Jambuzera. A foto tinha um copo de dose ao lado; cortei. |
+
+### Duas decisões que você pode querer mudar
+
+**As seis porções fritas ficaram com o fundo do bar** — bandeirinhas de
+arco-íris atrás das esfirras, parede vermelha atrás das coxinhas. Mantive
+porque é foto da casa e o caminho `fotos` existe para isso, mas elas são bem
+mais claras que os outros cards. Se destoar demais, é mover de `fotos` para
+`fundo_para_trocar` no `tools/fotos-drive.json`. As empanadas e a torta já
+vieram sobre preto e não têm esse problema.
+
+**As 31 fotos que os dois lados tinham eu não toquei.** Onde o Drive e o
+OneDrive tinham foto do mesmo item, ficou a do Drive — é a que já passou pelo
+ajuste de fundo do commit anterior.
+
+### Sobraram 12 itens sem foto
+
+Stella Artois avulsa, os quatro Schweppes/Absolut em lata, a Eco Bag, as três
+porções veganas, Party, Caipirinha Saquê e Porn Martini. `PROMPT-GEMINI.md`
+tem o prompt e a lista pronta.
+
+### Uma armadilha que estava no `gerar-imagens.py`
+
+Ele lia o estado de foto de `_masters/`, que é gitignored. Num clone novo essa
+pasta está vazia, então rodar o script apagava o `"imagem": true` de **todos**
+os itens — os `.webp` continuavam no repo e nenhum card os pedia. Agora o
+estado sai dos próprios `.webp` de `assets/itens/`, que é o que está
+versionado. Foi exatamente o que aconteceu aqui antes de eu notar.

@@ -115,7 +115,12 @@ def main() -> int:
 
     print(f"\n{gerados} arquivos gerados a partir de {len(arquivos)} masters.")
 
-    prontos = {p.stem for p in MASTERS.iterdir() if p.suffix.lower() in EXTENSOES}
+    # O estado de foto sai dos .webp de assets/itens/, não dos masters.
+    # _masters/ é gitignored: num clone novo ele está vazio, e marcar por ele
+    # apagaria o "imagem" de todo item que já tem foto publicada — os webp
+    # continuariam no repo e nenhum card os pediria.
+    prontos = {p.name[: -len(f"-{LARGURAS[0]}.webp")]
+               for p in SAIDA.glob(f"*-{LARGURAS[0]}.webp")}
     mudou = marcar_quem_tem_foto(dados, prontos & catalogo.keys())
     if mudou:
         print(f"cardapio.json atualizado: {mudou} itens mudaram de estado de foto.")
@@ -125,8 +130,7 @@ def main() -> int:
         for s in orfaos:
             print(f"  - {s}")
 
-    feitos = {p.stem for p in MASTERS.iterdir() if p.suffix.lower() in EXTENSOES}
-    faltando = [(s, n) for s, n in catalogo.items() if s not in feitos]
+    faltando = [(s, n) for s, n in catalogo.items() if s not in prontos]
     if faltando:
         print(f"\nFaltam {len(faltando)} de {len(catalogo)} itens (mostram a inicial em neon):")
         for s, n in faltando[:15]:
