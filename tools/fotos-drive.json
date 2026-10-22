@@ -1,6 +1,6 @@
 {
   "pasta": "https://drive.google.com/drive/folders/1mSI1PvnfAaAAxo1-AzQfmh3U9OEWADWj",
-  "nota": "Baixe a pasta inteira para assets/itens/_brutas/ e rode tools/fotos-drive.py. Os nomes aqui são os do Drive, sem renomear.",
+  "nota": "Baixe a pasta do Drive e as fotos do OneDrive para assets/itens/_brutas/ e rode tools/fotos-drive.py. Os nomes aqui são os das pastas, sem renomear.",
   "fotos": {
     "aperol-spritz": "APEROL.png",
     "black-russian": "BLACK RUSSIAN.png",
@@ -54,7 +54,8 @@
     "caipirinha-vodca-absolut": "CAIPIRINHA DE SICILIANO.png",
     "sunshine-citrus": "BALLENTINES  SUNSHINE.jpg",
     "taca-de-espumante": "ESPUMANTE.jpeg",
-    "taca-de-vinho": "VINHO BRANCO.jpeg"
+    "taca-de-vinho": "VINHO BRANCO.jpeg",
+    "caipirinha-saque": "CAIPIRINHA SAQUE.webp"
   },
   "fileira_de_latas": {
     "arquivo": "latas_bebidas prontas.png",
@@ -142,7 +143,12 @@
     "energetico-red-bull-melancia-lata": "232323.JPG",
     "energetico-red-bull-tropical-lata": "24355.JPG",
     "energetico-red-bull-morango-e-pessego-lata": "34324234.JPG",
-    "leque-mitte-bar": "LEQUE.PNG"
+    "leque-mitte-bar": "LEQUE.PNG",
+    "porn-martini": "PORN MARTINI.webp",
+    "absolut-sprite-lata-269ml": "ABSOLUT SPRITE.webp",
+    "gin-tonica-schweppes-lata-269ml": "SCHWEPPES GIN TONICA.webp",
+    "gin-tonica-pink-schweppes-lata-269ml": "SCHWEPPES GIN TONICA PINK.webp",
+    "spritz-schweppes-lata-269ml": "SCHWEPPES SPRITZ.webp"
   },
   "fundo_para_trocar": {
     "heineken-lata-350ml": "2424.png",
@@ -177,19 +183,15 @@
     "garrafa-vinho-branco-sauvignon-chilano": "suvignon.jpg",
     "garrafa-vinho-tinto-carmenere-chilano": "carmenere.jpg",
     "caipirinha-jambu": "jambu.jpg",
-    "taca-mimosa": "mimosa.jpg"
+    "taca-mimosa": "mimosa.jpg",
+    "porcao-vegana-mini-bolinha-de-queijo": "VEGANA BOLINHA DE QUEIJO.jpg",
+    "porcao-vegana-mini-coxinha-de-jaca": "VEGANA COXINHA DE JACA.webp",
+    "porcao-vegana-mini-kibe": "VEGANA KIBE.jpg"
   },
   "ajustes": {
-    "mojito": {
-      "altura": 0.86
-    },
     "jambuzera-dose-45ml": {
-      "altura": 0.86,
       "limiar": 224,
       "desvio": 20
-    },
-    "espresso-martini": {
-      "margem": 0.06
     },
     "jack-daniel-s-dose-45ml": {
       "recorte": [
@@ -204,6 +206,14 @@
         0.0,
         0.0,
         0.64,
+        1.0
+      ]
+    },
+    "porcao-vegana-mini-kibe": {
+      "recorte": [
+        0.45,
+        0.0,
+        1.0,
         1.0
       ]
     }

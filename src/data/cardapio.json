@@ -165,25 +165,29 @@
           "nome": "Absolut Sprite Lata 269ml",
           "preco": 25.0,
           "descricao": "Drink pronto de vodca Absolut com Sprite.",
-          "slug": "absolut-sprite-lata-269ml"
+          "slug": "absolut-sprite-lata-269ml",
+          "imagem": true
         },
         {
           "nome": "Gin Tônica Pink Schweppes Lata 269ml",
           "preco": 22.0,
           "descricao": "Gin tônica pronto, versão pink.",
-          "slug": "gin-tonica-pink-schweppes-lata-269ml"
+          "slug": "gin-tonica-pink-schweppes-lata-269ml",
+          "imagem": true
         },
         {
           "nome": "Spritz Schweppes Lata 269ml",
           "preco": 25.0,
           "descricao": "Spritz pronto com Schweppes.",
-          "slug": "spritz-schweppes-lata-269ml"
+          "slug": "spritz-schweppes-lata-269ml",
+          "imagem": true
         },
         {
           "nome": "Gin Tônica Schweppes Lata 269ml",
           "preco": 23.0,
           "descricao": "Gin tônica pronto com Schweppes.",
-          "slug": "gin-tonica-schweppes-lata-269ml"
+          "slug": "gin-tonica-schweppes-lata-269ml",
+          "imagem": true
         }
       ]
     },
@@ -393,21 +397,24 @@
           "preco": 42.0,
           "descricao": "Porção de mini coxinhas veganas de jaca.",
           "slug": "porcao-vegana-mini-coxinha-de-jaca",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Kibe",
           "preco": 52.0,
           "descricao": "Porção de mini kibes veganos.",
           "slug": "porcao-vegana-mini-kibe",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Bolinha de Queijo",
           "preco": 42.0,
           "descricao": "Porção de mini bolinhas de queijo vegano.",
           "slug": "porcao-vegana-mini-bolinha-de-queijo",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         }
       ]
     },
@@ -692,7 +699,8 @@
           "nome": "Caipirinha Saquê",
           "preco": 30.0,
           "descricao": "Saquê, limão e açúcar.",
-          "slug": "caipirinha-saque"
+          "slug": "caipirinha-saque",
+          "imagem": true
         },
         {
           "nome": "Caipirinha Jambu",
@@ -741,7 +749,8 @@
           "preco": 39.0,
           "descricao": "Vodca, maracujá, baunilha e espumante à parte.",
           "slug": "porn-martini",
-          "confirmar": true
+          "confirmar": true,
+          "imagem": true
         },
         {
           "nome": "Tinto de Verano",

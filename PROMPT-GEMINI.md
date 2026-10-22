@@ -21,8 +21,10 @@ Recorte o produto do fundo original e recomponha a cena assim:
 
 ENQUADRAMENTO
 - Imagem quadrada, proporção 1:1, 1024×1024 pixels.
-- Produto centralizado, vertical, ocupando cerca de 80% da altura do quadro.
-- Margem livre e uniforme em volta; nada encostando ou cortando nas bordas.
+- Produto centralizado no eixo horizontal, vertical, ocupando 72% da altura
+  do quadro.
+- A base do produto encosta a 11% do fundo; o ar que sobra fica em cima.
+- Nada encostando ou cortando nas bordas.
 - Câmera na altura do meio do produto, lente de 85mm, sem distorção de
   perspectiva, sem ângulo de cima nem de baixo.
 
@@ -124,34 +126,23 @@ Quando um copo ou garrafa aparece com algo ao lado que o recorte não dá conta
 
 ---
 
-## Os 12 itens que ainda faltam (21/10/2026)
+## Os 3 itens que ainda faltam (22/10/2026)
 
-### Latas
 - [ ] `stella-artois-lata-350ml.png` — Stella Artois Lata 350ml
-- [ ] `absolut-sprite-lata-269ml.png` — Absolut Sprite Lata 269ml
-- [ ] `gin-tonica-pink-schweppes-lata-269ml.png` — Gin Tônica Pink Schweppes Lata 269ml
-- [ ] `spritz-schweppes-lata-269ml.png` — Spritz Schweppes Lata 269ml
-- [ ] `gin-tonica-schweppes-lata-269ml.png` — Gin Tônica Schweppes Lata 269ml
-
-### Outros
 - [ ] `eco-bag-mitte.png` — Eco Bag Mitte
-
-### Comidas
-- [ ] `porcao-vegana-mini-coxinha-de-jaca.png` — Porção Vegana Mini Coxinha de Jaca
-- [ ] `porcao-vegana-mini-kibe.png` — Porção Vegana Mini Kibe
-- [ ] `porcao-vegana-mini-bolinha-de-queijo.png` — Porção Vegana Mini Bolinha de Queijo
-
-### Autorais
 - [ ] `party.png` — Party
 
-### Caipirinhas
-- [ ] `caipirinha-saque.png` — Caipirinha Saquê
+A Stella avulsa é foto de e-commerce com fundo branco, seção
+`produtos_no_branco` — e a mesma foto resolve o Combo 4, que o script monta
+sozinho. A Eco Bag é foto no bar. O **Party** talvez nem precise de foto nova:
+sobrou `THUG LIFE.png` no Drive, sem item correspondente na planilha; se for o
+mesmo drink, é uma linha em `tools/fotos-drive.json`.
 
-### Tropicais
-- [ ] `porn-martini.png` — Porn Martini
+---
 
-Os quatro Schweppes/Absolut em lata e a Stella avulsa são produto de
-prateleira: foto de e-commerce com fundo branco no Google, seção
-`produtos_no_branco`, e o prompt acima resolve. As três porções veganas, a
-Caipirinha Saquê, o Porn Martini e o Party são da casa — ou fotografa no bar,
-ou gera.
+## O enquadramento não é mais com você
+
+Desde 22/10/2026 o `fotos-drive.py` reenquadra tudo sozinho: acha o produto na
+foto, calcula o quadrado de 72% de altura com a base a 11% do fundo e monta.
+Uma foto que chegue fora dessa proporção entra no padrão do mesmo jeito — o
+que o prompt pede acima só facilita a vida do recorte.

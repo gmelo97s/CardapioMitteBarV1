@@ -326,3 +326,50 @@ pasta está vazia, então rodar o script apagava o `"imagem": true` de **todos**
 os itens — os `.webp` continuavam no repo e nenhum card os pedia. Agora o
 estado sai dos próprios `.webp` de `assets/itens/`, que é o que está
 versionado. Foi exatamente o que aconteceu aqui antes de eu notar.
+
+---
+
+## 8. Enquadramento igual em todos os cards (22/10/2026)
+
+O cardápio tinha 112 fotos vindas de três lugares — Drive, OneDrive e as que o
+bar mandou agora — e cada uma caía no quadro de um jeito. No grid isso lê como
+álbum, não como série.
+
+Medi o **Cosmopolitan**, que era o card que estava certo: a taça ocupa **72% da
+altura**, fica no **centro horizontal exato** e a base pousa perto do fundo.
+Isso virou definição no topo do `fotos-drive.py` e todos os 112 passaram por
+ela — não existe mais `altura` por item no `ajustes`.
+
+Três coisas que o caminho ensinou:
+
+**O detector de objeto estava errado.** Ele achava o produto por nitidez,
+assumindo que só o copo estava em foco. Na foto do Dry Martini ele lia a quina
+iluminada da parede e devolvia uma caixa da altura inteira da imagem. Troquei
+pela máscara do `rembg`, que já estava no arquivo para o `fundo_para_trocar`.
+
+**Altura não basta.** Bandeja de esfirra e leque de três latas estouram as
+laterais antes de chegar aos 72% de altura. Por isso entrou `LARGURA_OBJETO`,
+um teto de 86% de largura: nesses casos quem limita é ela, e o objeto fica
+mais baixo.
+
+**A base a 6% do fundo não sobrevive ao detalhe.** O `max-height: 38dvh` da
+`.detalhe__figura` corta cerca de 9% em cima e 9% embaixo, e o pé da taça saía
+decepado — justamente na tela que o bar usou de referência. Ficou em 11%, que
+passa nos dois: card quadrado inteiro e detalhe sem cortar o pé.
+
+### As 9 fotos novas
+
+Entraram Porn Martini, Caipirinha Saquê, as três porções veganas e as quatro
+latas de 269ml (Absolut Sprite e os três Schweppes). As latas e o Porn Martini
+vieram sobre branco; as veganas e a Caipirinha Saquê tiveram o fundo trocado
+pelo degradê escuro do card.
+
+No kibe vegano a foto tem **três** tigelas — kibe, ketchup e limão. Sem o
+fundo, as duas da esquerda viravam respingo de ketchup e meio limão flutuando
+no preto, e qualquer corte mais aberto passava no meio dos kibes da borda e
+deixava farelo solto. O `recorte` ficou só na tigela do kibe.
+
+### Sobraram 3 itens
+
+Stella Artois avulsa, Eco Bag e Party. `PROMPT-GEMINI.md` tem o caminho de
+cada um.

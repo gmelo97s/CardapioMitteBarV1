@@ -40,100 +40,106 @@ CARDAPIO = RAIZ / "src" / "data" / "cardapio.json"
 LADO = 1024
 QUALIDADE = 92
 
-# --- recorte das fotos de copo ------------------------------------------- #
-MARGEM = 0.10        # folga em volta do copo
-DESFOQUE = 26        # preenchimento das sobras do quadrado
+# --- enquadramento, o mesmo para todo card ------------------------------- #
+# Medido no Cosmopolitan, que é o card que ficou certo: a taça ocupa 72% da
+# altura, fica no centro horizontal e a base encosta a 6% do fundo. O produto
+# "pisa no chão" do quadro e sobra ar em cima — é o que faz cinquenta fotos de
+# origens diferentes lerem como uma série, e não como um álbum.
+#
+# A altura manda, menos quando o objeto é largo demais para caber deitado:
+# bandeja de esfirra e leque de três latas estouram as laterais antes de
+# chegar aos 72% de altura, e aí quem limita é LARGURA_OBJETO.
+ALTURA_OBJETO = 0.72
+LARGURA_OBJETO = 0.86
+# No Cosmopolitan a base está a 6% do fundo, e o card, que é quadrado, mostra
+# isso inteiro. O detalhe não: `max-height: 38dvh` corta cerca de 9% em cima e
+# 9% embaixo, e 6% de margem vira pé de taça decepado. 11% sobrevive aos dois.
+BASE_OBJETO = 0.89
+
+# --- sobras do quadrado nas fotos que mantêm o fundo --------------------- #
+DESFOQUE = 26
 ESCURECE = 0.42
 
-# --- montagem da fileira de latas ---------------------------------------- #
+# --- fundo das fotos recortadas ------------------------------------------ #
 FUNDO_TOPO = (26, 26, 31)   # --mitte-bg-elev-2
 FUNDO_BASE = (9, 9, 11)     # --mitte-bg
-LARGURA_SEGURA = 0.72       # ver montar_latas: o card recorta as laterais
 
 
 # ========================================================================== #
 # Fotos de copo
 # ========================================================================== #
 
-def _mapa_foco(im: Image.Image) -> np.ndarray:
-    """Onde a foto está nítida. O balcão e a prateleira estão desfocados,
-    então um passa-alta separa o copo do resto sem precisar de modelo."""
-    p = im.convert("L")
-    p.thumbnail((512, 512))
-    a = np.asarray(p, dtype=np.float32)
-    borrado = np.asarray(p.filter(ImageFilter.GaussianBlur(5)), dtype=np.float32)
-    foco = np.abs(a - borrado)
-    return (foco >= np.percentile(foco, 92)).astype(np.float32)
+def caixa_do_objeto(im: Image.Image, corte: float = 0.02) -> tuple[float, float, float, float]:
+    """Onde está o produto na foto.
+
+    Aqui havia um passa-alta: a premissa era que só o copo estava nítido e o
+    resto, balcão e prateleira, desfocado. Vale no balcão e erra em tudo mais
+    — na foto do Dry Martini ele lia a quina iluminada da parede como parte do
+    objeto e devolvia uma caixa da altura inteira da imagem. Como o modelo de
+    recorte já está neste arquivo por causa do `fundo_para_trocar`, o mais
+    simples é perguntar a ele, que responde exatamente isto.
+
+    Linha ou coluna com menos de `corte` da massa da máscara fica de fora: um
+    farelo de máscara de alguns pixels esticava a caixa e, com ela, todo o
+    enquadramento.
+    """
+    from rembg import remove
+
+    p = im.convert("RGBA").copy()
+    p.thumbnail((LADO_RECORTE, LADO_RECORTE), Image.LANCZOS)
+    alfa = np.array(remove(p, session=_sessao(), post_process_mask=True))[:, :, 3].astype(np.float32)
+
+    linhas, colunas = alfa.sum(axis=1), alfa.sum(axis=0)
+    if linhas.max() <= 0:
+        return 0.0, 0.0, float(im.width), float(im.height)
+    ys = np.where(linhas > linhas.max() * corte)[0]
+    xs = np.where(colunas > colunas.max() * corte)[0]
+
+    ex, ey = im.width / p.width, im.height / p.height
+    return xs.min() * ex, ys.min() * ey, xs.max() * ex, ys.max() * ey
 
 
-def _faixa(peso: np.ndarray, fracao: float) -> tuple[float, float]:
-    """Menor intervalo que concentra `fracao` do peso."""
-    total = peso.sum()
-    if total <= 0:
-        return 0.0, float(len(peso))
-    acum = np.cumsum(peso)
-    alvo = total * fracao
-    melhor = (0, len(peso))
-    j = 0
-    for i in range(len(peso)):
-        base = acum[i - 1] if i else 0.0
-        while j < len(peso) and acum[j] - base < alvo:
-            j += 1
-        if j >= len(peso):
-            break
-        if j - i < melhor[1] - melhor[0]:
-            melhor = (i, j)
-    return float(melhor[0]), float(melhor[1])
+def enquadrar(caixa: tuple[float, float, float, float]) -> tuple[float, float, float]:
+    """O quadrado do padrão em volta da caixa do objeto: (esquerda, topo, lado)."""
+    x0, y0, x1, y1 = caixa
+    lado = max((y1 - y0) / ALTURA_OBJETO, (x1 - x0) / LARGURA_OBJETO)
+    return (x0 + x1) / 2 - lado / 2, y1 - BASE_OBJETO * lado, lado
 
 
-def _regiao_do_copo(im: Image.Image, margem: float = MARGEM) -> tuple[int, int, int, int]:
-    m = _mapa_foco(im)
-    h, w = m.shape
-    fx0, fx1 = _faixa(m.sum(axis=0), 0.84)
-    fy0, fy1 = _faixa(m.sum(axis=1), 0.88)
+def quadrado(im: Image.Image, lado: int = LADO) -> Image.Image:
+    """A foto enquadrada no padrão, com o fundo dela preservado.
 
-    iw, ih = im.size
-    x0, x1 = fx0 / w * iw, fx1 / w * iw
-    y0, y1 = fy0 / h * ih, fy1 / h * ih
-
-    mx, my = (x1 - x0) * margem, (y1 - y0) * margem
-    x0, x1, y0, y1 = x0 - mx, x1 + mx, y0 - my, y1 + my
-
-    # tenta fechar um quadrado em volta do copo antes de recorrer ao
-    # preenchimento: quando cabe, a foto sai inteira, sem sobra desfocada.
-    lado = max(x1 - x0, y1 - y0)
-    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
-    x0, x1, y0, y1 = cx - lado / 2, cx + lado / 2, cy - lado / 2, cy + lado / 2
-
-    # empurra para dentro da foto em vez de encolher o recorte
-    if x0 < 0: x1, x0 = x1 - x0, 0
-    if x1 > iw: x0, x1 = x0 - (x1 - iw), iw
-    if y0 < 0: y1, y0 = y1 - y0, 0
-    if y1 > ih: y0, y1 = y0 - (y1 - ih), ih
-    return int(max(x0, 0)), int(max(y0, 0)), int(min(x1, iw)), int(min(y1, ih))
-
-
-def quadrado(im: Image.Image, lado: int = LADO, margem: float = MARGEM) -> Image.Image:
-    """Quadrado com o copo inteiro dentro.
-
-    O copo quase sempre é mais alto do que a foto é larga, então um corte
-    quadrado comeria a borda ou a base. Aqui a região do copo entra inteira,
-    e as sobras laterais recebem a própria foto desfocada e escurecida — o
-    fundo continua sendo o bar, não uma tarja preta.
+    O quadrado do padrão quase nunca cabe inteiro dentro da foto: pedir 72% de
+    altura para um copo que já ocupa 90% dela significa afastar a câmera, e
+    não há foto além da borda. As sobras recebem a própria imagem ampliada,
+    desfocada e escurecida — o fundo continua sendo o bar, não uma tarja
+    preta, e o olho lê como profundidade de campo.
     """
     im = im.convert("RGB")
-    corte = im.crop(_regiao_do_copo(im, margem))
-    cw, ch = corte.size
+    esq, topo, L = enquadrar(caixa_do_objeto(im))
+    escala = lado / L
 
-    escala = lado / min(cw, ch)
-    fundo = corte.resize((max(lado, round(cw * escala)), max(lado, round(ch * escala))), Image.LANCZOS)
-    ex, ey = (fundo.width - lado) // 2, (fundo.height - lado) // 2
-    fundo = fundo.crop((ex, ey, ex + lado, ey + lado)).filter(ImageFilter.GaussianBlur(DESFOQUE))
+    # a foto na escala do enquadramento, e onde o quadrado cai dentro dela
+    fw, fh = max(1, round(im.width * escala)), max(1, round(im.height * escala))
+    foto = im.resize((fw, fh), Image.LANCZOS)
+    ox, oy = round(esq * escala), round(topo * escala)
+
+    # fundo: a mesma foto ampliada até cobrir o quadrado, centrada no objeto
+    cobre = max(lado / fw, lado / fh, 1.0)
+    bw, bh = max(lado, round(fw * cobre)), max(lado, round(fh * cobre))
+    fundo = im.resize((bw, bh), Image.LANCZOS)
+    bx = round((ox + lado / 2) * bw / fw - lado / 2)
+    by = round((oy + lado / 2) * bh / fh - lado / 2)
+    bx, by = max(0, min(bx, bw - lado)), max(0, min(by, bh - lado))
+    fundo = fundo.crop((bx, by, bx + lado, by + lado))
+    fundo = fundo.filter(ImageFilter.GaussianBlur(DESFOQUE))
     fundo = ImageEnhance.Brightness(fundo).enhance(ESCURECE)
 
-    escala = lado / max(cw, ch)
-    frente = corte.resize((max(1, round(cw * escala)), max(1, round(ch * escala))), Image.LANCZOS)
-    fundo.paste(frente, ((lado - frente.width) // 2, (lado - frente.height) // 2))
+    # frente: o pedaço real da foto que cai dentro do quadrado
+    ix0, iy0 = max(0, ox), max(0, oy)
+    ix1, iy1 = min(fw, ox + lado), min(fh, oy + lado)
+    if ix1 > ix0 and iy1 > iy0:
+        fundo.paste(foto.crop((ix0, iy0, ix1, iy1)), (ix0 - ox, iy0 - oy))
     return fundo
 
 
@@ -181,15 +187,16 @@ def recortar_lata(origem: Image.Image, faixa: list[int]) -> Image.Image:
     return lata
 
 
-def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.82,
-                 largura_max: float = LARGURA_SEGURA) -> Image.Image:
+def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = ALTURA_OBJETO,
+                 largura_max: float = LARGURA_OBJETO) -> Image.Image:
     """Uma lata centralizada, ou várias em leque com sobreposição e escadinha.
 
-    `largura_max` é a área segura: o master é quadrado, mas o card no celular
-    é retrato e a foto entra com `object-fit: cover`, que come até 13% de cada
-    lado. Um leque que ocupasse 90% da largura apareceria com as latas das
-    pontas fatiadas pela borda do card. Uma lata sozinha é estreita e nunca
-    encosta nesse teto — ele só morde nas montagens.
+    Mesma altura e mesma base das fotos que mantêm o fundo: é o que faz um
+    card recortado e um card fotografado ficarem lado a lado sem denunciar que
+    passaram por caminhos diferentes.
+
+    O leque de três não chega aos 72% de altura — `largura_max` o segura
+    antes, senão as latas das pontas encostariam nas bordas do quadro.
     """
     tela = _fundo_radial(lado)
     n = len(latas)
@@ -208,7 +215,7 @@ def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = 0.8
         largura = escaladas[0].width + passo * (n - 1)
 
     esq = (lado - largura) / 2
-    base = int((lado - alvo) * 0.50) + alvo
+    base = int(lado * BASE_OBJETO)
     # escadinha: a do meio sobe, as das pontas descem — fileira, não parede
     degrau = [0.0] if n == 1 else [abs(i - (n - 1) / 2) / ((n - 1) / 2) for i in range(n)]
 
@@ -358,8 +365,9 @@ def main() -> int:
     MASTERS.mkdir(parents=True, exist_ok=True)
     feitos = 0
 
-    # Enquadramento fora do padrão, item a item: garrafa fina que sobra
-    # margem, copo pequeno que se perde no balcão.
+    # Ajuste de recorte item a item. O enquadramento não entra aqui: é o
+    # mesmo para todos, por definição — o que o olho lê como série é o
+    # produto cair sempre no mesmo lugar do quadro.
     ajustes = mapa.get("ajustes", {})
 
     def salvar(slug: str, im: Image.Image) -> None:
@@ -391,7 +399,7 @@ def main() -> int:
         with Image.open(origem) as im:
             corte = recortar_do_branco(aparar(im, a), limiar=a.get("limiar", 238),
                                        desvio=a.get("desvio", 12))
-        salvar(slug, montar_latas([corte], altura=a.get("altura", 0.82)))
+        salvar(slug, montar_latas([corte]))
         feitos += 1
 
     # Produto sobre o painel colorido do salão: recorta e devolve no escuro.
@@ -402,9 +410,7 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            salvar(slug, montar_latas([recortar_do_fundo(aparar(im, a))],
-                                      altura=a.get("altura", 0.80),
-                                      largura_max=a.get("largura_max", 0.90)))
+            salvar(slug, montar_latas([recortar_do_fundo(aparar(im, a))]))
         feitos += 1
 
     for slug, arquivo in sorted(mapa["fotos"].items()):
@@ -414,7 +420,7 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            salvar(slug, quadrado(aparar(im, a), margem=a.get("margem", MARGEM)))
+            salvar(slug, quadrado(aparar(im, a)))
         feitos += 1
 
     if fileira:
