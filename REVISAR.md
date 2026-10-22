@@ -497,3 +497,35 @@ Quando as cinco garrafas novas entraram, a aba Doses ficou com dois tipos de
 composição: cinco só com a garrafa e três com o copo de dose ao lado. O bar
 mandou a Ballantine's sozinha, que entrou pelo mesmo caminho das outras
 cinco. Sobrou **só o Absolut** com o copo — uma foto resolve.
+
+---
+
+## 11. Party é drink mesmo, e o cache de um ano (22/10/2026)
+
+### A correção da correção
+
+Party voltou para **Autorais**. A foto de leque que tinha ido para o card dele
+era, na verdade, a foto nova do **Leque Mitte Bar** — substituiu o arco-íris
+antigo. Party ganhou a foto do drink: copo alto, laranja, com fatia de toranja
+no balcão. A **Batida de Jambuzera** também trocou de foto.
+
+Party segue sem descrição, a pedido do bar.
+
+### Por que quem já tinha o link não via as fotos novas
+
+Não era deploy nem domínio: `cardapiomittebarv1.vercel.app` e
+`mittebarpage.vercel.app` servem o mesmo build, com o mesmo etag — confirmado
+nos dois. O problema é o `vercel.json`, que manda os assets com
+`max-age=31536000, immutable`.
+
+Um ano de cache está certo para arquivos grandes cujo nome não muda à toa. Só
+que o nome **também não muda quando a foto muda**: trocar a foto de um item
+reescreve `slug-800.webp` no mesmo caminho. Para quem já tinha aberto o
+cardápio, o navegador serve a foto velha do próprio disco, sem perguntar nada
+ao servidor. Foi o que aconteceu quando as cinco garrafas trocaram.
+
+`gerar-imagens.py` agora grava `meta.versao_imagens` no cardápio — **hash do
+conteúdo de todos os webp publicados**, não data —, e o `app.js` pendura essa
+versão na URL de cada foto. Trocou foto, a versão muda e o navegador trata a
+foto nova como outro arquivo. Não trocou, a versão é a mesma e o cache de quem
+já baixou continua valendo, que é o ponto do `immutable`.

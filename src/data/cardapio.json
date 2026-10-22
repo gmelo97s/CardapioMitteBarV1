@@ -13,7 +13,8 @@
     "legenda": {
       "fora_de_linha": "Item fora do cardápio público.",
       "confirmar": "Nome ou descrição inferida. Precisa de validação do bar."
-    }
+    },
+    "versao_imagens": "7c709dfced"
   },
   "abas": [
     {
@@ -310,13 +311,6 @@
           "imagem": true
         },
         {
-          "nome": "Party",
-          "preco": 32.0,
-          "slug": "party",
-          "confirmar": true,
-          "imagem": true
-        },
-        {
           "nome": "Eco Bag Mitte",
           "preco": 40.0,
           "descricao": "Sacola de algodão com a marca do Mitte.",
@@ -498,6 +492,13 @@
           "preco": 36.0,
           "descricao": "Ballantine's Finest, mel, limão taiti, maracujá e água com gás.",
           "slug": "bi-nights",
+          "confirmar": true,
+          "imagem": true
+        },
+        {
+          "nome": "Party",
+          "preco": 32.0,
+          "slug": "party",
           "confirmar": true,
           "imagem": true
         }

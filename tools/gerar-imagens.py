@@ -11,6 +11,7 @@ Requer Pillow:
     pip install pillow
 """
 
+import hashlib
 import json
 import sys
 from pathlib import Path
@@ -45,6 +46,26 @@ def slugs_do_cardapio(dados: dict) -> dict[str, str]:
         for item in aba["itens"]
         if "slug" in item
     }
+
+
+def versao_das_imagens() -> str:
+    """Impressão digital do conjunto de fotos publicadas.
+
+    Os webp vão com `immutable` e um ano de cache, e o nome não muda quando a
+    foto muda: trocar a foto de um item reescreve `slug-800.webp` no mesmo
+    caminho. Para quem já abriu o cardápio uma vez, o navegador serve a foto
+    velha do próprio disco sem perguntar nada ao servidor. Pendurando esta
+    versão na URL, a foto nova vira outro arquivo para o navegador.
+
+    É hash do conteúdo, e não data: rodar o script sem trocar nada devolve a
+    mesma versão, e o cache de quem já baixou continua valendo.
+    """
+    h = hashlib.sha1()
+    for arquivo in sorted(SAIDA.glob("*.webp")):
+        h.update(arquivo.name.encode("utf-8"))
+        h.update(str(arquivo.stat().st_size).encode("ascii"))
+        h.update(hashlib.sha1(arquivo.read_bytes()).digest())
+    return h.hexdigest()[:10]
 
 
 def marcar_quem_tem_foto(dados: dict, prontos: set[str]) -> int:
@@ -124,6 +145,13 @@ def main() -> int:
     mudou = marcar_quem_tem_foto(dados, prontos & catalogo.keys())
     if mudou:
         print(f"cardapio.json atualizado: {mudou} itens mudaram de estado de foto.")
+
+    versao = versao_das_imagens()
+    if dados.setdefault("meta", {}).get("versao_imagens") != versao:
+        dados["meta"]["versao_imagens"] = versao
+        CARDAPIO.write_text(json.dumps(dados, ensure_ascii=False, indent=2) + "\n",
+                            encoding="utf-8")
+        print(f"versao das imagens: {versao}")
 
     if orfaos:
         print("\nMasters sem item correspondente no cardápio (confira o nome):")

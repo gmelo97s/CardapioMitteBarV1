@@ -219,11 +219,26 @@ function cardDoItem(item, i, aba = null) {
 /* A foto fica por cima da inicial. Só é pedida quando gerar-imagens.py marcou
    "imagem": true — sem isso, cem cards disparariam cem 404 em toda abertura.
    O onerror fica como rede de segurança se um arquivo for apagado à mão. */
+/* Os webp são servidos com `immutable` e um ano de cache — está certo, são
+   arquivos grandes e o nome não muda à toa. Só que o nome TAMBÉM não muda
+   quando a foto muda: trocar a foto de um item reescreve `slug-800.webp` no
+   mesmo caminho. Para quem já tinha aberto o cardápio, o navegador continua
+   servindo a foto velha do próprio disco, sem perguntar nada ao servidor, e
+   a troca só aparece daqui a um ano ou numa limpeza de cache.
+   Foi o que aconteceu: o bar trocou cinco garrafas e quem já tinha o link
+   aberto continuou vendo as antigas.
+
+   `meta.versao_imagens` muda toda vez que o gerar-imagens.py roda. Pendurada
+   na URL, ela faz o navegador tratar a foto nova como outro arquivo — e as
+   que não mudaram continuam vindo do cache, porque a versão só entra na
+   conta junto com o resto da URL. */
 function figura(item, sizes) {
   if (!item.slug || !item.imagem) return "";
+  const v = state.dados?.meta?.versao_imagens;
+  const sufixo = v ? `?v=${encodeURIComponent(v)}` : "";
   const base = `assets/itens/${item.slug}`;
-  const srcset = LARGURAS.map((w) => `${base}-${w}.webp ${w}w`).join(", ");
-  return `<img src="${base}-400.webp" srcset="${srcset}" sizes="${sizes}"
+  const srcset = LARGURAS.map((w) => `${base}-${w}.webp${sufixo} ${w}w`).join(", ");
+  return `<img src="${base}-400.webp${sufixo}" srcset="${srcset}" sizes="${sizes}"
                alt="" loading="lazy" decoding="async"
                onerror="this.remove()">`;
 }
