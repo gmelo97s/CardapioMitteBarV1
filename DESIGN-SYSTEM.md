@@ -224,8 +224,26 @@ texto.
   | Totem 1080×1920 | 409px | 12 | 2,0 |
 
   O preço fora do corpo e a descrição só em tela larga continuam valendo pela
-  mesma razão de antes: densidade. O master é quadrado e o `object-fit: cover`
-  não precisa cortar nada.
+  mesma razão de antes: densidade.
+
+  **No celular a figura não é quadrada, e aí o `cover` corta.** A altura da
+  linha é fixa — seis cards por tela — e a largura vem da coluna, então a
+  proporção da figura depende do aparelho: medindo 63 combinações, ela vai de
+  0,59 (tela alta e estreita) a 1,63 (tela baixa, com a barra do navegador
+  ocupando espaço). Deixar o `cover` livre nesse intervalo come 20% de cada
+  lado, e garrafa sem pé foi exatamente o que o bar viu no celular dele.
+
+  A foto dentro da figura tem a proporção limitada a **[0,90 .. 1,28]** por
+  *container query*, com `object-position: 50% 64%`. Os dois números saem das
+  folgas que o enquadramento garante, medidas em todos os masters por
+  `tools/medir-enquadramento.py` — 6,9% na lateral, 16,9% no topo, 9,5% na
+  base. O que sobra vira degradê da própria figura **em volta da foto**, e não
+  faixa morta entre a foto e o nome: a diferença é que o vazio fica dentro do
+  painel escuro, encostado nas bordas escuras da própria imagem.
+
+  Fora do celular a figura volta a ser quadrada por `aspect-ratio`, que ali é
+  o que lhe dá altura — a linha é `auto`, e sem ele um card sem foto colapsa
+  para zero, porque a inicial é absoluta e não ocupa espaço.
 
   A foto leva `position: relative; z-index: 1` e o preço, `z-index: 2`. Sem
   isso a inicial — que é absoluta — pintava por cima da foto, e toda foto

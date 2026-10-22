@@ -373,3 +373,75 @@ deixava farelo solto. O `recorte` ficou só na tigela do kibe.
 
 Stella Artois avulsa, Eco Bag e Party. `PROMPT-GEMINI.md` tem o caminho de
 cada um.
+
+---
+
+## 9. O corte do card, as comidas e a Stella (22/10/2026)
+
+### A garrafa decapitada
+
+O print do bar mostrava as Doses com as garrafas cortadas. A causa não estava
+nas fotos: os masters estavam inteiros, com 24% a 41% de folga lateral. Estava
+no card.
+
+A figura do card estica para preencher a linha — foi assim que a faixa morta
+entre foto e nome sumiu. Só que a altura da linha é fixa (seis cards por tela)
+e a largura vem da coluna, então **a proporção da figura depende da tela**.
+Medindo 63 combinações de celular, ela vai de 0,59 a 1,63. O `object-fit:
+cover` corta o que não couber:
+
+| | pior caso medido |
+|---|---|
+| corte horizontal | 20,4% de cada lado (360×956) |
+| corte vertical | 19,2% de cada lado (428×620) |
+
+Contra folgas de projeto de 6,9% na lateral, 16,9% no topo e 9,5% na base. Por
+isso a garrafa saía sem o pé em tela baixa, e a bandeja saía fatiada em tela
+alta.
+
+A correção limita a proporção da foto dentro da figura a **[0,90 .. 1,28]**,
+por *container query*. O que sobra vira degradê da própria figura em volta da
+foto — dentro do painel escuro, e não uma faixa morta entre a foto e o nome,
+que era o problema anterior. O `object-position` em `50% 64%` divide o corte
+vertical na proporção das duas folgas.
+
+Conferido em 168 combinações (14 telas × 12 abas): **nenhum item cortado,
+nenhum nome cortado, seis cards por tela**. O verificador cruza o corte real
+de cada card com a caixa do objeto medida naquele master — não com uma
+suposição.
+
+### Os combos em leque estavam 4% abaixo da base
+
+`montar_latas` fazia a lata do meio subir e as das pontas descerem. Resultado:
+o leque terminava com a base em 93% do quadro em vez de 89%, e o card comia o
+pé das latas das pontas. A escadinha agora ancora na base: a do meio sobe, as
+das pontas ficam onde deviam estar.
+
+### As nove comidas viraram série
+
+Elas eram o pedaço mais fora do lugar do cardápio: fundo de bandeira de
+arco-íris, camiseta vermelha, grafite e gente desfocada, bandeja cortada pelas
+bordas em cinco delas (a coxinha tinha 1,5% de folga lateral; o enroladinho,
+1,9%). No grid liam como se viessem de outro site.
+
+Agora as nove são recorte sobre o degradê escuro, no enquadramento padrão —
+mesma altura, mesma base, mesma sombra das latas. A seção 2 do `IMAGENS.md`
+explica por que duas delas precisam de outro modelo de recorte.
+
+**As fotos cruas das comidas não estão no repositório nem na pasta do Drive**
+(que só tem bebidas), então estes nove masters foram refeitos a partir do
+próprio webp publicado. O que mudou neles não é resolução — é recortar o fundo
+e reposicionar o objeto —, mas quem tiver as fotos originais deve rodar o
+pipeline normalmente: o mapa já registra a decisão em `fundo_para_trocar`.
+
+### Quatro itens ocultados, a pedido do bar
+
+Torta de Frango e as três porções veganas saíram do cardápio público com
+`"fora_de_linha": true`. Continuam no arquivo, com preço e descrição, e voltam
+apagando uma linha. Comidas ficou com 9 itens.
+
+### Stella Artois
+
+Entrou pelo caminho das latas de catálogo: recortada do fundo branco e posta
+no degradê escuro. Ficou a 71,7% de altura, base em 88,9%, centro em 0,499 —
+dentro do padrão. **Sobraram 2 itens sem foto**: Eco Bag e Party.

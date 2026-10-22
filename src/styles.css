@@ -773,9 +773,52 @@ button {
    Não dá para resolver com `height: 100%` junto do `aspect-ratio`: com a
    altura definida pela linha, a proporção passa a mandar na LARGURA e a
    figura saía 199px de largura dentro de um card de 175, estourando para
-   fora do recorte. */
+   fora do recorte.
+
+   Só que esticar a figura sem limite joga a conta no `object-fit: cover`. A
+   proporção da figura depende da tela: medindo 63 combinações de celular ela
+   vai de 0,59 (tela alta e estreita) a 1,63 (tela baixa, com a barra do
+   navegador ocupando espaço). Nos extremos o cover comia 20% de cada lado na
+   horizontal e 19% na vertical — garrafa decapitada e bandeja fatiada.
+
+   O master tem margens conhecidas, porque o enquadramento é um só: objeto com
+   no máximo 86% da largura e centrado (7% de folga de cada lado), base a 89%
+   (11% embaixo) e topo a 17%. Daí sai o limite da proporção da figura:
+
+     horizontal   corte ≤ 6,9% por lado          → proporção ≥ 1 − 2(0,069) = 0,86
+     vertical     corte ≤ 16,9% em cima, 9,5% embaixo → proporção ≤ 1/(1−0,264) = 1,36
+
+   As folgas são medidas, não supostas: `tools/medir-enquadramento.py` passa a
+   máscara do rembg nos 113 masters e devolve o pior caso de cada lado. Os
+   limites ficaram em 0,90 e 1,28, com uns dois pontos de sobra para cada
+   lado, e o `object-position` divide o corte vertical na proporção das duas
+   folgas — 64% em cima, onde sobra 16,9%, e 36% embaixo, onde sobra 9,5%.
+
+   O que sobra vira degradê da própria figura em volta da foto — dentro do
+   painel escuro, não uma faixa morta entre a foto e o nome.
+
+   Em navegador sem unidade de container a declaração inteira é descartada e a
+   foto volta a `width/height: 100%`, que é o comportamento de antes.
+
+   Tudo isto vale só dentro de `#grade-itens`, e não em todo `.itens__grade`.
+   A grade de resultados da busca usa a mesma classe, mas é outro elemento,
+   criado em `renderResultados`, e não recebe `--linha` — as linhas dela são
+   `auto`, e quem dá altura à figura é o conteúdo. `container-type: size`
+   contém o conteúdo nos dois eixos: ali a figura ficava com altura zero e a
+   busca inteira aparecia sem foto e sem preço, que mora dentro da figura. Na
+   busca a figura continua quadrada pelo `aspect-ratio` do bloco de cima. */
 @media (max-width: 47.99rem) {
-  body:not(.totem) .card__figura { aspect-ratio: auto; }
+  body:not(.totem) #grade-itens .card__figura {
+    aspect-ratio: auto;
+    container-type: size;
+    display: grid;
+    place-items: center;
+  }
+  body:not(.totem) #grade-itens .card__figura img {
+    width:  min(100cqw, 128cqh);      /* proporção ≤ 1,28 */
+    height: min(100cqh, 111.1cqw);    /* proporção ≥ 0,90  (1/0,90) */
+    object-position: 50% 64%;         /* 16,9 em cima : 9,5 embaixo */
+  }
 }
 
 .card:hover .card__figura img { transform: scale(1.06); }

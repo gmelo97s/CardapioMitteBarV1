@@ -82,25 +82,38 @@ Precisa do modelo, que baixa sozinho na primeira vez (~179 MB):
 pip install "rembg[cpu]"
 ```
 
-### Enquadramento item a item
+### Ajustes item a item
 
-O padrão serve para quase tudo, mas garrafa fina sobra margem e taça pequena
-se perde no balcão. `ajustes` afrouxa o padrão sem tocar nos outros:
+O **enquadramento** não entra aqui: ele é um só para os 113 cards, e é
+justamente isso que faz o grid ler como série. O que `ajustes` afrouxa é o
+**recorte** — o que o modelo precisa ver, e com qual modelo.
 
 ```json
 "ajustes": {
-  "combo-4-heineken-lata-350ml": { "largura_max": 0.96 },
-  "jambuzera-dose-45ml":         { "altura": 0.86, "limiar": 224, "desvio": 20 },
-  "espresso-martini":            { "margem": 0.06 }
+  "jambuzera-dose-45ml":            { "limiar": 224, "desvio": 20 },
+  "jack-daniel-s-dose-45ml":        { "recorte": [0.0, 0.0, 0.66, 1.0] },
+  "porcao-esfirra-de-carne-fechada": { "modelo": "birefnet-general-lite",
+                                       "recorte": [0.0, 0.45, 0.93, 1.0] }
 }
 ```
 
 | Chave | Para que serve |
 |---|---|
-| `altura` | quanto da altura do quadrado o produto ocupa (padrão 0,82) |
-| `largura_max` | teto de largura; afrouxe para assunto largo e baixo, como quatro latas lado a lado |
-| `margem` | folga em volta do copo nas fotos de bar (padrão 0,10) |
+| `recorte` | `[x0, y0, x1, y1]` em fração da foto, aplicado **antes** do recorte de fundo. Serve para tirar da cena o que o modelo não dá conta: o copo de dose vazio em vidro transparente, a mão que segura a bandeja, a ponta da bandeira de arco-íris |
+| `modelo` | qual modelo de recorte usar. O padrão (`isnet-general-use`) resolve 104 dos 113 |
 | `limiar`, `desvio` | o que conta como fundo branco nas fotos de catálogo. Afrouxar resolve véu de scanner e tarja de rodapé — e come topo prateado de lata, então é item a item |
+
+#### Quando trocar o modelo
+
+O padrão erra quando o fundo é **mais saliente que o produto**. Nas fotos de
+porção isso acontece duas vezes: a camiseta vermelha atrás do kibe faz ele
+furar o papelão escuro da bandeja — o "MITTE" sai rendado — e a bandeira de
+arco-íris da esfirra é recortada *no lugar* da comida, devolvendo um card com
+bandeira e sem esfirra.
+
+Nesses dois o `birefnet-general-lite` acerta. Não vale trocar o padrão: nos
+outros sete ele é **pior** — come a bandeja das empanadas e do enroladinho.
+Daí o ajuste ser por item.
 
 ### Para ligar uma foto nova a um item
 
@@ -135,6 +148,38 @@ python tools/gerar-imagens.py
 
 Nesse caminho, **uma** foto de Corona vira o card de "Combo 4 Corona": o
 script lê o `4` do slug e compõe as quatro latas.
+
+---
+
+## O corte do card — por que as folgas importam
+
+O master é quadrado, mas o card no celular não é: a altura da linha é fixa
+(seis cards por tela) e a largura vem da coluna, então a proporção da figura
+muda de aparelho para aparelho. Medindo 63 combinações de celular, ela vai de
+**0,59** (tela alta e estreita) a **1,63** (tela baixa, barra do navegador
+ocupando espaço). A foto entra com `object-fit: cover`, que corta o que não
+couber — nos extremos, 20% de cada lado.
+
+Quanto ele pode cortar sem decepar o produto é exatamente a folga que o
+enquadramento deixa. `tools/medir-enquadramento.py` passa a máscara do `rembg`
+nos masters publicados e devolve o pior caso de cada lado:
+
+```bash
+python tools/medir-enquadramento.py
+```
+
+```
+109 masters medidos. Pior folga de cada lado:
+  lateral    6.9%   (combo-4-heineken-lata-350ml)
+  topo      16.9%   (mascate-drinks-melancia-e-framboesa-362ml)
+  base       9.5%   (garrafa-espumante-brut-salton-750ml)
+```
+
+Disso saem os dois limites de proporção da `.card__figura img` em
+`src/styles.css`, e o `object-position`, que divide o corte vertical na
+proporção das duas folgas. **Mexeu no enquadramento, rode de novo e confira os
+limites** — senão a próxima foto fora do padrão reaparece como garrafa sem
+gargalo em algum celular que ninguém tem à mão.
 
 ---
 

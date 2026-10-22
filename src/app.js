@@ -165,6 +165,12 @@ function montarItens(itens) {
    altura útil em dezenas de pixels. Então é medida aqui, do elemento real, e
    reposta a cada resize. O CSS tem `auto` como reserva. */
 const LINHAS_VISIVEIS = 3;
+/* Três linhas é o alvo, não uma obrigação. Com o celular deitado sobra pouca
+   altura, e insistir em três deixava a linha com 31px: o card virava uma
+   tarja de texto com um selo de foto de 39px, e nos nomes de três linhas a
+   foto sumia de vez (7px). Abaixo deste piso a foto deixa de informar, então
+   é melhor mostrar menos cards inteiros do que seis cards sem foto. */
+const ALTURA_MINIMA_LINHA = 150;
 
 function medirGrade() {
   if (!el.rolagemItens || !el.gradeItens) return;
@@ -180,7 +186,11 @@ function medirGrade() {
      antes da borda e a quarta fica inteira fora da tela — que é a diferença
      entre ver 6 cards e ver 6 cards e meio. */
   const util = el.rolagemItens.clientHeight - parseFloat(r.paddingTop) - vao;
-  const linha = (util - vao * (LINHAS_VISIVEIS - 1)) / LINHAS_VISIVEIS;
+  const linhas = Math.max(1, Math.min(
+    LINHAS_VISIVEIS,
+    Math.floor((util + vao) / (ALTURA_MINIMA_LINHA + vao)),
+  ));
+  const linha = (util - vao * (linhas - 1)) / linhas;
   if (linha > 0) el.gradeItens.style.setProperty("--linha", `${linha}px`);
 }
 

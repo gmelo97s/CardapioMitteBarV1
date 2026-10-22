@@ -46,7 +46,8 @@
           "nome": "Stella Artois Lata 350ml",
           "preco": 17.0,
           "descricao": "Lager belga, lata 350ml gelada.",
-          "slug": "stella-artois-lata-350ml"
+          "slug": "stella-artois-lata-350ml",
+          "imagem": true
         },
         {
           "nome": "Combo 4 Heineken Lata 350ml",
@@ -390,7 +391,8 @@
           "descricao": "Fatia de torta de frango.",
           "slug": "torta-de-frango",
           "confirmar": true,
-          "imagem": true
+          "imagem": true,
+          "fora_de_linha": true
         },
         {
           "nome": "Porção Vegana Mini Coxinha de Jaca",
@@ -398,7 +400,8 @@
           "descricao": "Porção de mini coxinhas veganas de jaca.",
           "slug": "porcao-vegana-mini-coxinha-de-jaca",
           "confirmar": true,
-          "imagem": true
+          "imagem": true,
+          "fora_de_linha": true
         },
         {
           "nome": "Porção Vegana Mini Kibe",
@@ -406,7 +409,8 @@
           "descricao": "Porção de mini kibes veganos.",
           "slug": "porcao-vegana-mini-kibe",
           "confirmar": true,
-          "imagem": true
+          "imagem": true,
+          "fora_de_linha": true
         },
         {
           "nome": "Porção Vegana Mini Bolinha de Queijo",
@@ -414,7 +418,8 @@
           "descricao": "Porção de mini bolinhas de queijo vegano.",
           "slug": "porcao-vegana-mini-bolinha-de-queijo",
           "confirmar": true,
-          "imagem": true
+          "imagem": true,
+          "fora_de_linha": true
         }
       ]
     },

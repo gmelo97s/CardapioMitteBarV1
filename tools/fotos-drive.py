@@ -216,8 +216,13 @@ def montar_latas(latas: list[Image.Image], lado: int = LADO, altura: float = ALT
 
     esq = (lado - largura) / 2
     base = int(lado * BASE_OBJETO)
-    # escadinha: a do meio sobe, as das pontas descem — fileira, não parede
-    degrau = [0.0] if n == 1 else [abs(i - (n - 1) / 2) / ((n - 1) / 2) for i in range(n)]
+    # Escadinha: a do meio sobe, as das pontas ficam na base — fileira, não
+    # parede. O `- 1` é o que ancora o leque: antes a do meio é que ficava em
+    # BASE_OBJETO e as das pontas desciam 6% abaixo dela, e o leque terminava
+    # com a base em 93% do quadro em vez de 89%. Num card de celular, que
+    # corta pelas bordas, esses 4% eram a diferença entre a lata inteira e a
+    # lata sem o pé.
+    degrau = [0.0] if n == 1 else [abs(i - (n - 1) / 2) / ((n - 1) / 2) - 1 for i in range(n)]
 
     sombra = Image.new("L", (lado, lado), 0)
     ImageDraw.Draw(sombra).ellipse(
@@ -294,31 +299,37 @@ def recortar_do_branco(im: Image.Image, limiar: int = 238, desvio: int = 12) -> 
 # só o fundo passa a ser o do cardápio.
 
 MODELO_RECORTE = "isnet-general-use"
+# Bandeja de porção é o caso em que o modelo padrão erra: contra a camiseta
+# vermelha e a bandeira de arco-íris das fotos de comida ele fura o papelão
+# escuro da bandeja — "MITTE" saía rendado — e deixa farelo de bandeira entre
+# as esfirras. O birefnet devolve a bandeja inteira nas duas. Fica por item,
+# em `ajustes.modelo`, e não como padrão: trocar o modelo de todo mundo
+# refaria os cem cards que já estão certos.
+MODELO_BANDEJA = "birefnet-general-lite"
 LADO_RECORTE = 1600      # acima disso o modelo não melhora e só custa tempo
 
-_sessao_recorte = None
+_sessoes: dict[str, object] = {}
 
 
-def _sessao() -> object:
-    """Uma sessão só: carregar o modelo custa alguns segundos."""
-    global _sessao_recorte
-    if _sessao_recorte is None:
+def _sessao(modelo: str = MODELO_RECORTE) -> object:
+    """Uma sessão por modelo: carregar cada um custa alguns segundos."""
+    if modelo not in _sessoes:
         try:
             from rembg import new_session
         except ImportError:
             sys.exit("Esta seção precisa do rembg. Rode: pip install rembg")
-        _sessao_recorte = new_session(MODELO_RECORTE)
-    return _sessao_recorte
+        _sessoes[modelo] = new_session(modelo)
+    return _sessoes[modelo]
 
 
-def recortar_do_fundo(im: Image.Image) -> Image.Image:
+def recortar_do_fundo(im: Image.Image, modelo: str = MODELO_RECORTE) -> Image.Image:
     """Separa o produto do fundo da foto e devolve só ele, já aparado."""
     from rembg import remove
 
     im = im.convert("RGBA")
     if max(im.size) > LADO_RECORTE:
         im.thumbnail((LADO_RECORTE, LADO_RECORTE), Image.LANCZOS)
-    corte = remove(im, session=_sessao(), post_process_mask=True)
+    corte = remove(im, session=_sessao(modelo), post_process_mask=True)
     caixa = corte.getbbox()
     return corte.crop(caixa) if caixa else corte
 
@@ -410,7 +421,7 @@ def main() -> int:
             continue
         a = ajustes.get(slug, {})
         with Image.open(origem) as im:
-            salvar(slug, montar_latas([recortar_do_fundo(aparar(im, a))]))
+            salvar(slug, montar_latas([recortar_do_fundo(aparar(im, a), a.get("modelo", MODELO_RECORTE))]))
         feitos += 1
 
     for slug, arquivo in sorted(mapa["fotos"].items()):

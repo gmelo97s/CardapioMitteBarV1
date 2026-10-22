@@ -40,15 +40,6 @@
     "hungarian-poison": "VENENO HÚNGARO.png",
     "zero-b": "ZERO BALLA.png",
     "combo-3-beats-lata": "098.png",
-    "empanada-cebola-e-queijo-campestre": "EMPANADA CAMPESTRE.png",
-    "empanada-queijo-e-tomate-caprese": "EMPANADA CAPRESE.png",
-    "empanada-carne-e-azeitona-platense": "EMPANADA PLATENSE.png",
-    "porcao-mini-bolinha-de-queijo": "BOLINHA DE QUEIJO.png",
-    "porcao-mini-coxinha-de-frango-e-requeijao": "COXINHA DE FRANGO.png",
-    "porcao-mini-kibe": "CROQUETE.png",
-    "porcao-mini-enroladinho-presunto-e-queijo": "PRESUNTO E QUEIJO.png",
-    "porcao-esfirra-de-carne-fechada": "ESFIRRA.png",
-    "porcao-esfirra-de-queijo-fechada": "ESFIRRA.png",
     "torta-de-frango": "TORTA FRANGO.png",
     "caipirinha-cachaca": "CAIPIRINHA DE LIMÃO TAITI.png",
     "caipirinha-vodca-absolut": "CAIPIRINHA DE SICILIANO.png",
@@ -148,7 +139,8 @@
     "absolut-sprite-lata-269ml": "ABSOLUT SPRITE.webp",
     "gin-tonica-schweppes-lata-269ml": "SCHWEPPES GIN TONICA.webp",
     "gin-tonica-pink-schweppes-lata-269ml": "SCHWEPPES GIN TONICA PINK.webp",
-    "spritz-schweppes-lata-269ml": "SCHWEPPES SPRITZ.webp"
+    "spritz-schweppes-lata-269ml": "SCHWEPPES SPRITZ.webp",
+    "stella-artois-lata-350ml": "STELLA ARTOIS.webp"
   },
   "fundo_para_trocar": {
     "heineken-lata-350ml": "2424.png",
@@ -186,7 +178,16 @@
     "taca-mimosa": "mimosa.jpg",
     "porcao-vegana-mini-bolinha-de-queijo": "VEGANA BOLINHA DE QUEIJO.jpg",
     "porcao-vegana-mini-coxinha-de-jaca": "VEGANA COXINHA DE JACA.webp",
-    "porcao-vegana-mini-kibe": "VEGANA KIBE.jpg"
+    "porcao-vegana-mini-kibe": "VEGANA KIBE.jpg",
+    "porcao-mini-coxinha-de-frango-e-requeijao": "COXINHA DE FRANGO.png",
+    "porcao-mini-enroladinho-presunto-e-queijo": "PRESUNTO E QUEIJO.png",
+    "porcao-mini-bolinha-de-queijo": "BOLINHA DE QUEIJO.png",
+    "porcao-esfirra-de-carne-fechada": "ESFIRRA.png",
+    "porcao-esfirra-de-queijo-fechada": "ESFIRRA.png",
+    "porcao-mini-kibe": "CROQUETE.png",
+    "empanada-cebola-e-queijo-campestre": "EMPANADA CAMPESTRE.png",
+    "empanada-queijo-e-tomate-caprese": "EMPANADA CAPRESE.png",
+    "empanada-carne-e-azeitona-platense": "EMPANADA PLATENSE.png"
   },
   "ajustes": {
     "jambuzera-dose-45ml": {
@@ -215,6 +216,33 @@
         0.0,
         1.0,
         1.0
+      ]
+    },
+    "porcao-esfirra-de-carne-fechada": {
+      "modelo": "birefnet-general-lite",
+      "recorte": [
+        0.0,
+        0.45,
+        0.93,
+        1.0
+      ]
+    },
+    "porcao-esfirra-de-queijo-fechada": {
+      "modelo": "birefnet-general-lite",
+      "recorte": [
+        0.0,
+        0.45,
+        0.93,
+        1.0
+      ]
+    },
+    "porcao-mini-kibe": {
+      "modelo": "birefnet-general-lite",
+      "recorte": [
+        0.0,
+        0.45,
+        1.0,
+        0.92
       ]
     }
   }
