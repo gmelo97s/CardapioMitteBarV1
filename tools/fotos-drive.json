@@ -164,11 +164,6 @@
     "trident-verde-ou-azul": "4565477.png",
     "absolut-dose-45ml": "absolut.png",
     "ballantine-s-sunshine-dose-45ml": "BALLENTINES.png",
-    "black-label-dose-45ml": "black.png",
-    "chivas-dose-45ml": "chivas.png",
-    "jose-cuervo-ouro-dose-45ml": "jose cuervo.png",
-    "red-label-dose-45ml": "red.png",
-    "jack-daniel-s-dose-45ml": "jack.png",
     "batida-de-jambuzera": "jambuzera.png",
     "garrafa-espumante-brut-salton-750ml": "brut.jpg",
     "garrafa-espumante-moscatel-salton-750ml": "moscatel.jpg",
@@ -187,20 +182,17 @@
     "porcao-mini-kibe": "CROQUETE.png",
     "empanada-cebola-e-queijo-campestre": "EMPANADA CAMPESTRE.png",
     "empanada-queijo-e-tomate-caprese": "EMPANADA CAPRESE.png",
-    "empanada-carne-e-azeitona-platense": "EMPANADA PLATENSE.png"
+    "empanada-carne-e-azeitona-platense": "EMPANADA PLATENSE.png",
+    "chivas-dose-45ml": "CHIVAS.webp",
+    "jack-daniel-s-dose-45ml": "JACK DANIELS.webp",
+    "jose-cuervo-ouro-dose-45ml": "JOSE CUERVO.jpg",
+    "red-label-dose-45ml": "RED LABEL.webp",
+    "black-label-dose-45ml": "BLACK LABEL.jpg"
   },
   "ajustes": {
     "jambuzera-dose-45ml": {
       "limiar": 224,
       "desvio": 20
-    },
-    "jack-daniel-s-dose-45ml": {
-      "recorte": [
-        0.0,
-        0.0,
-        0.66,
-        1.0
-      ]
     },
     "batida-de-jambuzera": {
       "recorte": [

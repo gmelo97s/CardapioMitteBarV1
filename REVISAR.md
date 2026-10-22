@@ -445,3 +445,48 @@ apagando uma linha. Comidas ficou com 9 itens.
 Entrou pelo caminho das latas de catálogo: recortada do fundo branco e posta
 no degradê escuro. Ficou a 71,7% de altura, base em 88,9%, centro em 0,499 —
 dentro do padrão. **Sobraram 2 itens sem foto**: Eco Bag e Party.
+
+---
+
+## 10. As cinco garrafas de dose, e o Party (22/10/2026)
+
+### Por que as tampas estavam cortadas
+
+Black Label, Chivas, Red Label, Jack Daniel's e José Cuervo saíam do card sem
+a tampa. O corte é um **traço reto e horizontal** no alto da garrafa — não é
+borda rasgada de recorte malfeito, é borda de foto. A foto do totem já vinha
+enquadrada com a tampa fora do quadro, e o pipeline enquadra o que existe:
+ele acha o produto, centraliza e põe a base no lugar certo, mas não inventa
+o pedaço que nunca foi fotografado.
+
+As cinco foram substituídas por fotos de e-commerce que o bar mandou, pelo
+caminho do recorte por modelo. O recorte por limiar de branco não serviu
+aqui: a foto do Jack Daniel's tem fundo que não é branco puro e voltou
+inteira, e a do Chivas trouxe o reflexo do estúdio como um borrão branco
+colado na base.
+
+**Efeito colateral:** as cinco novas são só a garrafa. Absolut, Ballantine's
+e Jambuzera continuam com o copo de dose ao lado, porque a foto delas é
+assim. A aba ficou com dois tipos de composição. Se o bar quiser uniformizar,
+o caminho é uma foto de cada uma das três sem o copo — ou das cinco com ele.
+
+### Party não é drink: é leque
+
+Estava em Autorais a R$ 32, com a descrição "Drink autoral da casa" — que era
+palpite de uma sessão anterior, e estava na lista de descrições a confirmar.
+O bar confirmou que é leque. Foi para **Outros**, logo depois do Leque Mitte
+Bar, e a descrição mudou para a de leque. Autorais ficou com 4 itens; Outros,
+com 18.
+
+A descrição ainda é um palpite — "Leque do Mitte, para dançar sem derreter",
+a mesma do Leque Mitte Bar. Dois leques com a mesma frase e preços diferentes
+(R$ 60 e R$ 32) pedem uma palavra do bar sobre o que distingue os dois.
+
+### Party e Eco Bag continuam sem foto
+
+As fotos existem — o bar mandou o leque laranja-e-rosa sobre o mármore e a
+eco bag sobre a cortina roxa —, mas chegaram nesta sessão só como imagem na
+conversa, não como arquivo que o pipeline consiga abrir. Reenviadas como
+anexo, as duas entram em uma rodada: a eco bag pelo caminho das fotos de bar,
+que preserva o fundo (a cortina roxa é da identidade), e o leque pelo recorte
+sobre o degradê escuro, porque o mármore do piso não acrescenta nada.
