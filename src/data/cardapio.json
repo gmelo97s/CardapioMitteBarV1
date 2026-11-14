@@ -14,7 +14,7 @@
       "fora_de_linha": "Item fora do cardápio público.",
       "confirmar": "Nome ou descrição inferida. Precisa de validação do bar."
     },
-    "versao_imagens": "7c709dfced"
+    "versao_imagens": "0cb1b77e31"
   },
   "abas": [
     {
@@ -24,49 +24,49 @@
       "itens": [
         {
           "nome": "Heineken Lata 350ml",
-          "preco": 18.0,
+          "preco": 17.0,
           "descricao": "Lager holandesa, lata 350ml gelada.",
           "slug": "heineken-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Corona Lata 350ml",
-          "preco": 18.0,
+          "preco": 17.0,
           "descricao": "Cerveja mexicana puro malte, lata 350ml gelada.",
           "slug": "corona-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Corona Zero Lata 350ml",
-          "preco": 20.0,
+          "preco": 19.0,
           "descricao": "Corona sem álcool, lata 350ml gelada.",
           "slug": "corona-zero-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Stella Artois Lata 350ml",
-          "preco": 17.0,
+          "preco": 16.0,
           "descricao": "Lager belga, lata 350ml gelada.",
           "slug": "stella-artois-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Combo 4 Heineken Lata 350ml",
-          "preco": 67.0,
+          "preco": 66.0,
           "descricao": "Quatro latas de Heineken 350ml geladas.",
           "slug": "combo-4-heineken-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Combo 4 Corona Lata 350ml",
-          "preco": 67.0,
+          "preco": 66.0,
           "descricao": "Quatro latas de Corona Extra 350ml geladas.",
           "slug": "combo-4-corona-lata-350ml",
           "imagem": true
         },
         {
           "nome": "Combo 4 Stella Artois Lata 350ml",
-          "preco": 63.0,
+          "preco": 62.0,
           "descricao": "Quatro latas de Stella Artois 350ml geladas.",
           "slug": "combo-4-stella-artois-lata-350ml",
           "imagem": true
@@ -154,6 +154,13 @@
           "preco": 17.0,
           "descricao": "Bebida mista gaseificada de gin e frutas tropicais.",
           "slug": "skol-beats-tropical-269ml",
+          "imagem": true
+        },
+        {
+          "nome": "Skol Beats Pink 269ml",
+          "preco": 19.0,
+          "descricao": "Bebida mista gaseificada sabor pink lemonade.",
+          "slug": "skol-beats-pink-269ml",
           "imagem": true
         },
         {
@@ -393,8 +400,8 @@
           "descricao": "Fatia de torta de frango.",
           "slug": "torta-de-frango",
           "confirmar": true,
-          "imagem": true,
-          "fora_de_linha": true
+          "fora_de_linha": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Coxinha de Jaca",
@@ -402,8 +409,8 @@
           "descricao": "Porção de mini coxinhas veganas de jaca.",
           "slug": "porcao-vegana-mini-coxinha-de-jaca",
           "confirmar": true,
-          "imagem": true,
-          "fora_de_linha": true
+          "fora_de_linha": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Kibe",
@@ -411,8 +418,8 @@
           "descricao": "Porção de mini kibes veganos.",
           "slug": "porcao-vegana-mini-kibe",
           "confirmar": true,
-          "imagem": true,
-          "fora_de_linha": true
+          "fora_de_linha": true,
+          "imagem": true
         },
         {
           "nome": "Porção Vegana Mini Bolinha de Queijo",
@@ -420,8 +427,8 @@
           "descricao": "Porção de mini bolinhas de queijo vegano.",
           "slug": "porcao-vegana-mini-bolinha-de-queijo",
           "confirmar": true,
-          "imagem": true,
-          "fora_de_linha": true
+          "fora_de_linha": true,
+          "imagem": true
         }
       ]
     },
